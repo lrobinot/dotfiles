@@ -60,6 +60,16 @@ then
 fi
 
 # ###########################################################
+# Import dconf files
+# ###########################################################
+for file in $(ls dconf)
+do
+  target=$(sed "s@_@/@g" <<<${file%.txt})
+  message "Importing configuration $target ..."
+  dconf load $target < ./dconf/$file
+done
+
+# ###########################################################
 # stow packages
 # ###########################################################
 for dir in $(ls packages)
