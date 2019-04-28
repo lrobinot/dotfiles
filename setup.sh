@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # This script installs dotfiles
 
+top=$(git rev-parse --show-toplevel)
+
 # include helpers
-source ./lib/message.sh
-source ./lib/requirements.sh
+source ${top}/lib/message.sh
+source ${top}/lib/requirements.sh
 
 clear
 echo ''
@@ -35,7 +37,7 @@ git pull origin master
 # Git Config
 # ###########################################################
 message "Configuring .gitconfig ..."
-if [ ! -f ./packages/git/.gitconfig -o ./packages/git/.gitconfig.dist -nt ./packages/git/.gitconfig ]
+if [ ! -f ${top}/packages/git/.gitconfig -o ${top}/packages/git/.gitconfig.dist -nt ${top}/packages/git/.gitconfig ]
 then
   echo "What is..."
   read -r -p "  ... your first name? " firstname
@@ -53,10 +55,37 @@ then
   fi
   fullname="${firstname^} ${lastname^^}"
 
-  cp ./packages/git/.gitconfig.dist ./packages/git/.gitconfig
-  sed -i "s/__GITUSER__/$fullname/" ./packages/git/.gitconfig
-  sed -i "s/__GITEMAIL__/$email/" ./packages/git/.gitconfig
-  sed -i "s/__GITHUBUSER__/$githubuser/" ./packages/git/.gitconfig
+  cp ${top}packages/git/.gitconfig.dist ${top}packages/git/.gitconfig
+  sed -i "s/__GITUSER__/$fullname/" ${top}packages/git/.gitconfig
+  sed -i "s/__GITEMAIL__/$email/" ${top}packages/git/.gitconfig
+  sed -i "s/__GITHUBUSER__/$githubuser/" ${top}packages/git/.gitconfig
+fi
+
+# ###########################################################
+# Install bash.d scripts
+# ###########################################################
+message "Configuring bash.d ..."
+cp ${top}/bash.d/git-bash-prompt.sh.dist ${top}/bash.d/git-bash-prompt.sh
+sed -i "s@__TOP__@${top}@" ${top}/bash.d/git-bash-prompt.sh
+
+grep -qF '# BEGIN -- DOTFILES' $HOME/.bashrc
+if [ $? -ne 0 ]
+then
+  cat<<END >>$HOME/.bashrc
+# BEGIN -- DOTFILES
+if [ -d ${top}/bash.d ]
+then
+  for i in ${top}/bash.d/*.sh
+  do
+    if [ -r \$i ]
+    then
+      . \$i
+    fi
+  done
+  unset i
+fi
+# END -- DOTFILES
+END
 fi
 
 # ###########################################################
@@ -66,13 +95,13 @@ for file in $(ls dconf)
 do
   target=$(sed "s@_@/@g" <<<${file%.txt})
   message "Importing configuration $target ..."
-  dconf load $target < ./dconf/$file
+  dconf load $target < ${top}/dconf/$file
 done
 
 # ###########################################################
 # stow packages
 # ###########################################################
-for dir in $(ls packages)
+for dir in $(ls ${top}/packages)
 do
   package=$(basename $dir)
   message "Configuring package $package ..."

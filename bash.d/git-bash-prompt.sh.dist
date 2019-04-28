@@ -1,0 +1,3 @@
+#GIT_PROMPT_ONLY_IN_REPO=1
+GIT_PROMPT_IGNORE_SUBMODULES=1
+source __TOP__/bash-git-prompt/gitprompt.sh
