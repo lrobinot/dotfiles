@@ -1,1 +1,2 @@
-homedir/packages/git/.giconfig
+bash.d/git-bash-prompt.sh
+packages/git/.gitconfig
