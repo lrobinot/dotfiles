@@ -1,0 +1,12 @@
+[user]
+  name = __GITUSER__
+  email = __GITEMAIL__
+
+[github]
+  user = __GITHUBUSER__
+
+[core]
+  editor = vim
+
+[default]
+  default = matching
