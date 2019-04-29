@@ -1,16 +1,35 @@
 // Place your settings in this file to overwrite the default settings
 {
-  "editor.tabSize": 2,
-  "editor.formatOnSave": true,
-  "workbench.colorTheme": "Monokai",
-  "html.format.enable": false,
-  "editor.renderWhitespace": "all",
-  "editor.renderControlCharacters": true,
-  "explorer.confirmDelete": false,
-  "editor.minimap.enabled": false,
-  "explorer.confirmDragAndDrop": false,
-  "window.titleBarStyle": "custom",
-  "breadcrumbs.enabled": true,
-  "workbench.tree.indent": 16,
-  "workbench.iconTheme": "vscode-icons"
+    "telemetry.enableCrashReporter": false,
+    "telemetry.enableTelemetry": false,
+    "workbench.statusBar.visible": true,
+    "markdown.styles": [
+        "https://raw.githubusercontent.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css"
+    ],
+    "files.trimTrailingWhitespace": true,
+    "workbench.colorTheme": "Monokai",
+    "extensions.autoUpdate": true,
+    "editor.renderIndentGuides": true,
+    "editor.showFoldingControls": "always",
+    "shellcheck.run": "onSave",
+    "window.zoomLevel": 0,
+    "workbench.startupEditor": "newUntitledFile",
+    "editor.minimap.enabled": false,
+    "terminal.integrated.fontFamily": "DejaVu Sans Mono",
+    "terminal.integrated.fontSize": 14,
+    "explorer.confirmDragAndDrop": false,
+    "editor.renderWhitespace": "all",
+    "explorer.confirmDelete": false,
+    "editor.wordWrap": "on",
+    "shellcheck.disableVersionCheck": true,
+    "files.associations": {
+        "DIFFS": "diff"
+    },
+    "python.linting.pylintEnabled": true,
+    "window.titleBarStyle": "custom",
+    "editor.tabSize": 2,
+    "breadcrumbs.enabled": true,
+    "explorer.autoReveal": false,
+    "editor.renderControlCharacters": true,
+    "workbench.iconTheme": "vscode-icons"
 }

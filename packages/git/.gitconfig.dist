@@ -2,11 +2,25 @@
   name = __GITUSER__
   email = __GITEMAIL__
 
+[core]
+  editor = vim
+
 [github]
   user = __GITHUBUSER__
 
-[core]
-  editor = vim
+[color]
+	diff = always
+
+[color "diff"]
+	meta = yellow
+	frag = magenta
+	whitespace = red
+
+[alias]
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %Cblue<%an>%Creset' --abbrev-commit --date=relative --all
+	co = checkout
+	cp = cherry-pick
+	last = log -1 --stat
 
 [default]
   default = matching

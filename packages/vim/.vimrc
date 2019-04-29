@@ -22,5 +22,9 @@ set autoindent
 set smartindent
 set nohls
 set number
-
+set et
+set smarttab
 set scrolloff=5
+
+filetype on
+filetype plugin on

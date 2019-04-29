@@ -8,13 +8,14 @@ cursor-colors-set=true
 highlight-colors-set=false
 use-theme-colors=false
 use-custom-command=true
-cursor-foreground-color='rgb(0,0,0)'
 font='Monospace 9'
+cursor-foreground-color='rgb(0,0,0)'
 scrollback-unlimited=true
 use-transparent-background=true
 use-theme-transparency=false
 background-color='rgb(64,24,76)'
 background-transparency-percent=7
+audible-bell=false
 
 [legacy]
 schema-version=uint32 3

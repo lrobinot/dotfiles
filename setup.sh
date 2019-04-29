@@ -55,10 +55,10 @@ then
   fi
   fullname="${firstname^} ${lastname^^}"
 
-  cp ${top}packages/git/.gitconfig.dist ${top}packages/git/.gitconfig
-  sed -i "s/__GITUSER__/$fullname/" ${top}packages/git/.gitconfig
-  sed -i "s/__GITEMAIL__/$email/" ${top}packages/git/.gitconfig
-  sed -i "s/__GITHUBUSER__/$githubuser/" ${top}packages/git/.gitconfig
+  cp ${top}/packages/git/.gitconfig.dist ${top}/packages/git/.gitconfig
+  sed -i "s/__GITUSER__/$fullname/" ${top}/packages/git/.gitconfig
+  sed -i "s/__GITEMAIL__/$email/" ${top}/packages/git/.gitconfig
+  sed -i "s/__GITHUBUSER__/$githubuser/" ${top}/packages/git/.gitconfig
 fi
 
 # ###########################################################
