@@ -1,3 +1,5 @@
+{{ ansible_managed | comment }}
+
 [user]
 name = {{ firstname|title }} {{ lastname|upper }}
 email = {{ email }}

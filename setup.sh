@@ -88,7 +88,8 @@ read -r -p "  ... your github username? " -i "$githubuser" -e githubuser
 message "Starting playbook"
 export ANSIBLE_CONFIG="${top}/ansible.cfg"
 ansible-playbook \
-  -l localhost \
+  --inventory "${top}/inventory" \
+  --limit localhost \
   --become --ask-become-pass \
   --extra-vars="firstname=$firstname" \
   --extra-vars="lastname=$lastname" \
@@ -97,7 +98,7 @@ ansible-playbook \
   --extra-vars="username=$USER" \
   --extra-vars="groupname=$(id --name --group "$USER")" \
   --extra-vars="homedir=$HOME" \
-  --extra-vars="dotdir=$top" \
+  --extra-vars="dotdir=$(realpath --relative-to="$HOME" "$top")" \
   dotfiles.yml
 
 message "Configure Gnome Terminal"
@@ -122,4 +123,3 @@ gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/prof
 gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" background-color "rgb(64,24,76)"
 gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" background-transparency-percent 10
 gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" audible-bell "false"
-

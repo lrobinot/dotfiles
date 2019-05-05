@@ -61,8 +61,8 @@
         - nodejs
 
     - name: "Configure Node"
-      copy:
-        src: home/.npmrc
+      template:
+        src: home/.npmrc.j2
         dest: "{{ homedir }}/.npmrc"
         owner: "{{ username }}"
         group: "{{ groupname }}"
@@ -100,8 +100,8 @@
         - vim
 
     - name: "Configure Vim"
-      copy:
-        src: home/.vimrc
+      template:
+        src: home/.vimrc.j2
         dest: "{{ homedir }}/.vimrc"
         owner: "{{ username }}"
         group: "{{ groupname }}"
@@ -113,14 +113,18 @@
         state: latest
       with_items:
         - tmux
+      tags:
+        - tmux
 
     - name: "Configure Tmux"
-      copy:
-        src: home/.tmux.conf
+      template:
+        src: home/.tmux.conf.j2
         dest: "{{ homedir }}/.tmux.conf"
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      tags:
+        - tmux
 
     - name: "Install Zsh"
       package:
@@ -143,3 +147,10 @@
         state: latest
       with_items:
         - httpie
+
+    - name: "Install Wallch"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - wallch
