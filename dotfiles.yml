@@ -1,0 +1,145 @@
+---
+- hosts: localhost
+  become: yes
+
+  tasks:
+    - name: "Git repository"
+      apt_repository:
+        repo: ppa:git-core/ppa
+        filename: git-core
+
+    - name: "Install Git & Git-flow"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - git
+        - git-flow
+
+    - name: "Configure Git"
+      template:
+        src: home/.gitconfig.j2
+        dest: "{{ homedir }}/.gitconfig"
+        owner: "{{ username }}"
+        group: "{{ groupname }}"
+        mode: 0600
+
+    - name: "Docker repository"
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+        filename: docker
+
+    - name: "Install Docker"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - docker-ce
+        - docker-ce-cli
+        - docker-compose
+
+    - name: "Install Minikube"
+      get_url:
+        url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        dest: /usr/local/bin/minikube
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: "Node repository"
+      apt_repository:
+        repo: "deb [arch=amd64] https://deb.nodesource.com/node_12.x {{ ansible_distribution_release }} main"
+        state: present
+        filename: nodesource
+
+    - name: "Install Node"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - nodejs
+
+    - name: "Configure Node"
+      copy:
+        src: home/.npmrc
+        dest: "{{ homedir }}/.npmrc"
+        owner: "{{ username }}"
+        group: "{{ groupname }}"
+        mode: 0600
+
+    - name: "VS Code repository"
+      apt_repository:
+        repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+        state: present
+        filename: vscode
+
+    - name: "Install VS Code"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - code
+
+    - name: "Configure VS Code"
+      copy:
+        src: home/.config/Code/User/{{ item }}
+        dest: "{{ homedir }}/.config/Code/User/{{ item }}"
+        owner: "{{ username }}"
+        group: "{{ groupname }}"
+        mode: 0600
+      with_items:
+        - settings.json
+        - keybindings.json
+
+    - name: "Install Vim"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - vim
+
+    - name: "Configure Vim"
+      copy:
+        src: home/.vimrc
+        dest: "{{ homedir }}/.vimrc"
+        owner: "{{ username }}"
+        group: "{{ groupname }}"
+        mode: 0600
+
+    - name: "Install Tmux"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - tmux
+
+    - name: "Configure Tmux"
+      copy:
+        src: home/.tmux.conf
+        dest: "{{ homedir }}/.tmux.conf"
+        owner: "{{ username }}"
+        group: "{{ groupname }}"
+        mode: 0600
+
+    - name: "Install Zsh"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - zsh
+
+    - name: "Configure Zsh"
+      template:
+        src: home/.zshrc.j2
+        dest: "{{ homedir }}/.zshrc"
+        owner: "{{ username }}"
+        group: "{{ groupname }}"
+        mode: 0600
+
+    - name: "Install Httpie"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - httpie

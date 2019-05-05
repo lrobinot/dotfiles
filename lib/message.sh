@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # Colors
 ESC_SEQ="\e["
 COL_RESET=$ESC_SEQ"39m"
