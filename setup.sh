@@ -95,8 +95,8 @@ ansible-playbook \
   --extra-vars="lastname=$lastname" \
   --extra-vars="email=$email" \
   --extra-vars="githubuser=$githubuser" \
-  --extra-vars="username=$USER" \
-  --extra-vars="groupname=$(id --name --group "$USER")" \
+  --extra-vars="username=$(id --user $USER)" \
+  --extra-vars="groupname=$(id --group "$USER")" \
   --extra-vars="homedir=$HOME" \
   --extra-vars="dotdir=$(realpath --relative-to="$HOME" "$top")" \
   dotfiles.yml
