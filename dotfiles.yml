@@ -41,6 +41,7 @@
         - { key: "use-transparent-background", value: "true" }
         - { key: "use-theme-transparency", value: "false" }
         - { key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}" }
+        - { key: "custom-command", value: "'zsh'" }
 
     - name: "Install Terminator"
       package:
