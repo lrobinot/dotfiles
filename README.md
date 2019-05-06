@@ -1,2 +1,2 @@
-My little dotfiles collection.
+My little dotfiles collection, and more.
 
