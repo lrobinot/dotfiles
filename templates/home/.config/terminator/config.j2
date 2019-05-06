@@ -1,0 +1,16 @@
+[global_config]
+  focus = system
+  handle_size = 8
+[keybindings]
+[plugins]
+[profiles]
+  [[default]]
+    background_color = "{{ terminal.background.color }}"
+    background_darkness = {{ terminal.background.transparency / 100 | round(2, 'floor') }}
+    background_type = transparent
+    cursor_color = "{{ terminal.cursor.color }}"
+    font = {{ terminal.font }}
+    palette = "{{ terminal.palette|join(':') }}"
+    scrollback_infinite = True
+    scrollback_lines = {{ terminal.scrollback }}
+    use_system_font = False
