@@ -3,6 +3,64 @@
   become: yes
 
   tasks:
+    - name: "Install Ubuntu Mono fonts"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - ubuntu-mono
+
+    - name: Install Gnome Terminal
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - gnome-terminal
+
+    - name: Configure Gnome Terminal (default-size-columns)
+      become: "{{ username }}"
+      dconf:
+        key: "/org/gnome/terminal/legacy/profiles:/:{{ gnome_terminal_default_profile }}/{{ item.key }}"
+        state: present
+        value: "{{ item.value }}"
+      with_items:
+        - { key: "default-size-columns", value: "120" }
+        - { key: "default-size-rows", value: "60" }
+        - { key: "use-theme-colors", value: "false" }
+        - { key: "foreground-color", value: "'{{ terminal.foreground.color }}'" }
+        - { key: "custom-background-color", value: "'{{ terminal.background.color }}'" }
+        - { key: "background-color", value: "'{{ terminal.background.color }}'" }
+        - { key: "palette", value: "{{ terminal.palette }}" }
+        - { key: "use-custom-command", value: "'zsh'" }
+        - { key: "custom-command", value: "true" }
+        - { key: "use-system-font", value: "false" }
+        - { key: "font", value: "'Ubuntu Mono 12'" }
+        - { key: "cursor-foreground-color", value: "'{{ terminal.cursor.color }}'" }
+        - { key: "cursor-foreground-color", value: "'{{ terminal.cursor.color }}'" }
+        - { key: "audible-bell", value: "false" }
+        - { key: "use-transparent-background", value: "true" }
+        - { key: "use-theme-transparency", value: "false" }
+        - { key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}" }
+
+    - name: "Install Terminator"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - terminator
+      tags:
+        - terminator
+
+    - name: "Configure Terminator"
+      template:
+        src: home/.config/terminator/config.j2
+        dest: "{{ homedir }}/.config/terminator/config"
+        owner: "{{ username }}"
+        group: "{{ groupname }}"
+        mode: 0600
+      tags:
+        - terminator
+
     - name: "Git repository"
       apt_repository:
         repo: ppa:git-core/ppa
@@ -35,8 +93,7 @@
         name: "{{ item }}"
         state: latest
       with_items:
-        - docker-ce
-        - docker-ce-cli
+        - docker.io
         - docker-compose
 
     - name: "Install Minikube"
@@ -49,7 +106,7 @@
 
     - name: "Node repository"
       apt_repository:
-        repo: "deb [arch=amd64] https://deb.nodesource.com/node_12.x {{ ansible_distribution_release }} main"
+        repo: "deb [arch=amd64] https://deb.nodesource.com/{{ packages.node.repo }} {{ ansible_distribution_release }} main"
         state: present
         filename: nodesource
 
@@ -82,7 +139,7 @@
         - code
 
     - name: "Configure VS Code"
-      copy:
+      template:
         src: home/.config/Code/User/{{ item }}
         dest: "{{ homedir }}/.config/Code/User/{{ item }}"
         owner: "{{ username }}"
@@ -154,3 +211,5 @@
         state: latest
       with_items:
         - wallch
+
+
