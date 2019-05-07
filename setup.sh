@@ -11,9 +11,6 @@ COL_RESET=$ESC_SEQ"39m"
 COL_RED=$ESC_SEQ"31m"
 COL_GREEN=$ESC_SEQ"32m"
 COL_YELLOW=$ESC_SEQ"33m"
-COL_BLUE=$ESC_SEQ"34m"
-COL_MAGENTA=$ESC_SEQ"35m"
-COL_CYAN=$ESC_SEQ"36m"
 
 message() {
   /bin/echo -e "\n$COL_GREEN*** $1$COL_RESET"
@@ -67,6 +64,7 @@ command -v git >/dev/null 2>&1 && {
   umask g-w,o-rwx
   git pull origin master
   git submodule update --recursive --remote
+  ok
 }
 
 message "Need some configuration"
@@ -91,6 +89,7 @@ read -r -p "  ... your github username? " -i "$githubuser" -e githubuser
 
 gnome_terminal_default_profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 gnome_terminal_default_profile=${gnome_terminal_default_profile:1:-1}
+ok
 
 message "Starting playbook"
 export ANSIBLE_CONFIG="${top}/ansible.cfg"
@@ -108,3 +107,4 @@ ansible-playbook \
   --extra-vars="dotdir=$(realpath --relative-to="$HOME" "$top")" \
   --extra-vars="gnome_terminal_default_profile=$gnome_terminal_default_profile" \
   dotfiles.yml
+ok
