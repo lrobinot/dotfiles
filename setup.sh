@@ -11,9 +11,6 @@ COL_RESET=$ESC_SEQ"39m"
 COL_RED=$ESC_SEQ"31m"
 COL_GREEN=$ESC_SEQ"32m"
 COL_YELLOW=$ESC_SEQ"33m"
-COL_BLUE=$ESC_SEQ"34m"
-COL_MAGENTA=$ESC_SEQ"35m"
-COL_CYAN=$ESC_SEQ"36m"
 
 message() {
   /bin/echo -e "\n$COL_GREEN*** $1$COL_RESET"
@@ -50,13 +47,18 @@ echo '| (_| | (_) | |_|  _| | |  __/\__ \_   _|_   _|'
 echo ' \__,_|\___/ \__|_| |_|_|\___||___/ |_|   |_|  '
 echo '                                               '
 
+wsl=$(cat /proc/version | grep -c -- -Microsoft)
+
+message "Checking requirements"
+sudo DEBIAN_FRONTEND=nonnoninteractive apt-get install -qq --yes dirmngr python-pip python-dev libffi-dev libssl-dev </dev/null >/dev/null && echo "OK"
+
 message "Checking ansible requirement"
 command -v ansible >/dev/null 2>&1 || {
   action "ansible not found, installing via apt"
   running "add-apt-repository ppa:ansible/ansible"
   sudo add-apt-repository --yes --update ppa:ansible/ansible &>/dev/null && echo "OK"
   running "apt-get install ansible"
-  sudo DEBIAN_FRONEND=noninterractive apt-get install -qq --yes ansible </dev/null >/dev/null && echo "OK"
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes ansible </dev/null >/dev/null && echo "OK"
 }
 running "ansible --version"
 ansible --version
@@ -106,5 +108,6 @@ ansible-playbook \
   --extra-vars="groupname=$(id --group "$USER")" \
   --extra-vars="homedir=$HOME" \
   --extra-vars="dotdir=$(realpath --relative-to="$HOME" "$top")" \
+  --extra-vars="wsl=$wsl" \
   --extra-vars="gnome_terminal_default_profile=$gnome_terminal_default_profile" \
   dotfiles.yml
