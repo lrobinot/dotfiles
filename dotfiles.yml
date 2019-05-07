@@ -31,8 +31,8 @@
         - { key: "custom-background-color", value: "'{{ terminal.background.color }}'" }
         - { key: "background-color", value: "'{{ terminal.background.color }}'" }
         - { key: "palette", value: "{{ terminal.palette }}" }
-        - { key: "use-custom-command", value: "'zsh'" }
-        - { key: "custom-command", value: "true" }
+        - { key: "use-custom-command", value: "true" }
+        - { key: "custom-command", value: "'/usr/bin/zsh'" }
         - { key: "use-system-font", value: "false" }
         - { key: "font", value: "'Ubuntu Mono 12'" }
         - { key: "cursor-foreground-color", value: "'{{ terminal.cursor.color }}'" }
@@ -41,7 +41,6 @@
         - { key: "use-transparent-background", value: "true" }
         - { key: "use-theme-transparency", value: "false" }
         - { key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}" }
-        - { key: "custom-command", value: "'zsh'" }
 
     - name: "Install Terminator"
       package:
@@ -62,10 +61,40 @@
       tags:
         - terminator
 
+    - name: "Install Tilda"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - tilda
+      tags:
+        - tilda
+
+    - name: "Configure Tilda"
+      template:
+        src: home/.config/tilda/config_0.j2
+        dest: "{{ homedir }}/.config/tilda/config_0"
+        owner: "{{ username }}"
+        group: "{{ groupname }}"
+        mode: 0600
+      tags:
+        - tilda
+
+    - name: "Auto start Tilda"
+      template:
+        src: home/.config/autostart/tilda.desktop.j2
+        dest: "{{ homedir }}/.config/autostart/tilda.desktop"
+        owner: "{{ username }}"
+        group: "{{ groupname }}"
+        mode: 0600
+      tags:
+        - tilda
+
     - name: "Git repository"
       apt_repository:
         repo: ppa:git-core/ppa
         filename: git-core
+        mode: 0644
 
     - name: "Install Git & Git-flow"
       package:
@@ -88,6 +117,7 @@
         repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
         state: present
         filename: docker
+        mode: 0644
 
     - name: "Install Docker"
       package:
@@ -110,6 +140,7 @@
         repo: "deb [arch=amd64] https://deb.nodesource.com/{{ packages.node.repo }} {{ ansible_distribution_release }} main"
         state: present
         filename: nodesource
+        mode: 0644
 
     - name: "Install Node"
       package:
@@ -131,6 +162,7 @@
         repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
         state: present
         filename: vscode
+        mode: 0644
 
     - name: "Install VS Code"
       package:
