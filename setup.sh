@@ -69,6 +69,7 @@ command -v git >/dev/null 2>&1 && {
   umask g-w,o-rwx
   git pull origin master
   git submodule update --recursive --remote
+  ok
 }
 
 message "Need some configuration"
@@ -93,6 +94,7 @@ read -r -p "  ... your github username? " -i "$githubuser" -e githubuser
 
 gnome_terminal_default_profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 gnome_terminal_default_profile=${gnome_terminal_default_profile:1:-1}
+ok
 
 message "Starting playbook"
 export ANSIBLE_CONFIG="${top}/ansible.cfg"
@@ -111,3 +113,4 @@ ansible-playbook \
   --extra-vars="wsl=$wsl" \
   --extra-vars="gnome_terminal_default_profile=$gnome_terminal_default_profile" \
   dotfiles.yml
+ok
