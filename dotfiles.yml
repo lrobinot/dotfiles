@@ -9,12 +9,16 @@
         state: latest
       with_items:
         - ubuntu-mono
+      tags:
+        - fonts
 
     - name: Install Gnome Terminal
       package:
         name: "{{ item }}"
         state: latest
       with_items:
+        - gnome-terminal
+      tags:
         - gnome-terminal
 
     - name: Configure Gnome Terminal (default-size-columns)
@@ -42,6 +46,8 @@
         - { key: "use-theme-transparency", value: "false" }
         - { key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}" }
         - { key: "custom-command", value: "'zsh'" }
+      tags:
+        - gnome-terminal
 
     - name: "Install Terminator"
       package:
@@ -66,6 +72,8 @@
       apt_repository:
         repo: ppa:git-core/ppa
         filename: git-core
+      tags:
+        - git
 
     - name: "Install Git & Git-flow"
       package:
@@ -74,6 +82,8 @@
       with_items:
         - git
         - git-flow
+      tags:
+        - git
 
     - name: "Configure Git"
       template:
@@ -82,12 +92,16 @@
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      tags:
+        - git
 
     - name: "Docker repository"
       apt_repository:
         repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
         state: present
         filename: docker
+      tags:
+        - docker
 
     - name: "Install Docker"
       package:
@@ -96,6 +110,8 @@
       with_items:
         - docker.io
         - docker-compose
+      tags:
+        - docker
 
     - name: "Install Minikube"
       get_url:
@@ -104,18 +120,24 @@
         owner: root
         group: root
         mode: 0755
+      tags:
+        - minikube
 
     - name: "Node repository"
       apt_repository:
         repo: "deb [arch=amd64] https://deb.nodesource.com/{{ packages.node.repo }} {{ ansible_distribution_release }} main"
         state: present
         filename: nodesource
+      tags:
+        - nodejs
 
     - name: "Install Node"
       package:
         name: "{{ item }}"
         state: latest
       with_items:
+        - nodejs
+      tags:
         - nodejs
 
     - name: "Configure Node"
@@ -125,12 +147,16 @@
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      tags:
+        - nodejs
 
     - name: "VS Code repository"
       apt_repository:
         repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
         state: present
         filename: vscode
+      tags:
+        - vscode
 
     - name: "Install VS Code"
       package:
@@ -138,6 +164,8 @@
         state: latest
       with_items:
         - code
+      tags:
+        - vscode
 
     - name: "Configure VS Code"
       template:
@@ -149,12 +177,16 @@
       with_items:
         - settings.json
         - keybindings.json
+      tags:
+        - vscode
 
     - name: "Install Vim"
       package:
         name: "{{ item }}"
         state: latest
       with_items:
+        - vim
+      tags:
         - vim
 
     - name: "Configure Vim"
@@ -164,6 +196,8 @@
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      tags:
+        - vim
 
     - name: "Install Tmux"
       package:
@@ -190,6 +224,8 @@
         state: latest
       with_items:
         - zsh
+      tags:
+        - zsh
 
     - name: "Configure Zsh"
       template:
@@ -198,12 +234,16 @@
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      tags:
+        -zsh
 
     - name: "Install Httpie"
       package:
         name: "{{ item }}"
         state: latest
       with_items:
+        - httpie
+      tags:
         - httpie
 
     - name: "Install Wallch"
