@@ -9,7 +9,7 @@
         state: latest
       with_items:
         - ubuntu-mono
-      when: wsl == 0
+      when: wsl == "0"
       tags:
         - fonts
 
@@ -19,7 +19,7 @@
         state: latest
       with_items:
         - gnome-terminal
-      when: wsl == 0
+      when: wsl == "0"
       tags:
         - gnome-terminal
 
@@ -47,8 +47,7 @@
         - { key: "use-transparent-background", value: "true" }
         - { key: "use-theme-transparency", value: "false" }
         - { key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}" }
-        - { key: "custom-command", value: "'zsh'" }
-      when: wsl == 0
+      when: wsl == "0"
       tags:
         - gnome-terminal
 
@@ -58,7 +57,7 @@
         state: latest
       with_items:
         - terminator
-      when: wsl == 0
+      when: wsl == "0"
       tags:
         - terminator
 
@@ -69,7 +68,7 @@
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
-      when: wsl == 0
+      when: wsl == "0"
       tags:
         - terminator
 
@@ -202,7 +201,7 @@
         state: present
         filename: vscode
         mode: 0644
-      when: wsl == 0
+      when: wsl == "0"
       tags:
         - vscode
 
@@ -212,7 +211,7 @@
         state: latest
       with_items:
         - code
-      when: wsl == 0
+      when: wsl == "0"
       tags:
         - vscode
 
@@ -226,7 +225,7 @@
       with_items:
         - settings.json
         - keybindings.json
-      when: wsl == 0
+      when: wsl == "0"
       tags:
         - vscode
 
@@ -302,6 +301,6 @@
         state: latest
       with_items:
         - wallch
-      when: wsl == 0
+      when: wsl == "0"
       tags:
         - wallch
