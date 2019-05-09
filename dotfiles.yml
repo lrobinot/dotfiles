@@ -119,12 +119,21 @@
         filename: docker
         mode: 0644
 
+    - name: "Remove old Docker"
+      package:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - docker
+        - docker-engine
+        - docker.io
+
     - name: "Install Docker"
       package:
         name: "{{ item }}"
         state: latest
       with_items:
-        - docker.io
+        - docker-ce
         - docker-compose
 
     - name: "Install Minikube"
@@ -244,5 +253,4 @@
         state: latest
       with_items:
         - wallch
-
 
