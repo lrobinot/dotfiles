@@ -47,10 +47,10 @@ echo '| (_| | (_) | |_|  _| | |  __/\__ \_   _|_   _|'
 echo ' \__,_|\___/ \__|_| |_|_|\___||___/ |_|   |_|  '
 echo '                                               '
 
-wsl=$(cat /proc/version | grep -c -- -Microsoft)
+wsl=$(cat /proc/version | grep -c -- -Microsoft || :)
 
 message "Checking requirements"
-sudo DEBIAN_FRONTEND=nonnoninteractive apt-get install -qq --yes dirmngr python-pip python-dev libffi-dev libssl-dev </dev/null >/dev/null && echo "OK"
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr python-pip python-dev libffi-dev libssl-dev </dev/null >/dev/null && echo "OK"
 
 message "Checking ansible requirement"
 command -v ansible >/dev/null 2>&1 || {
