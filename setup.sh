@@ -68,7 +68,9 @@ command -v git >/dev/null 2>&1 && {
   message "Updating dotfiles"
   umask g-w,o-rwx
   git pull origin master
-  git submodule update --recursive --remote
+  # To update to new version of submodule
+  #git submodule update --recursive --remote
+  git submodule update --recursive
   ok
 }
 
