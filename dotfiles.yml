@@ -9,12 +9,18 @@
         state: latest
       with_items:
         - ubuntu-mono
+      when: wsl == 0
+      tags:
+        - fonts
 
     - name: Install Gnome Terminal
       package:
         name: "{{ item }}"
         state: latest
       with_items:
+        - gnome-terminal
+      when: wsl == 0
+      tags:
         - gnome-terminal
 
     - name: Configure Gnome Terminal (default-size-columns)
@@ -41,6 +47,10 @@
         - { key: "use-transparent-background", value: "true" }
         - { key: "use-theme-transparency", value: "false" }
         - { key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}" }
+        - { key: "custom-command", value: "'zsh'" }
+      when: wsl == 0
+      tags:
+        - gnome-terminal
 
     - name: "Install Terminator"
       package:
@@ -48,6 +58,7 @@
         state: latest
       with_items:
         - terminator
+      when: wsl == 0
       tags:
         - terminator
 
@@ -58,6 +69,7 @@
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      when: wsl == 0
       tags:
         - terminator
 
@@ -95,6 +107,8 @@
         repo: ppa:git-core/ppa
         filename: git-core
         mode: 0644
+      tags:
+        - git
 
     - name: "Install Git & Git-flow"
       package:
@@ -103,6 +117,8 @@
       with_items:
         - git
         - git-flow
+      tags:
+        - git
 
     - name: "Configure Git"
       template:
@@ -111,6 +127,8 @@
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      tags:
+        - git
 
     - name: "Docker repository"
       apt_repository:
@@ -118,6 +136,8 @@
         state: present
         filename: docker
         mode: 0644
+      tags:
+        - docker
 
     - name: "Remove old Docker"
       package:
@@ -135,6 +155,8 @@
       with_items:
         - docker-ce
         - docker-compose
+      tags:
+        - docker
 
     - name: "Install Minikube"
       get_url:
@@ -143,6 +165,8 @@
         owner: root
         group: root
         mode: 0755
+      tags:
+        - minikube
 
     - name: "Node repository"
       apt_repository:
@@ -150,12 +174,16 @@
         state: present
         filename: nodesource
         mode: 0644
+      tags:
+        - nodejs
 
     - name: "Install Node"
       package:
         name: "{{ item }}"
         state: latest
       with_items:
+        - nodejs
+      tags:
         - nodejs
 
     - name: "Configure Node"
@@ -165,6 +193,8 @@
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      tags:
+        - nodejs
 
     - name: "VS Code repository"
       apt_repository:
@@ -172,6 +202,9 @@
         state: present
         filename: vscode
         mode: 0644
+      when: wsl == 0
+      tags:
+        - vscode
 
     - name: "Install VS Code"
       package:
@@ -179,6 +212,9 @@
         state: latest
       with_items:
         - code
+      when: wsl == 0
+      tags:
+        - vscode
 
     - name: "Configure VS Code"
       template:
@@ -190,12 +226,17 @@
       with_items:
         - settings.json
         - keybindings.json
+      when: wsl == 0
+      tags:
+        - vscode
 
     - name: "Install Vim"
       package:
         name: "{{ item }}"
         state: latest
       with_items:
+        - vim
+      tags:
         - vim
 
     - name: "Configure Vim"
@@ -205,6 +246,8 @@
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      tags:
+        - vim
 
     - name: "Install Tmux"
       package:
@@ -231,6 +274,8 @@
         state: latest
       with_items:
         - zsh
+      tags:
+        - zsh
 
     - name: "Configure Zsh"
       template:
@@ -239,12 +284,16 @@
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      tags:
+        -zsh
 
     - name: "Install Httpie"
       package:
         name: "{{ item }}"
         state: latest
       with_items:
+        - httpie
+      tags:
         - httpie
 
     - name: "Install Wallch"
@@ -253,4 +302,6 @@
         state: latest
       with_items:
         - wallch
-
+      when: wsl == 0
+      tags:
+        - wallch
