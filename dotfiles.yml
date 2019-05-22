@@ -93,11 +93,14 @@
 
     - name: "Configure Tilda"
       template:
-        src: home/.config/tilda/config_0.j2
-        dest: "{{ homedir }}/.config/tilda/config_0"
+        src: home/.config/tilda/{{ item }}.j2
+        dest: "{{ homedir }}/.config/tilda/{{ item }}"
         owner: "{{ username }}"
         group: "{{ groupname }}"
         mode: 0600
+      with_items:
+        - config_0
+        - style.css
       tags:
         - tilda
 
@@ -169,7 +172,8 @@
 
     - name: "Install Minikube"
       get_url:
-        url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        url: https://storage.googleapis.com/minikube/releases/v1.1.0/minikube-linux-amd64
+        checksum: sha256:43ce88a10c7b57f5e4f83e5a1485e13e4ad537bfb20f7d57364f66450b872634
         dest: /usr/local/bin/minikube
         owner: root
         group: root
