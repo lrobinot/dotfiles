@@ -324,3 +324,27 @@
         mode: 0755
       tags:
         - sops
+
+    - name: "Insomnia repository key"
+      apt_key:
+        url: https://insomnia.rest/keys/debian-public.key.asc
+        state: present
+
+    - name: "Insomnia repository"
+      apt_repository:
+        repo: "deb [arch=amd64] deb https://dl.bintray.com/getinsomnia/Insomnia"
+        state: present
+        filename: insomnia
+        mode: 0644
+      tags:
+        - insomnia
+
+    - name: "Install Insomnia"
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - insomnia
+      tags:
+        - insomnia
+
