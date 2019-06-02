@@ -336,7 +336,7 @@
 
     - name: "Insomnia repository"
       apt_repository:
-        repo: "deb [arch=amd64] deb https://dl.bintray.com/getinsomnia/Insomnia"
+        repo: "deb [arch=amd64] https://dl.bintray.com/getinsomnia/Insomnia /"
         state: present
         filename: insomnia
         mode: 0644
