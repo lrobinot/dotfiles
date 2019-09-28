@@ -36,3 +36,15 @@ all:
     packages:
       node:
         repo: "node_12.x"
+
+      minikube:
+        version: 1.4.0
+        sha256: e63b8007c2d39fd037587adff2ec5360a910b51f427f0d1521fce5f3cac5e0fd
+
+      sops:
+        version: 3.4.0
+
+      go:
+        version: 1.13.1
+        sha256: 94f874037b82ea5353f4061e543681a0e79657f787437974214629af8407d124
+

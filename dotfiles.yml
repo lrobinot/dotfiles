@@ -1,354 +1,442 @@
 ---
 - hosts: localhost
   become: yes
+  vars:
+  - go_version_expected: "go version go{{ packages.go.version }} linux/amd64"
 
   tasks:
-    - name: "Install Ubuntu Mono fonts"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - ubuntu-mono
-      when: wsl == "0"
-      tags:
-        - fonts
+  - name: "[fonts] Ubuntu Mono :: installation"
+    apt:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - ubuntu-mono
+    when: wsl == "0"
+    tags:
+    - fonts
+    - ubuntu-mono
 
-    - name: Install Gnome Terminal
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - gnome-terminal
-      when: wsl == "0"
-      tags:
-        - gnome-terminal
+  - name: "[terminal] Gnome Terminal :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - gnome-terminal
+    when: wsl == "0"
+    tags:
+    - terminal
+    - gnome-terminal
 
-    - name: Configure Gnome Terminal
-      become: "{{ username }}"
-      dconf:
-        key: "/org/gnome/terminal/legacy/profiles:/:{{ gnome_terminal_default_profile }}/{{ item.key }}"
-        state: present
-        value: "{{ item.value }}"
-      with_items:
-        - { key: "default-size-columns", value: "120" }
-        - { key: "default-size-rows", value: "60" }
-        - { key: "use-theme-colors", value: "false" }
-        - { key: "foreground-color", value: "'{{ terminal.foreground.color }}'" }
-        - { key: "custom-background-color", value: "'{{ terminal.background.color }}'" }
-        - { key: "background-color", value: "'{{ terminal.background.color }}'" }
-        - { key: "palette", value: "{{ terminal.palette }}" }
-        - { key: "use-custom-command", value: "true" }
-        - { key: "custom-command", value: "'/usr/bin/zsh'" }
-        - { key: "use-system-font", value: "false" }
-        - { key: "font", value: "'Ubuntu Mono 12'" }
-        - { key: "cursor-foreground-color", value: "'{{ terminal.cursor.color }}'" }
-        - { key: "cursor-foreground-color", value: "'{{ terminal.cursor.color }}'" }
-        - { key: "audible-bell", value: "false" }
-        - { key: "use-transparent-background", value: "true" }
-        - { key: "use-theme-transparency", value: "false" }
-        - { key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}" }
-      when: wsl == "0"
-      tags:
-        - gnome-terminal
+  - name: "[terminal] Gnome Terminal :: configuration"
+    become: "{{ username }}"
+    dconf:
+      key: "/org/gnome/terminal/legacy/profiles:/:{{ gnome_terminal_default_profile }}/{{ item.key }}"
+      state: present
+      value: "{{ item.value }}"
+    with_items:
+    - { key: "default-size-columns", value: "120" }
+    - { key: "default-size-rows", value: "60" }
+    - { key: "use-theme-colors", value: "false" }
+    - { key: "foreground-color", value: "'{{ terminal.foreground.color }}'" }
+    - { key: "custom-background-color", value: "'{{ terminal.background.color }}'" }
+    - { key: "background-color", value: "'{{ terminal.background.color }}'" }
+    - { key: "palette", value: "{{ terminal.palette }}" }
+    - { key: "use-custom-command", value: "true" }
+    - { key: "custom-command", value: "'/usr/bin/zsh'" }
+    - { key: "use-system-font", value: "false" }
+    - { key: "font", value: "'Ubuntu Mono 12'" }
+    - { key: "cursor-foreground-color", value: "'{{ terminal.cursor.color }}'" }
+    - { key: "cursor-foreground-color", value: "'{{ terminal.cursor.color }}'" }
+    - { key: "audible-bell", value: "false" }
+    - { key: "use-transparent-background", value: "true" }
+    - { key: "use-theme-transparency", value: "false" }
+    - { key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}" }
+    when: wsl == "0"
+    tags:
+    - terminal
+    - gnome-terminal
 
-    - name: "Install Terminator"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - terminator
-      when: wsl == "0"
-      tags:
-        - terminator
+  - name: "[terminal] Terminator :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - terminator
+    when: wsl == "0"
+    tags:
+    - terminal
+    - terminator
 
-    - name: "Configure Terminator"
-      template:
-        src: home/.config/terminator/config.j2
-        dest: "{{ homedir }}/.config/terminator/config"
-        owner: "{{ username }}"
-        group: "{{ groupname }}"
-        mode: 0600
-      when: wsl == "0"
-      tags:
-        - terminator
+  - name: "[terminal] Terminator :: configuration"
+    template:
+      src: home/.config/terminator/config.j2
+      dest: "{{ homedir }}/.config/terminator/config"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    when: wsl == "0"
+    tags:
+    - terminal
+    - terminator
 
-    - name: "Install Tilda"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - tilda
-      tags:
-        - tilda
+  - name: "[terminal] Tilda :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - tilda
+    tags:
+    - terminal
+    - tilda
 
-    - name: "Configure Tilda (folder)"
-      file:
-        path: "{{ homedir }}/.config/tilda"
-        state: directory
-        owner: "{{ username }}"
-        group: "{{ groupname }}"
-        mode: '0700'
-      tags:
-        - tilda
+  - name: "[terminal] Tilda :: folder"
+    file:
+      path: "{{ homedir }}/.config/tilda"
+      state: directory
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: '0700'
+    tags:
+    - terminal
+    - tilda
 
-    - name: "Configure Tilda"
-      template:
-        src: home/.config/tilda/{{ item }}.j2
-        dest: "{{ homedir }}/.config/tilda/{{ item }}"
-        owner: "{{ username }}"
-        group: "{{ groupname }}"
-        mode: 0600
-      with_items:
-        - config_0
-        - style.css
-      tags:
-        - tilda
+  - name: "[terminal] Tilda :: configuration"
+    template:
+      src: home/.config/tilda/{{ item }}.j2
+      dest: "{{ homedir }}/.config/tilda/{{ item }}"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    with_items:
+    - config_0
+    - style.css
+    tags:
+    - terminal
+    - tilda
 
-    - name: "Auto start Tilda"
-      template:
-        src: home/.config/autostart/tilda.desktop.j2
-        dest: "{{ homedir }}/.config/autostart/tilda.desktop"
-        owner: "{{ username }}"
-        group: "{{ groupname }}"
-        mode: 0600
-      tags:
-        - tilda
+  - name: "[terminal] Tilda :: auto-start"
+    template:
+      src: home/.config/autostart/tilda.desktop.j2
+      dest: "{{ homedir }}/.config/autostart/tilda.desktop"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - terminal
+    - tilda
 
-    - name: "Git repository"
-      apt_repository:
-        repo: ppa:git-core/ppa
-        filename: git-core
-        mode: 0644
-      tags:
-        - git
+  - name: "[scm] Git :: repository"
+    apt_repository:
+      repo: ppa:git-core/ppa
+      filename: git-core
+      mode: 0644
+    tags:
+    - scm
+    - git
 
-    - name: "Install Git & Git-flow"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - git
-        - git-flow
-      tags:
-        - git
+  - name: "[scm] Git :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - git
+    - git-flow
+    tags:
+    - scm
+    - git
 
-    - name: "Configure Git"
-      template:
-        src: home/.gitconfig.j2
-        dest: "{{ homedir }}/.gitconfig"
-        owner: "{{ username }}"
-        group: "{{ groupname }}"
-        mode: 0600
-      tags:
-        - git
+  - name: "[scm] Git :: configuration"
+    template:
+      src: home/.gitconfig.j2
+      dest: "{{ homedir }}/.gitconfig"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - scm
+    - git
 
-    - name: "Docker repository"
-      apt_repository:
-        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
-        state: present
-        filename: docker
-        mode: 0644
-      tags:
-        - docker
+  - name: "[container] Docker :: repository"
+    apt_repository:
+      repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+      state: present
+      filename: docker
+      mode: 0644
+    tags:
+    - container
+    - docker
 
-    - name: "Remove old Docker"
-      package:
-        name: "{{ item }}"
-        state: absent
-      with_items:
-        - docker
-        - docker-engine
-        - docker.io
+  - name: "[container] Docker :: cleanup"
+    package:
+      name: "{{ item }}"
+      state: absent
+    with_items:
+    - docker
+    - docker-engine
+    - docker.io
+    tags:
+    - container
+    - docker
 
-    - name: "Install Docker"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - docker-ce
-        - docker-compose
-      tags:
-        - docker
+  - name: "[container] Docker :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - docker-ce
+    - docker-compose
+    tags:
+    - container
+    - docker
 
-    - name: "Install Minikube"
-      get_url:
-        url: https://storage.googleapis.com/minikube/releases/v1.1.0/minikube-linux-amd64
-        checksum: sha256:43ce88a10c7b57f5e4f83e5a1485e13e4ad537bfb20f7d57364f66450b872634
-        dest: /usr/local/bin/minikube
-        owner: root
-        group: root
-        mode: 0755
-      tags:
-        - minikube
+  - name: "[kubernetes] Minikube :: installation"
+    get_url:
+      url: https://storage.googleapis.com/minikube/releases/v{{ packages.minikube.version }}/minikube-linux-amd64
+      checksum: sha256:{{ packages.minikube.sha256 }}
+      dest: /usr/local/bin/minikube
+      owner: root
+      group: root
+      mode: 0755
+    tags:
+    - kubernetes
+    - minikube
 
-    - name: "Node repository"
-      apt_repository:
-        repo: "deb [arch=amd64] https://deb.nodesource.com/{{ packages.node.repo }} {{ ansible_distribution_release }} main"
-        state: present
-        filename: nodesource
-        mode: 0644
-      tags:
-        - nodejs
+  - name: "[kubernetes] SOPS :: installation"
+    get_url:
+      url: https://github.com/mozilla/sops/releases/download/{{ packages.sops.version }}/sops-{{ packages.sops.version }}.linux
+      dest: /usr/local/bin/sops
+      owner: root
+      group: root
+      mode: 0755
+    tags:
+    - kubernetes
+    - sops
 
-    - name: "Install Node"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - nodejs
-      tags:
-        - nodejs
+  - name: "[lang] Node :: repository"
+    apt_repository:
+      repo: "deb [arch=amd64] https://deb.nodesource.com/{{ packages.node.repo }} {{ ansible_distribution_release }} main"
+      state: present
+      filename: nodesource
+      mode: 0644
+    tags:
+    - lang
+    - nodejs
 
-    - name: "Configure Node"
-      template:
-        src: home/.npmrc.j2
-        dest: "{{ homedir }}/.npmrc"
-        owner: "{{ username }}"
-        group: "{{ groupname }}"
-        mode: 0600
-      tags:
-        - nodejs
+  - name: "[lang] Node :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - nodejs
+    tags:
+    - lang
+    - nodejs
 
-    - name: "VS Code repository"
-      apt_repository:
-        repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
-        state: present
-        filename: vscode
-        mode: 0644
-      when: wsl == "0"
-      tags:
-        - vscode
+  - name: "[lang] Node :: configuration"
+    template:
+      src: home/.npmrc.j2
+      dest: "{{ homedir }}/.npmrc"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - lang
+    - nodejs
 
-    - name: "Install VS Code"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - code
-      when: wsl == "0"
-      tags:
-        - vscode
+  - name: "[lang] Go :: check"
+    command: /usr/local/go/bin/go version
+    ignore_errors: yes
+    register: go_version
+    changed_when: false
+    tags:
+    - lang
+    - go
 
-    - name: "Configure VS Code"
-      template:
-        src: home/.config/Code/User/{{ item }}
-        dest: "{{ homedir }}/.config/Code/User/{{ item }}"
-        owner: "{{ username }}"
-        group: "{{ groupname }}"
-        mode: 0600
-      with_items:
-        - settings.json
-        - keybindings.json
-      when: wsl == "0"
-      tags:
-        - vscode
+  - name: "[lang] Go :: download"
+    get_url:
+      url: https://dl.google.com/go/go{{ packages.go.version }}.linux-amd64.tar.gz
+      dest: /usr/local/src/go{{ packages.go.version }}.linux-amd64.tar.gz
+      checksum: sha256:{{ packages.go.sha256 }}
+    when: go_version is failed or go_version.stdout != go_version_expected
+    tags:
+    - lang
+    - go
 
-    - name: "Install Vim"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - vim
-      tags:
-        - vim
+  - name: "[lang] Go :: cleanup"
+    file:
+      path: /usr/local/go
+      state: absent
+    when: go_version is failed or go_version.stdout != go_version_expected
+    tags:
+    - lang
+    - go
 
-    - name: "Configure Vim"
-      template:
-        src: home/.vimrc.j2
-        dest: "{{ homedir }}/.vimrc"
-        owner: "{{ username }}"
-        group: "{{ groupname }}"
-        mode: 0600
-      tags:
-        - vim
+  - name: "[lang] Go :: installation"
+    unarchive:
+      src: /usr/local/src/go{{ packages.go.version }}.linux-amd64.tar.gz
+      dest: /usr/local
+      copy: no
+    when: go_version is failed or go_version.stdout != go_version_expected
+    tags:
+    - lang
+    - go
 
-    - name: "Install Tmux"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - tmux
-      tags:
-        - tmux
+  - name: "[lang] Go :: configuration"
+    template:
+      src: etc/profile.d/{{ item }}.j2
+      dest: /etc/profile.d/{{ item }}
+    with_items:
+    - go-bin.sh
+    - go-path.sh
+    tags:
+    - lang
+    - go
 
-    - name: "Configure Tmux"
-      template:
-        src: home/.tmux.conf.j2
-        dest: "{{ homedir }}/.tmux.conf"
-        owner: "{{ username }}"
-        group: "{{ groupname }}"
-        mode: 0600
-      tags:
-        - tmux
+  - name: "[editor] Code :: repository"
+    apt_repository:
+      repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+      state: present
+      filename: vscode
+      mode: 0644
+    when: wsl == "0"
+    tags:
+    - editor
+    - vscode
 
-    - name: "Install Zsh"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - zsh
-      tags:
-        - zsh
+  - name: "[editor] Code :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - code
+    when: wsl == "0"
+    tags:
+    - editor
+    - vscode
 
-    - name: "Configure Zsh"
-      template:
-        src: home/.zshrc.j2
-        dest: "{{ homedir }}/.zshrc"
-        owner: "{{ username }}"
-        group: "{{ groupname }}"
-        mode: 0600
-      tags:
-        -zsh
+  - name: "[editor] Code :: configuration"
+    template:
+      src: home/.config/Code/User/{{ item }}
+      dest: "{{ homedir }}/.config/Code/User/{{ item }}"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    with_items:
+    - settings.json
+    - keybindings.json
+    when: wsl == "0"
+    tags:
+    - editor
+    - vscode
 
-    - name: "Install Httpie"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - httpie
-      tags:
-        - httpie
+  - name: "[editor] Vim :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - vim
+    tags:
+    - editor
+    - vim
 
-    - name: "Install Wallch"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - wallch
-      when: wsl == "0"
-      tags:
-        - wallch
+  - name: "[editor] Vim :: configuration"
+    template:
+      src: home/.vimrc.j2
+      dest: "{{ homedir }}/.vimrc"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - editor
+    - vim
 
-    - name: "Install SOPS"
-      get_url:
-        url: https://github.com/mozilla/sops/releases/download/3.3.0/sops-3.3.0.linux
-        dest: /usr/local/bin/sops
-        owner: root
-        group: root
-        mode: 0755
-      tags:
-        - sops
+  - name: "[shell] Zsh :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - zsh
+    tags:
+    - shell
+    - zsh
 
-    - name: "Insomnia repository key"
-      apt_key:
-        url: https://insomnia.rest/keys/debian-public.key.asc
-        state: present
+  - name: "[shell] Zsh :: configuration"
+    template:
+      src: home/.zshrc.j2
+      dest: "{{ homedir }}/.zshrc"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - shell
+    - zsh
 
-    - name: "Insomnia repository"
-      apt_repository:
-        repo: "deb [arch=amd64] https://dl.bintray.com/getinsomnia/Insomnia /"
-        state: present
-        filename: insomnia
-        mode: 0644
-      tags:
-        - insomnia
+  - name: "[utils] Tmux :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - tmux
+    tags:
+    - utils
+    - tmux
 
-    - name: "Install Insomnia"
-      package:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - insomnia
-      tags:
-        - insomnia
+  - name: "[utils] Tmux :: configuration"
+    template:
+      src: home/.tmux.conf.j2
+      dest: "{{ homedir }}/.tmux.conf"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - utils
+    - tmux
 
+  - name: "[utils] Httpie :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - httpie
+    tags:
+    - utils
+    - httpie
+
+  - name: "[utils] Insomnia :: repository key"
+    apt_key:
+      url: https://insomnia.rest/keys/debian-public.key.asc
+      state: present
+    tags:
+    - utils
+    - insomnia
+
+  - name: "[utils] Insomnia :: repository"
+    apt_repository:
+      repo: "deb [arch=amd64] https://dl.bintray.com/getinsomnia/Insomnia /"
+      state: present
+      filename: insomnia
+      mode: 0644
+    tags:
+    - utils
+    - insomnia
+
+  - name: "[utils] Insomnia :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - insomnia
+    tags:
+    - utils
+    - insomnia
+
+  - name: "[misc] Wallch :: installation"
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - wallch
+    when: wsl == "0"
+    tags:
+    - misc
+    - wallch
