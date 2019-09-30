@@ -1,33 +1,32 @@
 ---
 - hosts: localhost
+  module_defaults:
+    apt:
+      force_apt_get: yes
   become: yes
   vars:
   - go_version_expected: "go version go{{ packages.go.version }} linux/amd64"
 
   tasks:
-  - name: "[fonts] Ubuntu Mono :: installation"
+  - name: "fonts | Ubuntu Mono :: installation"
     apt:
-      name: "{{ item }}"
+      name: ubuntu-mono
       state: latest
-    with_items:
-    - ubuntu-mono
     when: wsl == "0"
     tags:
     - fonts
     - ubuntu-mono
 
-  - name: "[terminal] Gnome Terminal :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "terminal | Gnome Terminal :: installation"
+    apt:
+      name: gnome-terminal
       state: latest
-    with_items:
-    - gnome-terminal
     when: wsl == "0"
     tags:
     - terminal
     - gnome-terminal
 
-  - name: "[terminal] Gnome Terminal :: configuration"
+  - name: "terminal | Gnome Terminal :: configuration"
     become: "{{ username }}"
     dconf:
       key: "/org/gnome/terminal/legacy/profiles:/:{{ gnome_terminal_default_profile }}/{{ item.key }}"
@@ -56,18 +55,16 @@
     - terminal
     - gnome-terminal
 
-  - name: "[terminal] Terminator :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "terminal | Terminator :: installation"
+    apt:
+      name: terminator
       state: latest
-    with_items:
-    - terminator
     when: wsl == "0"
     tags:
     - terminal
     - terminator
 
-  - name: "[terminal] Terminator :: configuration"
+  - name: "terminal | Terminator :: configuration"
     template:
       src: home/.config/terminator/config.j2
       dest: "{{ homedir }}/.config/terminator/config"
@@ -79,17 +76,15 @@
     - terminal
     - terminator
 
-  - name: "[terminal] Tilda :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "terminal | Tilda :: installation"
+    apt:
+      name: tilda
       state: latest
-    with_items:
-    - tilda
     tags:
     - terminal
     - tilda
 
-  - name: "[terminal] Tilda :: folder"
+  - name: "terminal | Tilda :: folder"
     file:
       path: "{{ homedir }}/.config/tilda"
       state: directory
@@ -100,7 +95,7 @@
     - terminal
     - tilda
 
-  - name: "[terminal] Tilda :: configuration"
+  - name: "terminal | Tilda :: configuration"
     template:
       src: home/.config/tilda/{{ item }}.j2
       dest: "{{ homedir }}/.config/tilda/{{ item }}"
@@ -114,7 +109,7 @@
     - terminal
     - tilda
 
-  - name: "[terminal] Tilda :: auto-start"
+  - name: "terminal | Tilda :: auto-start"
     template:
       src: home/.config/autostart/tilda.desktop.j2
       dest: "{{ homedir }}/.config/autostart/tilda.desktop"
@@ -125,7 +120,7 @@
     - terminal
     - tilda
 
-  - name: "[scm] Git :: repository"
+  - name: "scm | Git :: repository"
     apt_repository:
       repo: ppa:git-core/ppa
       filename: git-core
@@ -134,18 +129,15 @@
     - scm
     - git
 
-  - name: "[scm] Git :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "scm | Git :: installation"
+    apt:
+      name: ['git', 'git-flow']
       state: latest
-    with_items:
-    - git
-    - git-flow
     tags:
     - scm
     - git
 
-  - name: "[scm] Git :: configuration"
+  - name: "scm | Git :: configuration"
     template:
       src: home/.gitconfig.j2
       dest: "{{ homedir }}/.gitconfig"
@@ -156,7 +148,7 @@
     - scm
     - git
 
-  - name: "[container] Docker :: repository"
+  - name: "container | Docker :: repository"
     apt_repository:
       repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
       state: present
@@ -166,30 +158,23 @@
     - container
     - docker
 
-  - name: "[container] Docker :: cleanup"
-    package:
-      name: "{{ item }}"
+  - name: "container | Docker :: cleanup"
+    apt:
+      name: ['docker', 'docker-engine', 'docker.io']
       state: absent
-    with_items:
-    - docker
-    - docker-engine
-    - docker.io
     tags:
     - container
     - docker
 
-  - name: "[container] Docker :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "container | Docker :: installation"
+    apt:
+      name: ['docker-ce', 'docker-compose']
       state: latest
-    with_items:
-    - docker-ce
-    - docker-compose
     tags:
     - container
     - docker
 
-  - name: "[kubernetes] Minikube :: installation"
+  - name: "kubernetes | Minikube :: installation"
     get_url:
       url: https://storage.googleapis.com/minikube/releases/v{{ packages.minikube.version }}/minikube-linux-amd64
       checksum: sha256:{{ packages.minikube.sha256 }}
@@ -201,7 +186,7 @@
     - kubernetes
     - minikube
 
-  - name: "[kubernetes] SOPS :: installation"
+  - name: "kubernetes | SOPS :: installation"
     get_url:
       url: https://github.com/mozilla/sops/releases/download/{{ packages.sops.version }}/sops-{{ packages.sops.version }}.linux
       dest: /usr/local/bin/sops
@@ -212,7 +197,7 @@
     - kubernetes
     - sops
 
-  - name: "[lang] Node :: repository"
+  - name: "lang | Node :: repository"
     apt_repository:
       repo: "deb [arch=amd64] https://deb.nodesource.com/{{ packages.node.repo }} {{ ansible_distribution_release }} main"
       state: present
@@ -222,17 +207,15 @@
     - lang
     - nodejs
 
-  - name: "[lang] Node :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "lang | Node :: installation"
+    apt:
+      name: nodejs
       state: latest
-    with_items:
-    - nodejs
     tags:
     - lang
     - nodejs
 
-  - name: "[lang] Node :: configuration"
+  - name: "lang | Node :: configuration"
     template:
       src: home/.npmrc.j2
       dest: "{{ homedir }}/.npmrc"
@@ -243,7 +226,7 @@
     - lang
     - nodejs
 
-  - name: "[lang] Go :: check"
+  - name: "lang | Go :: check"
     command: /usr/local/go/bin/go version
     ignore_errors: yes
     register: go_version
@@ -252,7 +235,7 @@
     - lang
     - go
 
-  - name: "[lang] Go :: download"
+  - name: "lang | Go :: download"
     get_url:
       url: https://dl.google.com/go/go{{ packages.go.version }}.linux-amd64.tar.gz
       dest: /usr/local/src/go{{ packages.go.version }}.linux-amd64.tar.gz
@@ -262,7 +245,7 @@
     - lang
     - go
 
-  - name: "[lang] Go :: cleanup"
+  - name: "lang | Go :: cleanup"
     file:
       path: /usr/local/go
       state: absent
@@ -271,7 +254,7 @@
     - lang
     - go
 
-  - name: "[lang] Go :: installation"
+  - name: "lang | Go :: installation"
     unarchive:
       src: /usr/local/src/go{{ packages.go.version }}.linux-amd64.tar.gz
       dest: /usr/local
@@ -281,10 +264,11 @@
     - lang
     - go
 
-  - name: "[lang] Go :: configuration"
+  - name: "lang | Go :: configuration"
     template:
       src: etc/profile.d/{{ item }}.j2
       dest: /etc/profile.d/{{ item }}
+      mode: 0644
     with_items:
     - go-bin.sh
     - go-path.sh
@@ -292,7 +276,7 @@
     - lang
     - go
 
-  - name: "[editor] Code :: repository"
+  - name: "editor | Code :: repository"
     apt_repository:
       repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
       state: present
@@ -303,18 +287,16 @@
     - editor
     - vscode
 
-  - name: "[editor] Code :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "editor | Code :: installation"
+    apt:
+      name: code
       state: latest
-    with_items:
-    - code
     when: wsl == "0"
     tags:
     - editor
     - vscode
 
-  - name: "[editor] Code :: configuration"
+  - name: "editor | Code :: configuration"
     template:
       src: home/.config/Code/User/{{ item }}
       dest: "{{ homedir }}/.config/Code/User/{{ item }}"
@@ -329,17 +311,15 @@
     - editor
     - vscode
 
-  - name: "[editor] Vim :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "editor | Vim :: installation"
+    apt:
+      name: vim
       state: latest
-    with_items:
-    - vim
     tags:
     - editor
     - vim
 
-  - name: "[editor] Vim :: configuration"
+  - name: "editor | Vim :: configuration"
     template:
       src: home/.vimrc.j2
       dest: "{{ homedir }}/.vimrc"
@@ -350,17 +330,15 @@
     - editor
     - vim
 
-  - name: "[shell] Zsh :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "shell | Zsh :: installation"
+    apt:
+      name: zsh
       state: latest
-    with_items:
-    - zsh
     tags:
     - shell
     - zsh
 
-  - name: "[shell] Zsh :: configuration"
+  - name: "shell | Zsh :: configuration"
     template:
       src: home/.zshrc.j2
       dest: "{{ homedir }}/.zshrc"
@@ -371,17 +349,15 @@
     - shell
     - zsh
 
-  - name: "[utils] Tmux :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "utils | Tmux :: installation"
+    apt:
+      name: tmux
       state: latest
-    with_items:
-    - tmux
     tags:
     - utils
     - tmux
 
-  - name: "[utils] Tmux :: configuration"
+  - name: "utils | Tmux :: configuration"
     template:
       src: home/.tmux.conf.j2
       dest: "{{ homedir }}/.tmux.conf"
@@ -392,17 +368,15 @@
     - utils
     - tmux
 
-  - name: "[utils] Httpie :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "utils | Httpie :: installation"
+    apt:
+      name: httpie
       state: latest
-    with_items:
-    - httpie
     tags:
     - utils
     - httpie
 
-  - name: "[utils] Insomnia :: repository key"
+  - name: "utils | Insomnia :: repository key"
     apt_key:
       url: https://insomnia.rest/keys/debian-public.key.asc
       state: present
@@ -410,7 +384,7 @@
     - utils
     - insomnia
 
-  - name: "[utils] Insomnia :: repository"
+  - name: "utils | Insomnia :: repository"
     apt_repository:
       repo: "deb [arch=amd64] https://dl.bintray.com/getinsomnia/Insomnia /"
       state: present
@@ -420,22 +394,18 @@
     - utils
     - insomnia
 
-  - name: "[utils] Insomnia :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "utils | Insomnia :: installation"
+    apt:
+      name: insomnia
       state: latest
-    with_items:
-    - insomnia
     tags:
     - utils
     - insomnia
 
-  - name: "[misc] Wallch :: installation"
-    package:
-      name: "{{ item }}"
+  - name: "misc | Wallch :: installation"
+    apt:
+      name: wallch
       state: latest
-    with_items:
-    - wallch
     when: wsl == "0"
     tags:
     - misc
