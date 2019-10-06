@@ -8,6 +8,15 @@
   - go_version_expected: "go version go{{ packages.go.version }} linux/amd64"
 
   tasks:
+  - name: "fonts | Cascadia Code :: installation"
+    win_chocolatey:
+      name: cascadiacode
+      state: latest
+    when: wsl == "1"
+    tags:
+    - fonts
+    - cascadiacode
+
   - name: "fonts | Ubuntu Mono :: installation"
     apt:
       name: ubuntu-mono
@@ -16,6 +25,15 @@
     tags:
     - fonts
     - ubuntu-mono
+
+  - name: "terminal | Windows Terminal :: installation"
+    win_chocolatey:
+      name: microsoft-windows-terminal
+      state: latest
+    when: wsl == "1"
+    tags:
+    - terminal
+    - windows-terminal
 
   - name: "terminal | Gnome Terminal :: installation"
     apt:
