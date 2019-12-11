@@ -8,6 +8,7 @@ all:
     terminal:
       background:
         color: "#2a092a"
+        color2: "#002f3d"
         transparency: 90
       foreground:
         color: "#839496"
