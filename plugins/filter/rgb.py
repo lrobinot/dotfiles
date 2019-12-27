@@ -8,18 +8,18 @@ class FilterModule(object):
     ''' adds rgb filter '''
     def filters(self):
         return {
-          # filter map
-          'rgb': rgb_hex_to_dec
+            # filter map
+            'rgb': rgb_hex_to_dec
         }
 
 
 def rgb_hex_to_dec(inStr, component):
     if component == 'r':
-          return int(inStr[1:3], 16) * 255
+        return int(inStr[1:3], 16) * 255
     if component == 'g':
-          return int(inStr[3:5], 16) * 255
+        return int(inStr[3:5], 16) * 255
     if component == 'b':
-          return int(inStr[5:7], 16) * 255
+        return int(inStr[5:7], 16) * 255
 
 if __name__ == "__main__":
     str = "#002f3d"
