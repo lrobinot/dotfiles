@@ -98,7 +98,7 @@ gnome_terminal_default_profile=$(gsettings get org.gnome.Terminal.ProfilesList d
 gnome_terminal_default_profile=${gnome_terminal_default_profile:1:-1}
 ok
 
-message "Starting playbook"
+message "Starting Ansible Playbook"
 export ANSIBLE_CONFIG="${top}/ansible.cfg"
 ansible-playbook \
   --inventory "${top}/inventory" \

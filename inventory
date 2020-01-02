@@ -36,12 +36,23 @@ all:
 
     packages:
       sops:
-        version: 3.4.0
+        repo: mozilla/sops
+        version: 3.5.0
+        sha256: 610fca9687d1326ef2e1a66699a740f5dbd5ac8130190275959da737ec52f096
 
       node:
-        repo: "node_12.x"
+        pkg_repo: "node_12.x"
 
       go:
         version: 1.13.4
         sha256: 692d17071736f74be04a72a06dab9cac1cd759377bd85316e52b2227604c004c
+
+      glide:
+        repo: Masterminds/glide
+        version: 0.13.3
+
+      swagger:
+        repo: go-swagger/go-swagger
+        version: 0.21.0
+        sha256: a50dd0e9db98a6bf9d0794882f24c18c57308963a05b41c44db0c5d295164949
 
