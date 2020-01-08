@@ -98,8 +98,16 @@ gnome_terminal_default_profile=$(gsettings get org.gnome.Terminal.ProfilesList d
 gnome_terminal_default_profile=${gnome_terminal_default_profile:1:-1}
 ok
 
+if [ ! -z $1 ]
+then
+  tag="--tags $1"
+else
+  tag=
+fi
+
 message "Starting Ansible Playbook"
 export ANSIBLE_CONFIG="${top}/ansible.cfg"
+set -x
 ansible-playbook \
   --inventory "${top}/inventory" \
   --limit localhost \
@@ -114,5 +122,7 @@ ansible-playbook \
   --extra-vars="dotdir=$(realpath --relative-to="$HOME" "$top")" \
   --extra-vars="wsl=$wsl" \
   --extra-vars="gnome_terminal_default_profile=$gnome_terminal_default_profile" \
+  $tag \
   dotfiles.yml
+set +x
 ok
