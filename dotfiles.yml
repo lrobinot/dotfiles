@@ -8,6 +8,8 @@
   - go_version_expected: "go version go{{ packages.go.version }} linux/amd64"
   - glide_version_expected: "glide version v{{ packages.glide.version }}"
   - swagger_version_expected: "version: v{{ packages.swagger.version }}"
+  - kompose_version_expected: "v{{ packages.kompose.version }}"
+  - protoc_version_expected: "libprotoc {{ packages.protoc.version }}"
 
   tasks:
   - name: "fonts | Cascadia Code :: installation"
@@ -206,6 +208,28 @@
     - kubernetes
     - sops
 
+  - name: "kubernetes | Kompose :: check"
+    command: "kompose version | sed 's/ .*//'"
+    ignore_errors: yes
+    register: kompose_version
+    changed_when: false
+    tags:
+    - kubernetes
+    - kompose
+  
+  - name: "kubernetes | Kompose :: download"
+    get_url:
+      url: https://github.com/{{ packages.kompose.repo }}/releases/download/v{{ packages.kompose.version }}/kompose-linux-amd64
+      dest: /usr/local/bin/kompose
+      checksum: sha256:{{ packages.kompose.sha256 }}
+      owner: root
+      group: root
+      mode: '0755'
+    when: kompose_version is failed or kompose_version.stdout != kompose_version_expected
+    tags:
+    - kubernetes
+    - kompose
+
   - name: "lang | Node :: repository"
     apt_repository:
       repo: "deb [arch=amd64] https://deb.nodesource.com/{{ packages.node.pkg_repo }} {{ ansible_distribution_release }} main"
@@ -292,16 +316,16 @@
     changed_when: false
     tags:
     - lang
-    - go
+    - glide
 
   - name: "lang | Glide :: download"
     get_url:
       url: https://github.com/{{ packages.glide.repo }}/releases/download/v{{ packages.glide.version }}/glide-v{{ packages.glide.version }}-linux-amd64.tar.gz
-      dest: /usr/local/src/glide{{ packages.glide.version }}-linux-amd64.tar.gz
+      dest: /usr/local/src/glide-{{ packages.glide.version }}-linux-amd64.tar.gz
     when: glide_version is failed or glide_version.stdout != glide_version_expected
     tags:
     - lang
-    - go
+    - glide
 
   - name: "lang | Glide :: temporary extraction folder"
     tempfile:
@@ -310,7 +334,7 @@
     when: glide_version is failed or glide_version.stdout != glide_version_expected
     tags:
     - lang
-    - go
+    - glide
 
   - name: "lang | Glide :: extraction"
     unarchive:
@@ -320,7 +344,7 @@
     when: glide_version is failed or glide_version.stdout != glide_version_expected
     tags:
     - lang
-    - go
+    - glide
 
   - name: "lang | Glide :: installation"
     copy:
@@ -331,29 +355,66 @@
     when: glide_version is failed or glide_version.stdout != glide_version_expected
     tags:
     - lang
-    - go
+    - glide
 
-  - name: "lang | Swagger :: check"
-    command: swagger version | head -1
+  - name: "lang | Protoc :: check"
+    command: protoc --version
     ignore_errors: yes
-    register: swagger_version
+    register: protoc_version
     changed_when: false
     tags:
     - lang
-    - go
+    - protoc
 
-  - name: "lang | Swagger :: download"
+  - name: "lang | Protoc :: download"
     get_url:
-      url: https://github.com/{{ packages.swagger.repo }}/releases/download/v{{ packages.swagger.version }}/swagger_linux_amd64
-      dest: /usr/local/bin/swagger
-      checksum: sha256:{{ packages.swagger.sha256 }}
-      owner: root
-      group: root
-      mode: '0755'
-    when: swagger_version is failed or swagger_version.stdout != swagger_version_expected
+      url: https://github.com/{{ packages.protoc.repo }}/releases/download/v{{ packages.protoc.version }}/protoc-{{ packages.protoc.version }}-linux-x86_64.zip
+      dest: /usr/local/src/protoc-{{ packages.protoc.version }}-linux-x86_64.zip
+    when: protoc_version is failed or protoc_version.stdout != protoc_version_expected
     tags:
     - lang
-    - go
+    - protoc
+
+  - name: "lang | Protoc :: temporary extraction folder"
+    tempfile:
+      state: directory
+    register: __protoc_tmp
+    when: protoc_version is failed or protoc_version.stdout != protoc_version_expected
+    tags:
+    - lang
+    - protoc
+
+  - name: "lang | Protoc :: extraction"
+    unarchive:
+      src: /usr/local/src/protoc-{{ packages.protoc.version }}-linux-x86_64.zip
+      dest: "{{ __protoc_tmp.path }}"
+      copy: no
+    when: protoc_version is failed or protoc_version.stdout != protoc_version_expected
+    tags:
+    - lang
+    - protoc
+
+  - name: "lang | Protoc :: installation (binaries)"
+    copy:
+      src: "{{ __protoc_tmp.path }}/bin/protoc"
+      dest: "/usr/local/bin/protoc"
+      mode: 0755
+      remote_src: yes
+    when: protoc_version is failed or protoc_version.stdout != protoc_version_expected
+    tags:
+    - lang
+    - protoc
+
+  - name: "lang | Protoc :: installation (includes)"
+    copy:
+      src: "{{ __protoc_tmp.path }}/include/google"
+      dest: "/usr/local/include/google"
+      mode: 0755
+      remote_src: True
+    when: protoc_version is failed or protoc_version.stdout != protoc_version_expected
+    tags:
+    - lang
+    - protoc
 
   - name: "editor | Code :: repository"
     apt_repository:

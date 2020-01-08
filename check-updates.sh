@@ -12,7 +12,7 @@ do
 
     if [ "$version" != "$latest_version" ]
     then
-      echo "$package should be upgraded from $version to $latest_version"
+      echo ">>> $package should be upgraded from $version to $latest_version"
     else
       echo "$package is on latest version $version"
     fi
