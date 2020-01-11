@@ -216,7 +216,7 @@
     tags:
     - kubernetes
     - kompose
-  
+
   - name: "kubernetes | Kompose :: download"
     get_url:
       url: https://github.com/{{ packages.kompose.repo }}/releases/download/v{{ packages.kompose.version }}/kompose-linux-amd64
@@ -482,6 +482,17 @@
     template:
       src: home/.zshrc.j2
       dest: "{{ homedir }}/.zshrc"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - shell
+    - zsh
+
+  - name: "shell | Zsh :: theme"
+    copy:
+      src: home/.p10k.zsh
+      dest: "{{ homedir }}/.p10k.zsh"
       owner: "{{ username }}"
       group: "{{ groupname }}"
       mode: 0600

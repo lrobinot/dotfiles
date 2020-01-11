@@ -84,7 +84,9 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
+# Theme configuration
+source "$HOME/{{ dotdir }}/powerlevel10k/powerlevel10k.zsh-theme"
+source "$HOME/.p10k.zsh"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -110,3 +112,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Git configuration
+if [ -e "$HOME/.git.zsh" ]
+then
+  source "$HOME/.git.zsh"
+fi

@@ -107,7 +107,6 @@ fi
 
 message "Starting Ansible Playbook"
 export ANSIBLE_CONFIG="${top}/ansible.cfg"
-set -x
 ansible-playbook \
   --inventory "${top}/inventory" \
   --limit localhost \
@@ -124,5 +123,4 @@ ansible-playbook \
   --extra-vars="gnome_terminal_default_profile=$gnome_terminal_default_profile" \
   $tag \
   dotfiles.yml
-set +x
 ok
