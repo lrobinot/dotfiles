@@ -407,7 +407,7 @@
 
   - name: "lang | Protoc :: installation (includes)"
     copy:
-      src: "{{ __protoc_tmp.path }}/include/google"
+      src: "{{ __protoc_tmp.path }}/include/google/"
       dest: "/usr/local/include/google"
       mode: 0755
       remote_src: True
