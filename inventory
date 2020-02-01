@@ -39,29 +39,30 @@ all:
         repo: mozilla/sops
         version: 3.5.0
         sha256: 610fca9687d1326ef2e1a66699a740f5dbd5ac8130190275959da737ec52f096
+        platform: amd64
 
       node:
         pkg_repo: "node_12.x"
 
       go:
-        version: 1.13.4
-        sha256: 692d17071736f74be04a72a06dab9cac1cd759377bd85316e52b2227604c004c
-
-      glide:
-        repo: Masterminds/glide
-        version: 0.13.3
+        version: 1.13.7
+        # Checksum for go<version>.linux-amd64.tar.gz on https://golang.org/dl/
+        sha256: b3dd4bd781a0271b33168e627f7f43886b4c5d1c794a4015abf34e99c6526ca3
 
       swagger:
         repo: go-swagger/go-swagger
         version: 0.21.0
         sha256: a50dd0e9db98a6bf9d0794882f24c18c57308963a05b41c44db0c5d295164949
+        platform: amd64
 
       kompose:
         repo: kubernetes/kompose
         version: 1.20.0
         sha256: 449ad5ccd5e0ead98d3efab57b0dc427e5825d1260139025d3a3b8696cf36831
+        platform: amd64
 
       protoc:
         repo: protocolbuffers/protobuf
         version: 3.11.2
+        platform: linux-x86_64
 
