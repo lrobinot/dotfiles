@@ -4,6 +4,3 @@
 [submodule "powerlevel10k"]
 	path = powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
-[submodule "resh"]
-	path = resh
-	url = https://github.com/curusarn/resh.git
