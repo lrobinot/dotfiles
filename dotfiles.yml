@@ -6,7 +6,6 @@
   become: yes
   vars:
   - go_version_expected: "go version go{{ packages.go.version }} linux/amd64"
-  - glide_version_expected: "glide version v{{ packages.glide.version }}"
   - swagger_version_expected: "version: v{{ packages.swagger.version }}"
   - kompose_version_expected: "v{{ packages.kompose.version }}"
   - protoc_version_expected: "libprotoc {{ packages.protoc.version }}"
@@ -308,54 +307,6 @@
     tags:
     - lang
     - go
-
-  - name: "lang | Glide :: check"
-    command: glide --version
-    ignore_errors: yes
-    register: glide_version
-    changed_when: false
-    tags:
-    - lang
-    - glide
-
-  - name: "lang | Glide :: download"
-    get_url:
-      url: https://github.com/{{ packages.glide.repo }}/releases/download/v{{ packages.glide.version }}/glide-v{{ packages.glide.version }}-linux-amd64.tar.gz
-      dest: /usr/local/src/glide-{{ packages.glide.version }}-linux-amd64.tar.gz
-    when: glide_version is failed or glide_version.stdout != glide_version_expected
-    tags:
-    - lang
-    - glide
-
-  - name: "lang | Glide :: temporary extraction folder"
-    tempfile:
-      state: directory
-    register: __glide_tmp
-    when: glide_version is failed or glide_version.stdout != glide_version_expected
-    tags:
-    - lang
-    - glide
-
-  - name: "lang | Glide :: extraction"
-    unarchive:
-      src: /usr/local/src/glide{{ packages.glide.version }}-linux-amd64.tar.gz
-      dest: "{{ __glide_tmp.path }}"
-      copy: no
-    when: glide_version is failed or glide_version.stdout != glide_version_expected
-    tags:
-    - lang
-    - glide
-
-  - name: "lang | Glide :: installation"
-    copy:
-      src: "{{ __glide_tmp.path }}/linux-amd64/glide"
-      dest: "/usr/local/bin/glide"
-      mode: 0755
-      remote_src: True
-    when: glide_version is failed or glide_version.stdout != glide_version_expected
-    tags:
-    - lang
-    - glide
 
   - name: "lang | Protoc :: check"
     command: protoc --version
