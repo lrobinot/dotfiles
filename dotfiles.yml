@@ -201,7 +201,7 @@
       dest: /usr/local/bin/sops
       owner: root
       group: root
-      mode: 0755
+      mode: "0755"
       checksum: sha256:{{ packages.sops.sha256 }}
     tags:
     - kubernetes
@@ -223,7 +223,7 @@
       checksum: sha256:{{ packages.kompose.sha256 }}
       owner: root
       group: root
-      mode: '0755'
+      mode: "0755"
     when: kompose_version is failed or kompose_version.stdout != kompose_version_expected
     tags:
     - kubernetes
@@ -349,8 +349,18 @@
     copy:
       src: "{{ __protoc_tmp.path }}/bin/protoc"
       dest: "/usr/local/bin/protoc"
-      mode: 0755
+      mode: "0755"
       remote_src: yes
+    when: protoc_version is failed or protoc_version.stdout != protoc_version_expected
+    tags:
+    - lang
+    - protoc
+
+  - name: "lang | Protoc :: installation (include folder)"
+    file:
+      path: "/usr/local/include"
+      mode: "0755"
+      state: directory
     when: protoc_version is failed or protoc_version.stdout != protoc_version_expected
     tags:
     - lang
@@ -360,7 +370,7 @@
     copy:
       src: "{{ __protoc_tmp.path }}/include/google/"
       dest: "/usr/local/include/google"
-      mode: 0755
+      mode: "0755"
       remote_src: True
     when: protoc_version is failed or protoc_version.stdout != protoc_version_expected
     tags:
