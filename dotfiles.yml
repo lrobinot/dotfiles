@@ -6,8 +6,6 @@
   become: yes
   vars:
   - go_version_expected: "go version go{{ packages.go.version }} linux/amd64"
-  - swagger_version_expected: "version: v{{ packages.swagger.version }}"
-  - kompose_version_expected: "v{{ packages.kompose.version }}"
   - protoc_version_expected: "libprotoc {{ packages.protoc.version }}"
 
   tasks:
@@ -206,28 +204,6 @@
     tags:
     - kubernetes
     - sops
-
-  - name: "kubernetes | Kompose :: check"
-    command: "kompose version | sed 's/ .*//'"
-    ignore_errors: yes
-    register: kompose_version
-    changed_when: false
-    tags:
-    - kubernetes
-    - kompose
-
-  - name: "kubernetes | Kompose :: download"
-    get_url:
-      url: https://github.com/{{ packages.kompose.repo }}/releases/download/v{{ packages.kompose.version }}/kompose-linux-amd64
-      dest: /usr/local/bin/kompose
-      checksum: sha256:{{ packages.kompose.sha256 }}
-      owner: root
-      group: root
-      mode: "0755"
-    when: kompose_version is failed or kompose_version.stdout != kompose_version_expected
-    tags:
-    - kubernetes
-    - kompose
 
   - name: "lang | Node :: repository"
     apt_repository:

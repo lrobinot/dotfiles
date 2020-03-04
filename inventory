@@ -49,20 +49,8 @@ all:
         # Checksum for go<version>.linux-amd64.tar.gz on https://golang.org/dl/
         sha256: 08df79b46b0adf498ea9f320a0f23d6ec59e9003660b4c9c1ce8e5e2c6f823ca
 
-      swagger:
-        repo: go-swagger/go-swagger
-        version: 0.21.0
-        sha256: a50dd0e9db98a6bf9d0794882f24c18c57308963a05b41c44db0c5d295164949
-        platform: amd64
-
-      kompose:
-        repo: kubernetes/kompose
-        version: 1.20.0
-        sha256: 449ad5ccd5e0ead98d3efab57b0dc427e5825d1260139025d3a3b8696cf36831
-        platform: amd64
-
       protoc:
         repo: protocolbuffers/protobuf
-        version: 3.11.2
+        version: 3.11.4
         platform: linux-x86_64
 
