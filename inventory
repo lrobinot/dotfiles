@@ -41,6 +41,12 @@ all:
         sha256: 610fca9687d1326ef2e1a66699a740f5dbd5ac8130190275959da737ec52f096
         platform: amd64
 
+      k3d:
+        repo: rancher/k3d
+        version: 1.7.0
+        sha256: da9ff31bcf4377fadfb065f4998d347f19de1168a5a553ce2c23b763ee1f6098
+        platform: linux-amd64
+
       node:
         pkg_repo: "node_12.x"
 

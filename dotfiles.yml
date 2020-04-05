@@ -193,6 +193,44 @@
     - container
     - docker
 
+  - name: "kubernetes | kubectl :: repository key"
+    apt_key:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      state: present
+    tags:
+    - kubernetes
+    - kubectl
+
+  - name: "kubernetes | kubectl :: repository"
+    apt_repository:
+      repo: "deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main"
+      state: present
+      filename: kubernetes
+      mode: 0644
+    tags:
+    - kubernetes
+    - kubectl
+
+  - name: "kubernetes | kubectl :: installation"
+    apt:
+      name: kubectl
+      state: latest
+    tags:
+    - kubernetes
+    - kubectl
+
+  - name: "kubernetes | k3d :: installation"
+    get_url:
+      url: https://github.com/{{ packages.k3d.repo }}/releases/download/v{{ packages.k3d.version }}/k3d-{{ packages.k3d.platform }}
+      dest: /usr/local/bin/k3d
+      owner: root
+      group: root
+      mode: "0755"
+      checksum: sha256:{{ packages.k3d.sha256 }}
+    tags:
+    - kubernetes
+    - k3d
+
   - name: "kubernetes | SOPS :: installation"
     get_url:
       url: https://github.com/{{ packages.sops.repo }}/releases/download/v{{ packages.sops.version }}/sops-v{{ packages.sops.version }}.linux
