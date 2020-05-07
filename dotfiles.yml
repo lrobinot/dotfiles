@@ -475,6 +475,13 @@
     - shell
     - zsh
 
+  - name: "utils | Misc :: installation"
+    apt:
+      name: [ 'figlet', 'lolcat', 'boxes', 'xclip', 'xsel' ]
+      state: latest
+    tags:
+    - utils
+
   - name: "utils | Tmux :: installation"
     apt:
       name: tmux
