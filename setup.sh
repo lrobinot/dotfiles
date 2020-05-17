@@ -50,7 +50,13 @@ echo '                                               '
 wsl=$(cat /proc/version | grep -c -- -Microsoft || :)
 
 message "Checking requirements"
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr python-pip python-dev libffi-dev libssl-dev </dev/null >/dev/null && echo "OK"
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr libffi-dev libssl-dev </dev/null >/dev/null && echo "OK"
+if [ "$(lsb_release -sr)" = "20.04" ]
+then
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes python3-pip python3-dev python3-psutil </dev/null >/dev/null && echo "OK"
+else
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes python-pip python-dev python-psutil </dev/null >/dev/null && echo "OK"
+fi
 
 message "Checking ansible requirement"
 command -v ansible >/dev/null 2>&1 || {
