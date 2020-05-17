@@ -530,7 +530,7 @@
 
   - name: "utils | Misc :: installation"
     apt:
-      name: [ 'figlet', 'lolcat', 'boxes', 'xclip', 'xsel' ]
+      name: [ 'figlet', 'lolcat', 'boxes', 'xclip', 'xsel', 'tree' ]
       state: latest
     tags:
     - utils
