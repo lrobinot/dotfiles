@@ -9,6 +9,12 @@
   - protoc_version_expected: "libprotoc {{ packages.protoc.version }}"
 
   tasks:
+  - name: "settings | locale"
+    template:
+      src: etc/default/locale.j2
+      dest: /etc/default/locale
+      mode: "0644"
+
   - name: "settings | auto-start folder"
     file:
       path: "{{ homedir }}/.config/autostart"
@@ -110,6 +116,29 @@
       owner: "{{ username }}"
       group: "{{ groupname }}"
       mode: 0600
+    when: wsl == "0"
+    tags:
+    - terminal
+    - terminator
+
+  - name: "terminal | Terminator :: favorite"
+    block:
+
+    - name: "terminal | Terminator :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "terminal | Terminator :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_insert('terminator.desktop', 'firefox.desktop') }}"
+      become: "{{ username }}"
+      when: favorites.value.find('terminator.desktop') < 0
+
     when: wsl == "0"
     tags:
     - terminal
@@ -456,9 +485,14 @@
 
   - name: "editor | Code :: configuration folder"
     file:
-      path: "{{ homedir }}/.config/Code/User"
+      path: "{{ homedir }}/.config/{{ item }}"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
       state: directory
-      mode: '0750'
+      mode: '0700'
+    with_items:
+    - "Code"
+    - "Code/User"
     when: wsl == "0"
     tags:
     - editor
@@ -474,6 +508,29 @@
     with_items:
     - settings.json
     - keybindings.json
+    when: wsl == "0"
+    tags:
+    - editor
+    - vscode
+
+  - name: "editor | Code :: favorite"
+    block:
+
+    - name: "editor | Code :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "editor | Code :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('code.desktop') }}"
+      become: "{{ username }}"
+      when: favorites.value.find('code.desktop') < 0
+
     when: wsl == "0"
     tags:
     - editor
@@ -588,6 +645,29 @@
     - utils
     - insomnia
 
+  - name: "utils | Insomnia :: favorite"
+    block:
+
+    - name: "utils | Insomnia :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "utils | Insomnia :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('insomnia.desktop') }}"
+      become: "{{ username }}"
+      when: favorites.value.find('insomnia.desktop') < 0
+
+    when: wsl == "0"
+    tags:
+    - utils
+    - insomnia
+
   - name: "misc | Wallch :: installation"
     apt:
       name: wallch
@@ -597,7 +677,7 @@
     - misc
     - wallch
 
-  - name: add Google repository key
+  - name: "misc | Chrome :: repository key"
     apt_key:
       url: https://dl.google.com/linux/linux_signing_key.pub
       state: present
@@ -606,7 +686,7 @@
     - misc
     - chrome
 
-  - name: add Chrome repository
+  - name: "misc | Chrome :: repository"
     apt_repository:
       repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
       state: present
@@ -617,10 +697,87 @@
     - misc
     - chrome
 
-  - name: install Chrome
+  - name: "misc | Chrome :: installation"
     apt:
       name: google-chrome-stable
       state: latest
+    when: wsl == "0"
+    tags:
+    - misc
+    - chrome
+
+  - name: "misc | Chrome :: favorite"
+    block:
+
+    - name: "misc | Chrome :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "misc | Chrome :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_insert('google-chrome.desktop', 'org.gnome.Nautilus.desktop') }}"
+      become: "{{ username }}"
+      when: favorites.value.find('google-chrome.desktop') < 0
+
+    when: wsl == "0"
+    tags:
+    - misc
+    - chrome
+
+  - name: "special | Spotify :: repository key"
+    apt_key:
+      url: https://download.spotify.com/debian/pubkey.gpg
+      state: present
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - spotify
+
+  - name: "special | Spotify :: repository"
+    apt_repository:
+      repo: deb [arch=amd64] http://repository.spotify.com stable non-free
+      state: present
+      filename: "spotify"
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - spotify
+
+  - name: "special | Spotify :: installation"
+    apt:
+      name: spotify-client
+      state: latest
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - spotify
+
+  - name: "special | Spotify :: favorite"
+    block:
+
+    - name: "special | Spotify :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "special | Spotify :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('spotify.desktop') }}"
+      become: "{{ username }}"
+      when: favorites.value.find('spotify.desktop') < 0
+
     when: wsl == "0"
     tags:
     - misc
