@@ -9,6 +9,14 @@
   - protoc_version_expected: "libprotoc {{ packages.protoc.version }}"
 
   tasks:
+  - name: "settings | auto-start folder"
+    file:
+      path: "{{ homedir }}/.config/autostart"
+      state: directory
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0700
+
   - name: "fonts | Cascadia Code :: installation"
     win_chocolatey:
       name: cascadiacode
@@ -78,6 +86,18 @@
     apt:
       name: terminator
       state: latest
+    when: wsl == "0"
+    tags:
+    - terminal
+    - terminator
+
+  - name: "terminal | Terminator :: configuration folder"
+    file:
+      path: "{{ homedir }}/.config/terminator"
+      state: directory
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: '0700'
     when: wsl == "0"
     tags:
     - terminal
@@ -167,10 +187,17 @@
     - scm
     - git
 
+  - name: "container | Docker :: repository key"
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+    tags:
+    - container
+    - docker
+
   - name: "container | Docker :: repository"
     apt_repository:
       repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
-      state: present
       filename: docker
       mode: 0644
     tags:
@@ -242,6 +269,14 @@
     tags:
     - kubernetes
     - sops
+
+  - name: "lang | Node :: repository key"
+    apt_key:
+      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+      state: present
+    tags:
+    - lang
+    - nodejs
 
   - name: "lang | Node :: repository"
     apt_repository:
@@ -391,6 +426,14 @@
     - lang
     - protoc
 
+  - name: "editor | Code :: repository key"
+    apt_key:
+      url: https://packages.microsoft.com/keys/microsoft.asc
+      state: present
+    tags:
+    - container
+    - docker
+
   - name: "editor | Code :: repository"
     apt_repository:
       repo: "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
@@ -406,6 +449,16 @@
     apt:
       name: code
       state: latest
+    when: wsl == "0"
+    tags:
+    - editor
+    - vscode
+
+  - name: "editor | Code :: configuration folder"
+    file:
+      path: "{{ homedir }}/.config/Code/User"
+      state: directory
+      mode: '0750'
     when: wsl == "0"
     tags:
     - editor
@@ -543,3 +596,32 @@
     tags:
     - misc
     - wallch
+
+  - name: add Google repository key
+    apt_key:
+      url: https://dl.google.com/linux/linux_signing_key.pub
+      state: present
+    when: wsl == "0"
+    tags:
+    - misc
+    - chrome
+
+  - name: add Chrome repository
+    apt_repository:
+      repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+      state: present
+      filename: "google-chrome"
+      update_cache: "yes"
+    when: wsl == "0"
+    tags:
+    - misc
+    - chrome
+
+  - name: install Chrome
+    apt:
+      name: google-chrome-stable
+      state: latest
+    when: wsl == "0"
+    tags:
+    - misc
+    - chrome
