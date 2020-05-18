@@ -502,8 +502,11 @@
     - tmux
 
   - name: "utils | Httpie :: installation"
-    apt:
-      name: httpie
+    pip:
+      name: https://github.com/jakubroztocil/httpie/archive/2.1.0.tar.gz
+      executable: pip3
+      extra_args: --upgrade
+      umask: "0022"
       state: latest
     tags:
     - utils
