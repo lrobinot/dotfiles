@@ -41,6 +41,31 @@
     - fonts
     - ubuntu-mono
 
+  - name: "fonts | MesloLGS NF :: folder"
+    file:
+      path: /usr/share/fonts/truetype/meslo-lgs-nf
+      state: directory
+      mode: '0755'
+    when: wsl == "0"
+    tags:
+    - fonts
+    - meslo
+
+  - name: "fonts | MesloLGS NF :: installation"
+    get_url:
+      url: https://github.com/romkatv/powerlevel10k-media/raw/master/{{ item.src }}.ttf
+      dest: /usr/share/fonts/truetype/meslo-lgs-nf/{{ item.dst }}.ttf
+      mode: '0644'
+    with_items:
+    - { src: "MesloLGS%20NF%20Regular", dst: "meslo-lgs-nf-regular" }
+    - { src: "MesloLGS%20NF%20Bold", dst: "meslo-lgs-nf-bold" }
+    - { src: "MesloLGS%20NF%20Italic", dst: "meslo-lgs-nf-italic" }
+    - { src: "MesloLGS%20NF%20Bold%20Italic", dst: "meslo-lgs-nf-bold-italic" }
+    when: wsl == "0"
+    tags:
+    - fonts
+    - meslo
+
   - name: "terminal | Windows Terminal :: installation"
     win_chocolatey:
       name: microsoft-windows-terminal
