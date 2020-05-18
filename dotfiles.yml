@@ -513,6 +513,23 @@
     - editor
     - vscode
 
+  - name: "editor | Code :: extensions"
+    shell: code --install-extension {{ item }}
+    args:
+      creates: "{{ homedir }}/.vscode/extensions/{{ item }}-*/package.json"
+    become: "{{ username }}"
+    with_items:
+      - "alefragnani.bookmarks"
+      - "coenraads.bracket-pair-colorizer"
+      - "oderwat.indent-rainbow"
+      - "editorconfig.editorconfig"
+      - "searking.preview-vscode"
+      - "vscode-icons-team.vscode-icons"
+    when: wsl == "0"
+    tags:
+    - editor
+    - vscode
+
   - name: "editor | Code :: favorite"
     block:
 
