@@ -50,7 +50,13 @@ echo '                                               '
 wsl=$(cat /proc/version | grep -c -- -Microsoft || :)
 
 message "Checking requirements"
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr python-pip python-dev libffi-dev libssl-dev </dev/null >/dev/null && echo "OK"
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr libffi-dev libssl-dev </dev/null >/dev/null && echo "OK"
+if [ "$(lsb_release -sr)" = "20.04" ]
+then
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes python3-pip python3-dev python3-psutil </dev/null >/dev/null && echo "OK"
+else
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes python-pip python-dev python-psutil </dev/null >/dev/null && echo "OK"
+fi
 
 message "Checking ansible requirement"
 command -v ansible >/dev/null 2>&1 || {
@@ -74,36 +80,39 @@ command -v git >/dev/null 2>&1 && {
   ok
 }
 
-message "Need some configuration"
-if [ -f $HOME/.gitconfig ]
-then
-  firstname=$(grep 'name.*=.*' $HOME/.gitconfig | sed -e 's/.*name\s*=\s//' | cut -d ' ' -f 1)
-  lastname=$(grep 'name.*=.*' $HOME/.gitconfig | sed -e 's/.*name\s*=\s//' | cut -d ' ' -f 2)
-  email=$(grep 'email.*=.*' $HOME/.gitconfig | sed -e 's/.*email\s*=\s//')
-  githubuser=$(grep 'user.*=.*' $HOME/.gitconfig | sed -e 's/.*user\s*=\s//')
-else
-  firstname=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1 | cut -d ' ' -f 2)
-  lastname=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1 | cut -d ' ' -f 2)
-  email=
-  githubuser=
-fi
-
-echo "What is..."
-read -r -p "  ... your first name? " -i "$firstname" -e firstname
-read -r -p "  ... your family name? " -i "$lastname" -e lastname
-read -r -p "  ... your email? " -i "$email" -e email
-read -r -p "  ... your github username? " -i "$githubuser" -e githubuser
-
-gnome_terminal_default_profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
-gnome_terminal_default_profile=${gnome_terminal_default_profile:1:-1}
-ok
-
 if [ ! -z $1 ]
 then
   tag="--tags $1"
 else
   tag=
 fi
+
+if [ -z "${tag}" ] || [ "${tag}" = "git" ]
+then
+  message "Need some configuration"
+  if [ -f $HOME/.gitconfig ]
+  then
+    firstname=$(grep 'name.*=.*' $HOME/.gitconfig | sed -e 's/.*name\s*=\s//' | cut -d ' ' -f 1)
+    lastname=$(grep 'name.*=.*' $HOME/.gitconfig | sed -e 's/.*name\s*=\s//' | cut -d ' ' -f 2)
+    email=$(grep 'email.*=.*' $HOME/.gitconfig | sed -e 's/.*email\s*=\s//')
+    githubuser=$(grep 'user.*=.*' $HOME/.gitconfig | sed -e 's/.*user\s*=\s//')
+  else
+    firstname=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1 | cut -d ' ' -f 2)
+    lastname=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1 | cut -d ' ' -f 2)
+    email=
+    githubuser=
+  fi
+  
+  echo "What is..."
+  read -r -p "  ... your first name? " -i "$firstname" -e firstname
+  read -r -p "  ... your family name? " -i "$lastname" -e lastname
+  read -r -p "  ... your email? " -i "$email" -e email
+  read -r -p "  ... your github username? " -i "$githubuser" -e githubuser
+fi
+
+gnome_terminal_default_profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
+gnome_terminal_default_profile=${gnome_terminal_default_profile:1:-1}
+ok
 
 message "Starting Ansible Playbook"
 export ANSIBLE_CONFIG="${top}/ansible.cfg"
