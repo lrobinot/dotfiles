@@ -31,5 +31,6 @@
     "breadcrumbs.enabled": true,
     "explorer.autoReveal": false,
     "editor.renderControlCharacters": true,
-    "workbench.iconTheme": "vscode-icons"
+    "workbench.iconTheme": "vscode-icons",
+    "swaggerViewer.defaultPort": 62123
 }
