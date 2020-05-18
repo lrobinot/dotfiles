@@ -160,9 +160,8 @@
     - name: "terminal | Terminator :: favorite [2/2]"
       dconf:
         key: /org/gnome/shell/favorite-apps
-        value: "{{ favorites.value | list_insert('terminator.desktop', 'firefox.desktop') }}"
+        value: "{{ favorites.value | list_insert_after('terminator.desktop', 'org.gnome.Terminal.desktop') }}"
       become: "{{ username }}"
-      when: favorites.value.find('terminator.desktop') < 0
 
     when: wsl == "0"
     tags:
@@ -552,9 +551,8 @@
     - name: "editor | Code :: favorite [2/2]"
       dconf:
         key: /org/gnome/shell/favorite-apps
-        value: "{{ favorites.value | list_append('code.desktop') }}"
+        value: "{{ favorites.value | list_insert_before('code.desktop', 'org.gnome.Terminal.desktop') }}"
       become: "{{ username }}"
-      when: favorites.value.find('code.desktop') < 0
 
     when: wsl == "0"
     tags:
@@ -689,7 +687,6 @@
         key: /org/gnome/shell/favorite-apps
         value: "{{ favorites.value | list_append('insomnia.desktop') }}"
       become: "{{ username }}"
-      when: favorites.value.find('insomnia.desktop') < 0
 
     when: wsl == "0"
     tags:
@@ -748,9 +745,8 @@
     - name: "misc | Chrome :: favorite [2/2]"
       dconf:
         key: /org/gnome/shell/favorite-apps
-        value: "{{ favorites.value | list_insert('google-chrome.desktop', 'org.gnome.Nautilus.desktop') }}"
+        value: "{{ favorites.value | list_insert_after('google-chrome.desktop', 'org.gnome.Nautilus.desktop') }}"
       become: "{{ username }}"
-      when: favorites.value.find('google-chrome.desktop') < 0
 
     when: wsl == "0"
     tags:
@@ -804,9 +800,223 @@
         key: /org/gnome/shell/favorite-apps
         value: "{{ favorites.value | list_append('spotify.desktop') }}"
       become: "{{ username }}"
-      when: favorites.value.find('spotify.desktop') < 0
 
     when: wsl == "0"
     tags:
-    - misc
+    - never
+    - special
     - chrome
+
+  - name: "special | Transmission :: folders"
+    file:
+      path: "{{ homedir }}/{{ item }}"
+      state: directory
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0700
+    with_items:
+    - "Downloads"
+    - "Downloads/000 A Traiter 000"
+    - "Downloads/Transmission"
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - transmission
+
+  - name: "special | Transmission :: installation"
+    apt:
+      name: transmission-gtk
+      state: latest
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - transmission
+
+  - name: "special | Transmission :: favorite"
+    block:
+
+    - name: "special | Transmission :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "special | Transmission :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_insert_after('transmission-gtk.desktop', 'firefox.desktop') }}"
+      become: "{{ username }}"
+
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - transmission
+
+  - name: "special | Shutter :: installation"
+    apt:
+      name: shutter
+      state: latest
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - shutter
+
+  - name: "special | Shutter :: favorite"
+    block:
+
+    - name: "special | Shutter :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "special | Shutter :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('shutter.desktop') }}"
+      become: "{{ username }}"
+
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - shutter
+
+  - name: "special | Teamviewer :: repository key"
+    apt_key:
+      url: https://download.teamviewer.com/download/linux/signature/TeamViewer2017.asc
+      state: present
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - teamviewer
+
+  - name: "special | Teamviewer :: repository"
+    apt_repository:
+      repo: deb http://linux.teamviewer.com/deb stable main
+      state: present
+      filename: "teamviewer"
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - teamviewer
+
+  - name: "special | Teamviewer :: installation"
+    apt:
+      name: teamviewer
+      state: latest
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - teamviewer
+
+  - name: "special | Teamviewer :: favorite"
+    block:
+
+    - name: "special | Teamviewer :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "special | Teamviewer :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('com.teamviewer.TeamViewer.desktop') }}"
+      become: "{{ username }}"
+
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - teamviewer
+
+  - name: "special | VLC :: installation"
+    apt:
+      name: vlc
+      state: latest
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - vlc
+
+  - name: "special | VLC :: favorite"
+    block:
+
+    - name: "special | VLC :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "special | VLC :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('vlc.desktop') }}"
+      become: "{{ username }}"
+
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - vlc
+
+  - name: "special | OBS :: repository"
+    apt_repository:
+      repo: ppa:obsproject/obs-studio
+      filename: obs-studio
+      mode: 0644
+    tags:
+    - never
+    - special
+    - obs
+
+  - name: "special | OBS :: installation"
+    apt:
+      name: obs-studio
+      state: latest
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - obs
+
+  - name: "special | OBS :: favorite"
+    block:
+
+    - name: "special | OBS :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "special | OBS :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('com.obsproject.Studio.desktop') }}"
+      become: "{{ username }}"
+
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - obs
+
