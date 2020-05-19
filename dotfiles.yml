@@ -215,7 +215,7 @@
   - name: "scm | Git :: repository"
     apt_repository:
       repo: ppa:git-core/ppa
-      filename: git-core
+      filename: git
       mode: 0644
     tags:
     - scm
@@ -772,6 +772,8 @@
     - misc
     - chrome
 
+  # If Play/Pause keyboard buttons do not work with Spotify if Chrome is started
+  # chrome://flags/#hardware-media-key-handling to disable media key handler
   - name: "special | Spotify :: repository key"
     apt_key:
       url: https://download.spotify.com/debian/pubkey.gpg
@@ -1008,7 +1010,7 @@
 
   - name: "special | OBS :: installation"
     apt:
-      name: 
+      name:
         - obs-studio
         - v4l2loopback-dkms
         - v4l2loopback-utils
@@ -1041,4 +1043,38 @@
     - never
     - special
     - obs
+
+  - name: "special | Remmina :: installation"
+    apt:
+      name:
+        - remmina
+      state: latest
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - remmina
+
+  - name: "special | Remmina :: favorite"
+    block:
+
+    - name: "special | Remmina :: favorite [1/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "special | OBS :: favorite [2/2]"
+      dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('org.remmina.Remmina.desktop') }}"
+      become: "{{ username }}"
+
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - remmina
 
