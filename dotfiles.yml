@@ -741,7 +741,9 @@
 
   - name: "misc | Chrome :: installation"
     apt:
-      name: google-chrome-stable
+      name:
+      - google-chrome-stable
+      - chrome-gnome-shell
       state: latest
     when: wsl == "0"
     tags:
@@ -874,20 +876,20 @@
     - special
     - transmission
 
-  - name: "special | Shutter :: installation"
+  - name: "special | Flameshot :: installation"
     apt:
-      name: shutter
+      name: flameshot
       state: latest
     when: wsl == "0"
     tags:
     - never
     - special
-    - shutter
+    - flameshot
 
-  - name: "special | Shutter :: favorite"
+  - name: "special | Flameshot :: favorite"
     block:
 
-    - name: "special | Shutter :: favorite [1/2]"
+    - name: "special | Flameshot :: favorite [1/2]"
       dconf:
         key: /org/gnome/shell/favorite-apps
         state: read
@@ -895,17 +897,17 @@
       register: favorites
       changed_when: false
 
-    - name: "special | Shutter :: favorite [2/2]"
+    - name: "special | Flameshot :: favorite [2/2]"
       dconf:
         key: /org/gnome/shell/favorite-apps
-        value: "{{ favorites.value | list_append('shutter.desktop') }}"
+        value: "{{ favorites.value | list_insert_after('flameshot.desktop', 'spotify.desktop') }}"
       become: "{{ username }}"
 
     when: wsl == "0"
     tags:
     - never
     - special
-    - shutter
+    - flameshot
 
   - name: "special | Teamviewer :: repository key"
     apt_key:
@@ -1006,7 +1008,10 @@
 
   - name: "special | OBS :: installation"
     apt:
-      name: obs-studio
+      name: 
+        - obs-studio
+        - v4l2loopback-dkms
+        - v4l2loopback-utils
       state: latest
     when: wsl == "0"
     tags:
