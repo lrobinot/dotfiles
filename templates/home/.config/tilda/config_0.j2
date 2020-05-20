@@ -30,16 +30,8 @@ web_browser="x-www-browser"
 increase_font_size_key="<Control>equal"
 decrease_font_size_key="<Control>minus"
 normalize_font_size_key="<Control>0"
-# TODO: How to get monitor name, is it useful
-show_on_monitor="DP-7"
 word_chars="~-A-Za-z0-9,./?%&#:_"
 lines={{ terminal.scrollback }}
-# TODO: 75% of one screen horizontal size
-max_width=1440
-# TODO: 70% of one screen vertical size
-max_height=737
-min_width=1
-min_height=1
 # TODO: 125% of one screen horizontal size
 x_pos=2160
 # TODO: Size of top bar
@@ -51,6 +43,7 @@ backspace_key=0
 delete_key=1
 d_set_title=3
 command_exit=2
+command_timeout_ms=3000
 scheme=0
 slide_sleep_usec=800
 animation_orientation=0
@@ -61,8 +54,6 @@ prompt_on_exit=false
 palette_scheme=0
 non_focus_pull_up_behaviour=0
 cursor_shape=0
-# show_on_monitor_number=0
-# title_max_length_flag=false
 title_max_length=25
 # TODO: convert palette to these numbers...
 palette = {11822, 13364, 13878, 52428, 0, 0, 20046, 39578, 1542, 50372, 41120, 0, 13364, 25957, 42148, 30069, 20560, 31611, 1542, 38944, 39578, 54227, 55255, 53199, 21845, 22359, 21331, 61423, 10537, 10537, 35466, 58082, 13364, 64764, 59881, 20303, 29298, 40863, 53199, 44461, 32639, 43176, 13364, 58082, 58082, 61166, 61166, 60652}
@@ -79,12 +70,10 @@ cursor_blue=1542
 scroll_history_infinite=false
 scroll_on_output=false
 notebook_border=false
-antialias=true
 scrollbar=false
 grab_focus=true
 above=true
 notaskbar=true
-bold=true
 blinks=true
 scroll_on_key=true
 bell=false
@@ -96,16 +85,29 @@ set_as_desktop=false
 centered_horizontally=true
 centered_vertically=false
 enable_transparency=true
-# double_buffer=false
 auto_hide_on_focus_lost=false
 auto_hide_on_mouse_leave=false
-title_behaviour=2
+title_behaviour=1
 inherit_working_dir=true
 command_login_shell=false
 start_fullscreen=false
 confirm_close_tab=false
+back_alpha=62258
+show_title_tooltip=true
+# max_width=0
+# max_height=0
 # image=""
+show_on_monitor_number=1
+# transparency=0
+# bold=false
+# title_max_length_flag=false
+# antialias=false
+# double_buffer=false
 # scroll_background=false
 # use_image=false
-transparency=0
-back_alpha=62255
+min_width=800
+min_height=600
+# TODO: 75% of one screen horizontal size
+max_width=1440
+# TODO: 70% of one screen vertical size
+max_height=737
