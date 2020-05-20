@@ -49,9 +49,16 @@ echo '                                               '
 
 wsl=$(cat /proc/version | grep -c -- -Microsoft || :)
 
+read -s -p "[sudo] password for $USER: " PASSWORD
+echo ""
+TEMPPASSWORD=$(mktemp --tmpdir="${top}" --quiet)
+trap "rm -f ${TEMPPASSWORD}" EXIT
+echo "$PASSWORD" >"${TEMPPASSWORD}"
+
+sudo --stdin --validate >/dev/null <"${TEMPPASSWORD}"
+
 message "Checking requirements"
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr libffi-dev libssl-dev </dev/null >/dev/null && echo "OK"
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes python3-pip python3-dev python3-psutil </dev/null >/dev/null && echo "OK"
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr libffi-dev libssl-dev python3-pip python3-dev python3-psutil </dev/null >/dev/null && echo "OK"
 
 message "Checking ansible requirement"
 command -v ansible >/dev/null 2>&1 || {
@@ -84,7 +91,6 @@ fi
 
 if [ -z "${tag}" ] || [ "${tag}" = "git" ]
 then
-  message "Need some configuration"
   if [ -f $HOME/.gitconfig ]
   then
     firstname=$(grep 'name.*=.*' $HOME/.gitconfig | sed -e 's/.*name\s*=\s//' | cut -d ' ' -f 1)
@@ -96,25 +102,29 @@ then
     lastname=$(getent passwd $(whoami) | cut -d ':' -f 5 | cut -d ',' -f 1 | cut -d ' ' -f 2)
     email=
     githubuser=
+
+    message "Need some configuration"
+    echo "What is ..."
+    read -r -p "  ... your first name? " -i "$firstname" -e firstname
+    read -r -p "  ... your family name? " -i "$lastname" -e lastname
+    read -r -p "  ... your email? " -i "$email" -e email
+    read -r -p "  ... your github username? " -i "$githubuser" -e githubuser
   fi
-  
-  echo "What is..."
-  read -r -p "  ... your first name? " -i "$firstname" -e firstname
-  read -r -p "  ... your family name? " -i "$lastname" -e lastname
-  read -r -p "  ... your email? " -i "$email" -e email
-  read -r -p "  ... your github username? " -i "$githubuser" -e githubuser
 fi
 
 gnome_terminal_default_profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 gnome_terminal_default_profile=${gnome_terminal_default_profile:1:-1}
 ok
 
+rm -f ${TEMPPASSWORD}
+
 message "Starting Ansible Playbook"
 export ANSIBLE_CONFIG="${top}/ansible.cfg"
+#  --become --ask-become-pass \
 ansible-playbook \
   --inventory "${top}/inventory" \
   --limit localhost \
-  --become --ask-become-pass \
+  --extra-vars="ansible_become_pass=$PASSWORD" \
   --extra-vars="firstname=$firstname" \
   --extra-vars="lastname=$lastname" \
   --extra-vars="email=$email" \
