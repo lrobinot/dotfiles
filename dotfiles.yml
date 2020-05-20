@@ -651,7 +651,7 @@
     - utils
     - tmux
 
-  - name: "utils | Httpie :: installation"
+  - name: "special | Httpie :: installation"
     pip:
       name: https://github.com/jakubroztocil/httpie/archive/2.1.0.tar.gz
       executable: pip3
@@ -659,7 +659,8 @@
       umask: "0022"
       state: latest
     tags:
-    - utils
+    - never
+    - special
     - httpie
 
   - name: "utils | Insomnia :: repository key"
