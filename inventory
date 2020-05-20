@@ -51,9 +51,9 @@ all:
         pkg_repo: "node_12.x"
 
       go:
-        version: 1.14
+        version: 1.14.3
         # Checksum for go<version>.linux-amd64.tar.gz on https://golang.org/dl/
-        sha256: 08df79b46b0adf498ea9f320a0f23d6ec59e9003660b4c9c1ce8e5e2c6f823ca
+        sha256: 1c39eac4ae95781b066c144c58e45d6859652247f7515f0d2cba7be7d57d2226
 
       protoc:
         repo: protocolbuffers/protobuf
