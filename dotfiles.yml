@@ -719,6 +719,28 @@
     - misc
     - wallch
 
+  - name: "misc | Wallch :: Settings"
+    template:
+      src: home/.config/wallch/Settings.conf.j2
+      dest: "{{ homedir }}/.config/wallch/Settings.conf"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - misc
+    - wallch
+
+  - name: "misc | Wallch :: auto-start"
+    template:
+      src: home/.config/autostart/wallch.desktop.j2
+      dest: "{{ homedir }}/.config/autostart/wallch.desktop"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - misc
+    - wallch
+
   - name: "misc | Chrome :: repository key"
     apt_key:
       url: https://dl.google.com/linux/linux_signing_key.pub
