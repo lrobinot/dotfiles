@@ -711,13 +711,14 @@
     - utils
     - insomnia
 
-  - name: "misc | Wallch :: installation"
+  - name: "special | Wallch :: installation"
     apt:
       name: wallch
       state: latest
     when: wsl == "0"
     tags:
-    - misc
+    - never
+    - special
     - wallch
 
   - name: "misc | Wallch :: Settings"
@@ -728,7 +729,8 @@
       group: "{{ groupname }}"
       mode: 0600
     tags:
-    - misc
+    - never
+    - special
     - wallch
 
   - name: "misc | Wallch :: auto-start"
@@ -739,7 +741,8 @@
       group: "{{ groupname }}"
       mode: 0600
     tags:
-    - misc
+    - never
+    - special
     - wallch
 
   - name: "misc | Chrome :: repository key"
