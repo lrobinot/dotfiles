@@ -273,6 +273,15 @@
     - container
     - docker
 
+  - name: "container | Docker :: user rights"
+    user:
+      name: "{{ username }}"
+      groups: "docker"
+      append: "yes"
+    tags:
+    - container
+    - docker
+
   - name: "kubernetes | kubectl :: repository key"
     apt_key:
       url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
