@@ -720,39 +720,55 @@
     - utils
     - insomnia
 
-  - name: "special | Wallch :: installation"
+  - name: "special | Variety :: installation"
     apt:
-      name: wallch
+      name: variety
       state: latest
     when: wsl == "0"
     tags:
     - never
     - special
-    - wallch
+    - variety
 
-  - name: "misc | Wallch :: Settings"
+  - name: "special | Variety :: Settings folder"
+    file:
+      path: "{{ homedir }}/.config/variety"
+      state: directory
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0700
+    when: wsl == "0"
+    tags:
+    - never
+    - special
+    - variety
+
+  - name: "special | Variety :: Settings"
     template:
-      src: home/.config/wallch/Settings.conf.j2
-      dest: "{{ homedir }}/.config/wallch/Settings.conf"
+      src: home/.config/variety/{{ item }}.j2
+      dest: "{{ homedir }}/.config/variety/{{ item }}"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    with_items:
+    - ".firstrun"
+    - "variety.conf"
+    tags:
+    - never
+    - special
+    - variety
+
+  - name: "special | Variety :: auto-start"
+    template:
+      src: home/.config/autostart/variety.desktop.j2
+      dest: "{{ homedir }}/.config/autostart/variety.desktop"
       owner: "{{ username }}"
       group: "{{ groupname }}"
       mode: 0600
     tags:
     - never
     - special
-    - wallch
-
-  - name: "misc | Wallch :: auto-start"
-    template:
-      src: home/.config/autostart/wallch.desktop.j2
-      dest: "{{ homedir }}/.config/autostart/wallch.desktop"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
-      mode: 0600
-    tags:
-    - never
-    - special
-    - wallch
+    - variety
 
   - name: "misc | Chrome :: repository key"
     apt_key:
