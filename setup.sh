@@ -47,8 +47,6 @@ echo '| (_| | (_) | |_|  _| | |  __/\__ \_   _|_   _|'
 echo ' \__,_|\___/ \__|_| |_|_|\___||___/ |_|   |_|  '
 echo '                                               '
 
-wsl=$(cat /proc/version | grep -c -- -Microsoft || :)
-
 read -s -p "[sudo] password for $USER: " PASSWORD
 echo ""
 TEMPPASSWORD=$(mktemp --tmpdir="${top}" --quiet)
@@ -112,9 +110,10 @@ then
   fi
 fi
 
+wsl=$(cat /proc/version | grep -c -- -Microsoft || :)
 gnome_terminal_default_profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 gnome_terminal_default_profile=${gnome_terminal_default_profile:1:-1}
-ok
+monitor=$(xrandr | grep '^DP-.*1920x1080+1920+0' | awk '{print $1}')
 
 rm -f ${TEMPPASSWORD}
 
@@ -135,6 +134,7 @@ ansible-playbook \
   --extra-vars="dotdir=$(realpath --relative-to="$HOME" "$top")" \
   --extra-vars="wsl=$wsl" \
   --extra-vars="gnome_terminal_default_profile=$gnome_terminal_default_profile" \
+  --extra-vars="monitor=$monitor" \
   $tag \
   dotfiles.yml
 ok
