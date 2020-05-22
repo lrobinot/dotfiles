@@ -10,6 +10,11 @@ all:
         color: "#2a092a"
         color2: "#002f3d"
         transparency: 90
+      tab:
+        inactive:
+          background: "#00141a"
+        active:
+          background: "#002f3d"
       foreground:
         color: "#839496"
       palette:

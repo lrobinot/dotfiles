@@ -5,14 +5,14 @@ GtkBox {
 }
 
 notebook > header {
-  background-color: rgba(51,51,51,.9);
+  background-color: {{ terminal.tab.inactive.background | rgba(100) }};
   border: none;
 }
 
 notebook > header > tabs > tab {
-  background-color: rgba(80,80,80,.9);
+  background-color: {{ terminal.tab.inactive.background | rgba(50) }};
   border-radius: 0;
-  color: #ccc;
+  color: {{ terminal.foreground.color | rgba(80) }};
   border: 0;
   margin: 0 1px;
   border-width: 0 1px;
@@ -21,6 +21,6 @@ notebook > header > tabs > tab {
 }
 
 notebook > header > tabs > tab:checked {
-  background: rgba(0,0,0,.8);
-  color: orange;
+  background-color: {{ terminal.tab.active.background }};
+  color: {{ terminal.foreground.color }};
 }
