@@ -320,6 +320,90 @@
     - kubernetes
     - k3d
 
+  - name: "kubernetes | k9s :: download"
+    get_url:
+      url: https://github.com/{{ packages.k9s.repo }}/releases/download/v{{ packages.k9s.version }}/k9s_{{ packages.k9s.platform }}.tar.gz
+      dest: /tmp/k9s.tar.gz
+    tags:
+    - kubernetes
+    - k9s
+
+  - name: "kubernetes | k9s :: unarchive"
+    unarchive:
+      src: /tmp/k9s.tar.gz
+      dest: /usr/local/bin
+      copy: no
+      mode: 0755
+      exclude:
+      - LICENSE
+      - README.md
+    tags:
+    - kubernetes
+    - k9s
+
+  - name: "kubernetes | SOPS :: installation"
+    get_url:
+      url: https://github.com/{{ packages.sops.repo }}/releases/download/v{{ packages.sops.version }}/sops-v{{ packages.sops.version }}.linux
+      dest: /usr/local/bin/sops
+      owner: root
+      group: root
+      mode: "0755"
+      checksum: sha256:{{ packages.sops.sha256 }}
+    tags:
+    - kubernetes
+    - sops
+
+  - name: "lang | Node :: repository key"
+    apt_key:
+      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+      state: present
+    tags:
+    - lang
+    - nodejs
+
+  - name: "lang | Node :: repository"
+    apt_repository:
+      repo: "deb [arch=amd64] https://deb.nodesource.com/{{ packages.node.pkg_repo }} {{ ansible_distribution_release }} main"
+      state: present
+      filename: nodesource
+      mode: 0644
+    tags:
+    - lang
+    - nodejs
+
+  - name: "lang | Node :: installation"
+    apt:
+      name: nodejs
+      state: latest
+    tags:
+    - lang
+    - nodejs
+
+  - name: "lang | Node :: configuration"
+    template:
+      src: home/.npmrc.j2
+      dest: "{{ homedir }}/.npmrc"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - lang
+    - nodejs
+
+  - name: "lang | Go :: check"
+    command: /usr/local/go/bin/go version
+    ignore_errors: yes
+    register: go_version
+    changed_when: false
+    tags:
+    - lang
+    - go
+
+  - name: "lang | Go :: download"
+    get_url:
+      url: https://dl.google.com/go/go{{ packages.go.version }}.linux-amd64.tar.gz
+      dest: /usr/local/src/go{{ packages.go.version }}.linux-amd64.tar.gz
+
   - name: "kubernetes | SOPS :: installation"
     get_url:
       url: https://github.com/{{ packages.sops.repo }}/releases/download/v{{ packages.sops.version }}/sops-v{{ packages.sops.version }}.linux

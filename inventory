@@ -47,6 +47,11 @@ all:
         sha256: da9ff31bcf4377fadfb065f4998d347f19de1168a5a553ce2c23b763ee1f6098
         platform: linux-amd64
 
+      k9s:
+        repo: derailed/k9s
+        version: 0.19.6
+        platform: Linux_x86_64
+
       node:
         pkg_repo: "node_12.x"
 
