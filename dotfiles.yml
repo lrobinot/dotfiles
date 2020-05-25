@@ -9,11 +9,19 @@
   - protoc_version_expected: "libprotoc {{ packages.protoc.version }}"
 
   tasks:
+  - name: "settings | download cache folder"
+    file:
+      path: "{{ dlcache }}"
+      state: directory
+      mode: 0755
+    tags:
+    - always
+
   - name: "settings | locale"
     template:
       src: etc/default/locale.j2
       dest: /etc/default/locale
-      mode: "0644"
+      mode: 0644
 
   - name: "settings | auto-start folder"
     file:
@@ -353,68 +361,80 @@
     - kubernetes
     - sops
 
-  - name: "lang | Node :: repository key"
-    apt_key:
-      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-      state: present
-    tags:
-    - lang
-    - nodejs
-
-  - name: "lang | Node :: repository"
-    apt_repository:
-      repo: "deb [arch=amd64] https://deb.nodesource.com/{{ packages.node.pkg_repo }} {{ ansible_distribution_release }} main"
-      state: present
-      filename: nodesource
-      mode: 0644
-    tags:
-    - lang
-    - nodejs
-
-  - name: "lang | Node :: installation"
-    apt:
-      name: nodejs
-      state: latest
-    tags:
-    - lang
-    - nodejs
-
-  - name: "lang | Node :: configuration"
-    template:
-      src: home/.npmrc.j2
-      dest: "{{ homedir }}/.npmrc"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
-      mode: 0600
-    tags:
-    - lang
-    - nodejs
-
-  - name: "lang | Go :: check"
-    command: /usr/local/go/bin/go version
-    ignore_errors: yes
-    register: go_version
-    changed_when: false
-    tags:
-    - lang
-    - go
-
-  - name: "lang | Go :: download"
+  - name: "kubernetes | keycloak :: download"
     get_url:
-      url: https://dl.google.com/go/go{{ packages.go.version }}.linux-amd64.tar.gz
-      dest: /usr/local/src/go{{ packages.go.version }}.linux-amd64.tar.gz
-
-  - name: "kubernetes | SOPS :: installation"
-    get_url:
-      url: https://github.com/{{ packages.sops.repo }}/releases/download/v{{ packages.sops.version }}/sops-v{{ packages.sops.version }}.linux
-      dest: /usr/local/bin/sops
-      owner: root
-      group: root
-      mode: "0755"
-      checksum: sha256:{{ packages.sops.sha256 }}
+      url: https://downloads.jboss.org/keycloak/{{ packages.keycloak.version }}/keycloak-{{ packages.keycloak.version }}.tar.gz
+      dest: "{{ dlcache }}/keycloak-{{ packages.keycloak.version }}.tar.gz"
+      checksum: sha1:{{ packages.keycloak.sha1 }}
     tags:
     - kubernetes
-    - sops
+    - keycloak
+
+  - name: "kubernetes | keycloak :: folder"
+    file:
+      path: "/usr/local/keycloak"
+      mode: "0755"
+      state: directory
+    tags:
+    - kubernetes
+    - keycloak
+
+  - name: "kubernetes | keycloak :: unarchive"
+    unarchive:
+      src: "{{ dlcache }}/keycloak-{{ packages.keycloak.version }}.tar.gz"
+      dest: /usr/local/keycloak
+      copy: no
+      extra_opts:
+      - --strip-components=1
+    tags:
+    - kubernetes
+    - keycloak
+
+  - name: "kubernetes | keycloak :: symlink"
+    file:
+      src: /usr/local/keycloak/bin/kcadm.sh
+      dest: /usr/local/bin/kcadm
+      state: link
+    tags:
+    - kubernetes
+    - keycloak
+
+  - name: "lang | Node :: repository key"
+    apt_key:
+      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+      state: present
+    tags:
+    - lang
+    - nodejs
+
+  - name: "lang | Node :: repository"
+    apt_repository:
+      repo: "deb [arch=amd64] https://deb.nodesource.com/{{ packages.node.pkg_repo }} {{ ansible_distribution_release }} main"
+      state: present
+      filename: nodesource
+      mode: 0644
+    tags:
+    - lang
+    - nodejs
+
+  - name: "lang | Node :: installation"
+    apt:
+      name: nodejs
+      state: latest
+    tags:
+    - lang
+    - nodejs
+
+  - name: "lang | Node :: configuration"
+    template:
+      src: home/.npmrc.j2
+      dest: "{{ homedir }}/.npmrc"
+      owner: "{{ username }}"
+      group: "{{ groupname }}"
+      mode: 0600
+    tags:
+    - lang
+    - nodejs
 
   - name: "lang | Node :: repository key"
     apt_key:
@@ -465,7 +485,7 @@
   - name: "lang | Go :: download"
     get_url:
       url: https://dl.google.com/go/go{{ packages.go.version }}.linux-amd64.tar.gz
-      dest: /usr/local/src/go{{ packages.go.version }}.linux-amd64.tar.gz
+      dest: "{{ dlcache }}/go{{ packages.go.version }}.linux-amd64.tar.gz"
       checksum: sha256:{{ packages.go.sha256 }}
     when: go_version is failed or go_version.stdout != go_version_expected
     tags:
@@ -483,7 +503,7 @@
 
   - name: "lang | Go :: installation"
     unarchive:
-      src: /usr/local/src/go{{ packages.go.version }}.linux-amd64.tar.gz
+      src: "{{ dlcache }}/go{{ packages.go.version }}.linux-amd64.tar.gz"
       dest: /usr/local
       copy: no
     when: go_version is failed or go_version.stdout != go_version_expected
@@ -515,7 +535,7 @@
   - name: "lang | Protoc :: download"
     get_url:
       url: https://github.com/{{ packages.protoc.repo }}/releases/download/v{{ packages.protoc.version }}/protoc-{{ packages.protoc.version }}-linux-x86_64.zip
-      dest: /usr/local/src/protoc-{{ packages.protoc.version }}-linux-x86_64.zip
+      dest: "{{ dlcache }}/protoc-{{ packages.protoc.version }}-linux-x86_64.zip"
     when: protoc_version is failed or protoc_version.stdout != protoc_version_expected
     tags:
     - lang
@@ -532,7 +552,7 @@
 
   - name: "lang | Protoc :: extraction"
     unarchive:
-      src: /usr/local/src/protoc-{{ packages.protoc.version }}-linux-x86_64.zip
+      src: "{{ dlcache }}/protoc-{{ packages.protoc.version }}-linux-x86_64.zip"
       dest: "{{ __protoc_tmp.path }}"
       copy: no
     when: protoc_version is failed or protoc_version.stdout != protoc_version_expected

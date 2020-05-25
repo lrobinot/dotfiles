@@ -5,6 +5,8 @@ all:
       ansible_connection: local
 
   vars:
+    dlcache: /usr/local/.dotfiles
+
     terminal:
       background:
         color: "#2a092a"
@@ -70,3 +72,6 @@ all:
         version: 3.11.4
         platform: linux-x86_64
 
+      keycloak:
+        version: 10.0.1
+        sha1: 312761d90eacdf2e4e00a902ae120ad067b3a857
