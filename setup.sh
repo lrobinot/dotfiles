@@ -128,8 +128,9 @@ ansible-playbook \
   --extra-vars="lastname=$lastname" \
   --extra-vars="email=$email" \
   --extra-vars="githubuser=$githubuser" \
-  --extra-vars="username=$(id --user $USER)" \
-  --extra-vars="groupname=$(id --group "$USER")" \
+  --extra-vars="username=${USER}" \
+  --extra-vars="userid=$(id --user "$USER")" \
+  --extra-vars="groupid=$(id --group "$USER")" \
   --extra-vars="homedir=$HOME" \
   --extra-vars="dotdir=$(realpath --relative-to="$HOME" "$top")" \
   --extra-vars="wsl=$wsl" \
