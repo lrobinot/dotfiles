@@ -323,28 +323,39 @@
       owner: root
       group: root
       mode: "0755"
-      checksum: sha256:{{ packages.k3d.sha256 }}
+      checksum: sha256:{{ packages.k3d.checksum }}
     tags:
     - kubernetes
     - k3d
 
+  - name: "kubernetes | k9s :: check"
+    command: k9s version --short
+    ignore_errors: yes
+    register: k9s_version
+    changed_when: false
+    tags:
+    - kubernetes
+    - k9s
+
   - name: "kubernetes | k9s :: download"
     get_url:
       url: https://github.com/{{ packages.k9s.repo }}/releases/download/v{{ packages.k9s.version }}/k9s_{{ packages.k9s.platform }}.tar.gz
-      dest: /tmp/k9s.tar.gz
+      dest: "{{ dlcache }}/k9s-{{ packages.k9s.version }}.tar.gz"
+    when: k9s_version is failed or packages.k9s.version not in k9s_version.stdout_lines[0]
     tags:
     - kubernetes
     - k9s
 
   - name: "kubernetes | k9s :: unarchive"
     unarchive:
-      src: /tmp/k9s.tar.gz
+      src: "{{ dlcache }}/k9s-{{ packages.k9s.version }}.tar.gz"
       dest: /usr/local/bin
       copy: no
       mode: 0755
       exclude:
       - LICENSE
       - README.md
+    when: k9s_version is failed or packages.k9s.version not in k9s_version.stdout_lines[0]
     tags:
     - kubernetes
     - k9s
@@ -356,7 +367,7 @@
       owner: root
       group: root
       mode: "0755"
-      checksum: sha256:{{ packages.sops.sha256 }}
+      checksum: sha256:{{ packages.sops.checksum }}
     tags:
     - kubernetes
     - sops
@@ -365,7 +376,7 @@
     get_url:
       url: https://downloads.jboss.org/keycloak/{{ packages.keycloak.version }}/keycloak-{{ packages.keycloak.version }}.tar.gz
       dest: "{{ dlcache }}/keycloak-{{ packages.keycloak.version }}.tar.gz"
-      checksum: sha1:{{ packages.keycloak.sha1 }}
+      checksum: sha1:{{ packages.keycloak.checksum }}
     tags:
     - kubernetes
     - keycloak
@@ -486,7 +497,7 @@
     get_url:
       url: https://dl.google.com/go/go{{ packages.go.version }}.linux-amd64.tar.gz
       dest: "{{ dlcache }}/go{{ packages.go.version }}.linux-amd64.tar.gz"
-      checksum: sha256:{{ packages.go.sha256 }}
+      checksum: sha256:{{ packages.go.checksum }}
     when: go_version is failed or go_version.stdout != go_version_expected
     tags:
     - lang
@@ -740,10 +751,28 @@
 
   - name: "utils | Misc :: installation"
     apt:
-      name: [ 'figlet', 'lolcat', 'boxes', 'xclip', 'xsel', 'tree' ]
+      name: [ 'figlet', 'lolcat', 'boxes', 'xclip', 'xsel', 'tree', 'jq' ]
       state: latest
     tags:
     - utils
+
+  - name: "utils | Yq :: repository"
+    apt_repository:
+      repo: ppa:rmescandon/yq
+      state: present
+      filename: yq
+      mode: 0644
+    tags:
+    - utils
+    - yq
+
+  - name: "utils | Yq :: installation"
+    apt:
+      name: yq
+      state: latest
+    tags:
+    - utils
+    - yq
 
   - name: "utils | Tmux :: installation"
     apt:

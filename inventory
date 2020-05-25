@@ -45,18 +45,18 @@ all:
       sops:
         repo: mozilla/sops
         version: 3.5.0
-        sha256: 610fca9687d1326ef2e1a66699a740f5dbd5ac8130190275959da737ec52f096
+        checksum: 610fca9687d1326ef2e1a66699a740f5dbd5ac8130190275959da737ec52f096
         platform: amd64
 
       k3d:
         repo: rancher/k3d
         version: 1.7.0
-        sha256: da9ff31bcf4377fadfb065f4998d347f19de1168a5a553ce2c23b763ee1f6098
+        checksum: da9ff31bcf4377fadfb065f4998d347f19de1168a5a553ce2c23b763ee1f6098
         platform: linux-amd64
 
       k9s:
         repo: derailed/k9s
-        version: 0.19.6
+        version: 0.19.7
         platform: Linux_x86_64
 
       node:
@@ -65,13 +65,13 @@ all:
       go:
         version: 1.14.3
         # Checksum for go<version>.linux-amd64.tar.gz on https://golang.org/dl/
-        sha256: 1c39eac4ae95781b066c144c58e45d6859652247f7515f0d2cba7be7d57d2226
+        checksum: 1c39eac4ae95781b066c144c58e45d6859652247f7515f0d2cba7be7d57d2226
 
       protoc:
         repo: protocolbuffers/protobuf
-        version: 3.11.4
+        version: 3.12.1
         platform: linux-x86_64
 
       keycloak:
         version: 10.0.1
-        sha1: 312761d90eacdf2e4e00a902ae120ad067b3a857
+        checksum: 312761d90eacdf2e4e00a902ae120ad067b3a857
