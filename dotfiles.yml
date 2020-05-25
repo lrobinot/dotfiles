@@ -19,8 +19,8 @@
     file:
       path: "{{ homedir }}/.config/autostart"
       state: directory
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0700
 
   - name: "fonts | Cascadia Code :: installation"
@@ -126,8 +126,8 @@
     file:
       path: "{{ homedir }}/.config/terminator"
       state: directory
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: '0700'
     when: wsl == "0"
     tags:
@@ -138,8 +138,8 @@
     template:
       src: home/.config/terminator/config.j2
       dest: "{{ homedir }}/.config/terminator/config"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     when: wsl == "0"
     tags:
@@ -180,8 +180,8 @@
     file:
       path: "{{ homedir }}/.config/tilda"
       state: directory
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: '0700'
     tags:
     - terminal
@@ -191,8 +191,8 @@
     template:
       src: home/.config/tilda/{{ item }}.j2
       dest: "{{ homedir }}/.config/tilda/{{ item }}"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     with_items:
     - config_0
@@ -205,8 +205,8 @@
     template:
       src: home/.config/autostart/tilda.desktop.j2
       dest: "{{ homedir }}/.config/autostart/tilda.desktop"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     tags:
     - terminal
@@ -233,8 +233,8 @@
     template:
       src: home/.gitconfig.j2
       dest: "{{ homedir }}/.gitconfig"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     tags:
     - scm
@@ -383,8 +383,8 @@
     template:
       src: home/.npmrc.j2
       dest: "{{ homedir }}/.npmrc"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     tags:
     - lang
@@ -446,8 +446,8 @@
     template:
       src: home/.npmrc.j2
       dest: "{{ homedir }}/.npmrc"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     tags:
     - lang
@@ -577,8 +577,8 @@
       url: https://packages.microsoft.com/keys/microsoft.asc
       state: present
     tags:
-    - container
-    - docker
+    - editor
+    - vscode
 
   - name: "editor | Code :: repository"
     apt_repository:
@@ -603,8 +603,8 @@
   - name: "editor | Code :: configuration folder"
     file:
       path: "{{ homedir }}/.config/{{ item }}"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       state: directory
       mode: '0700'
     with_items:
@@ -619,8 +619,8 @@
     template:
       src: home/.config/Code/User/{{ item }}
       dest: "{{ homedir }}/.config/Code/User/{{ item }}"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     with_items:
     - settings.json
@@ -681,8 +681,8 @@
     template:
       src: home/.vimrc.j2
       dest: "{{ homedir }}/.vimrc"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     tags:
     - editor
@@ -700,8 +700,8 @@
     template:
       src: home/.zshrc.j2
       dest: "{{ homedir }}/.zshrc"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     tags:
     - shell
@@ -711,8 +711,8 @@
     copy:
       src: home/.p10k.zsh
       dest: "{{ homedir }}/.p10k.zsh"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     tags:
     - shell
@@ -737,8 +737,8 @@
     template:
       src: home/.tmux.conf.j2
       dest: "{{ homedir }}/.tmux.conf"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     tags:
     - utils
@@ -818,8 +818,8 @@
     file:
       path: "{{ homedir }}/.config/variety"
       state: directory
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0700
     when: wsl == "0"
     tags:
@@ -831,8 +831,8 @@
     template:
       src: home/.config/variety/{{ item }}.j2
       dest: "{{ homedir }}/.config/variety/{{ item }}"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     with_items:
     - ".firstrun"
@@ -846,8 +846,8 @@
     template:
       src: home/.config/autostart/variety.desktop.j2
       dest: "{{ homedir }}/.config/autostart/variety.desktop"
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0600
     tags:
     - never
@@ -967,8 +967,8 @@
     file:
       path: "{{ homedir }}/{{ item }}"
       state: directory
-      owner: "{{ username }}"
-      group: "{{ groupname }}"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
       mode: 0700
     with_items:
     - "Downloads"
