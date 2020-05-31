@@ -673,6 +673,7 @@
       - "editorconfig.editorconfig"
       - "searking.preview-vscode"
       - "vscode-icons-team.vscode-icons"
+      - "streetsidesoftware.code-spell-checker"
     when: wsl == "0"
     tags:
     - editor
