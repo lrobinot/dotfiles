@@ -17,6 +17,14 @@
     tags:
     - always
 
+  - name: "settings | locale.gen"
+    locale_gen:
+      name: "{{ item }}"
+      state: present
+    with_items:
+    - en_US.UTF-8
+    - fr_FR.UTF-8
+
   - name: "settings | locale"
     template:
       src: etc/default/locale.j2
@@ -180,6 +188,14 @@
     apt:
       name: tilda
       state: latest
+    tags:
+    - terminal
+    - tilda
+
+  - name: "terminal | Tilda :: version"
+    shell: "tilda --version | head -1 | awk '{print $2}'"
+    register: tilda_version
+    changed_when: false
     tags:
     - terminal
     - tilda

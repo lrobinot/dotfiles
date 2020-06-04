@@ -43,7 +43,9 @@ backspace_key=0
 delete_key=1
 d_set_title=3
 command_exit=2
+{% if tilda_version.stdout is version('1.5', '>=') %}
 command_timeout_ms=3000
+{% endif %}
 scheme=0
 slide_sleep_usec=800
 animation_orientation=0
@@ -93,7 +95,9 @@ command_login_shell=false
 start_fullscreen=false
 confirm_close_tab=false
 back_alpha=62258
+{% if tilda_version.stdout is version('1.5', '>=') %}
 show_title_tooltip=true
+{% endif %}
 # max_width=0
 # max_height=0
 # image=""
