@@ -773,6 +773,15 @@
     tags:
     - utils
 
+  - name: "utils | Yq :: remove python version"
+    pip:
+      name: yq
+      state: absent
+      umask: "0022"
+    tags:
+    - utils
+    - yq
+
   - name: "utils | Yq :: repository"
     apt_repository:
       repo: ppa:rmescandon/yq
