@@ -1294,3 +1294,11 @@
     - special
     - remmina
 
+  - name: "kubernetes | sentry :: download"
+    get_url:
+      url: https://downloads.sentry-cdn.com/sentry-cli/{{ packages.sentry-cli.version }}/sentry-cli-Linux-x86_64
+      dest: /usr/local/bin/sentry-cli
+    when: k9s_version is failed or packages.k9s.version not in k9s_version.stdout_lines[0]
+    tags:
+    - kubernetes
+    - sentry
