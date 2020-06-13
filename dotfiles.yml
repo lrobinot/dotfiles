@@ -695,7 +695,7 @@
       - "editorconfig.editorconfig"
       - "searking.preview-vscode"
       - "vscode-icons-team.vscode-icons"
-      - "ban.spellright"
+      - "ckolkman.vscode-postgres"
     when: wsl == "0"
     tags:
     - editor
