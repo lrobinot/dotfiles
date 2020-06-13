@@ -76,5 +76,8 @@ all:
         version: 10.0.1
         checksum: 312761d90eacdf2e4e00a902ae120ad067b3a857
 
+      httpie:
+        version: 2.1.0
+
       sentry-cli:
         version: 1.54.0

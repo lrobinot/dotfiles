@@ -774,7 +774,7 @@
 
   - name: "utils | Misc :: installation"
     apt:
-      name: [ 'figlet', 'lolcat', 'boxes', 'xclip', 'xsel', 'tree', 'jq' ]
+      name: [ 'figlet', 'lolcat', 'boxes', 'xclip', 'xsel', 'tree', 'jq', 'libnss3-tools' ]
       state: latest
     tags:
     - utils
@@ -825,16 +825,33 @@
     - utils
     - tmux
 
-  - name: "special | Httpie :: installation"
+  - name: "utils | Httpie :: remove os version"
+    apt:
+      name: httpie
+      state: absent
+    tags:
+    - utils
+    - httpie
+
+  - name: "utils | Httpie :: check"
+    command: http --version
+    ignore_errors: yes
+    register: httpie_version
+    changed_when: false
+    tags:
+    - utils
+    - httpie
+
+  - name: "utils | Httpie :: installation"
     pip:
-      name: https://github.com/jakubroztocil/httpie/archive/2.1.0.tar.gz
+      name: https://github.com/jakubroztocil/httpie/archive/{{ packages.httpie.version }}.tar.gz
       executable: pip3
       extra_args: --upgrade
       umask: "0022"
       state: latest
+    when: httpie_version is failed or httpie_version.stdout != packages.httpie.version
     tags:
-    - never
-    - special
+    - utils
     - httpie
 
   - name: "utils | Insomnia :: repository key"
@@ -1296,9 +1313,9 @@
 
   - name: "kubernetes | sentry :: download"
     get_url:
-      url: https://downloads.sentry-cdn.com/sentry-cli/{{ packages.sentry-cli.version }}/sentry-cli-Linux-x86_64
+      url: https://github.com/getsentry/sentry-cli/releases/download/{{ packages.sentry-cli.version }}/sentry-cli-Linux-x86_64
       dest: /usr/local/bin/sentry-cli
-    when: k9s_version is failed or packages.k9s.version not in k9s_version.stdout_lines[0]
+#    when: k9s_version is failed or packages.k9s.version not in k9s_version.stdout_lines[0]
     tags:
     - kubernetes
     - sentry
