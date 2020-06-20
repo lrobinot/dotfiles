@@ -1071,7 +1071,8 @@
     with_items:
     - "Downloads"
     - "Downloads/000 A Traiter 000"
-    - "Downloads/Transmission"
+    - "Downloads/.transmission.work"
+    - ".config/transmission"
     when: wsl == "0"
     tags:
     - never
@@ -1083,6 +1084,16 @@
       name: transmission-gtk
       state: latest
     when: wsl == "0"
+    tags:
+    - never
+    - special
+    - transmission
+
+  - name: "special | Transmission :: settings"
+    template:
+      src: home/.config/transmission/settings.json.j2
+      dest: "{{ homedir }}/.config/transmission/settings.json"
+      mode: 0644
     tags:
     - never
     - special
