@@ -670,7 +670,7 @@
 
   - name: "editor | Code :: configuration"
     template:
-      src: home/.config/Code/User/{{ item }}
+      src: home/.config/Code/User/{{ item }}.j2
       dest: "{{ homedir }}/.config/Code/User/{{ item }}"
       owner: "{{ userid }}"
       group: "{{ groupid }}"
@@ -1313,8 +1313,9 @@
 
   - name: "kubernetes | sentry :: download"
     get_url:
-      url: https://github.com/getsentry/sentry-cli/releases/download/{{ packages.sentry-cli.version }}/sentry-cli-Linux-x86_64
+      url: https://github.com/getsentry/sentry-cli/releases/download/{{ packages.sentry.version }}/sentry-cli-Linux-x86_64
       dest: /usr/local/bin/sentry-cli
+      mode: 0755
 #    when: k9s_version is failed or packages.k9s.version not in k9s_version.stdout_lines[0]
     tags:
     - kubernetes
