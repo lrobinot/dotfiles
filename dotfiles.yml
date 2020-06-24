@@ -670,7 +670,7 @@
 
   - name: "editor | Code :: configuration"
     template:
-      src: home/.config/Code/User/{{ item }}
+      src: home/.config/Code/User/{{ item }}.j2
       dest: "{{ homedir }}/.config/Code/User/{{ item }}"
       owner: "{{ userid }}"
       group: "{{ groupid }}"
@@ -695,7 +695,7 @@
       - "editorconfig.editorconfig"
       - "searking.preview-vscode"
       - "vscode-icons-team.vscode-icons"
-      - "ban.spellright"
+      - "ckolkman.vscode-postgres"
     when: wsl == "0"
     tags:
     - editor
@@ -1071,7 +1071,8 @@
     with_items:
     - "Downloads"
     - "Downloads/000 A Traiter 000"
-    - "Downloads/Transmission"
+    - "Downloads/.transmission.work"
+    - ".config/transmission"
     when: wsl == "0"
     tags:
     - never
@@ -1083,6 +1084,16 @@
       name: transmission-gtk
       state: latest
     when: wsl == "0"
+    tags:
+    - never
+    - special
+    - transmission
+
+  - name: "special | Transmission :: settings"
+    template:
+      src: home/.config/transmission/settings.json.j2
+      dest: "{{ homedir }}/.config/transmission/settings.json"
+      mode: 0644
     tags:
     - never
     - special
@@ -1311,3 +1322,12 @@
     - special
     - remmina
 
+  - name: "kubernetes | sentry :: download"
+    get_url:
+      url: https://github.com/getsentry/sentry-cli/releases/download/{{ packages.sentry.version }}/sentry-cli-Linux-x86_64
+      dest: /usr/local/bin/sentry-cli
+      mode: 0755
+#    when: k9s_version is failed or packages.k9s.version not in k9s_version.stdout_lines[0]
+    tags:
+    - kubernetes
+    - sentry

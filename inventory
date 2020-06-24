@@ -78,3 +78,6 @@ all:
 
       httpie:
         version: 2.1.0
+
+      sentry:
+        version: 1.54.0
