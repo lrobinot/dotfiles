@@ -56,7 +56,8 @@ all:
 
       k9s:
         repo: derailed/k9s
-        version: 0.19.7
+        version: 0.21.1
+        checksum: d691ec3970b601dacb932e2c6fcf33b9f04fa2a79cbca9ba4787ee159e6cae01
         platform: Linux_x86_64
 
       node:

@@ -363,6 +363,7 @@
     get_url:
       url: https://github.com/{{ packages.k9s.repo }}/releases/download/v{{ packages.k9s.version }}/k9s_{{ packages.k9s.platform }}.tar.gz
       dest: "{{ dlcache }}/k9s-{{ packages.k9s.version }}.tar.gz"
+      sha256sum: "{{ packages.k9s.checksum }}"
     when: k9s_version is failed or packages.k9s.version not in k9s_version.stdout_lines[0]
     tags:
     - kubernetes
