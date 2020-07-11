@@ -1332,3 +1332,58 @@
     tags:
     - kubernetes
     - sentry
+
+  - name: "special | login background changer download"
+    get_url:
+      url: https://raw.githubusercontent.com/thiggy01/ubuntu-20.04-change-gdm-background/master/ubuntu-20.04-change-gdm-background
+      dest: /usr/local/bin/ubuntu-20.04-change-gdm-background
+      mode: 0755
+    when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"
+    tags:
+    - never
+    - special
+    - login-background
+
+  - name: "special | login background changer dependencies"
+    apt:
+      name: libglib2.0-dev-bin
+      state: latest
+    when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"
+    tags:
+    - fonts
+    - ubuntu-mono
+    tags:
+    - never
+    - special
+    - login-background
+
+  - name: "special | login background folder"
+    file:
+      path: /usr/local/share/backgrounds
+      state: directory
+      mode: 0755
+    when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"
+    tags:
+    - never
+    - special
+    - login-background
+
+  - name: "special | login background copy"
+    copy:
+      src: usr/local/share/backgrounds/{{ gdmbackground }}
+      dest: /usr/local/share/backgrounds/{{ gdmbackground }}
+      mode: "0644"
+    when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"
+    tags:
+    - never
+    - special
+    - login-background
+
+  - name: "special | login background changer apply"
+    shell: echo "n" | /usr/local/bin/ubuntu-20.04-change-gdm-background /usr/local/share/backgrounds/{{ gdmbackground }}
+    when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"
+    tags:
+    - never
+    - special
+    - login-background
+
