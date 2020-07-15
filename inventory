@@ -7,6 +7,8 @@ all:
   vars:
     dlcache: /usr/local/.dotfiles
 
+    gdmbackground: purple-swirls.jpg
+
     terminal:
       background:
         color: "#2a092a"
