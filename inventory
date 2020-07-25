@@ -62,6 +62,12 @@ all:
         checksum: d691ec3970b601dacb932e2c6fcf33b9f04fa2a79cbca9ba4787ee159e6cae01
         platform: Linux_x86_64
 
+      kustomize:
+        repo: kubernetes-sigs/kustomize
+        version: 3.8.1
+        checksum: 9d5b68f881ba89146678a0399469db24670cba4813e0299b47cb39a240006f37
+        platform: linux_amd64
+
       node:
         pkg_repo: "node_12.x"
 

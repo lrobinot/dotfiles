@@ -383,6 +383,36 @@
     - kubernetes
     - k9s
 
+  - name: "kubernetes | kustomize :: check"
+    command: kustomize version
+    ignore_errors: yes
+    register: kustomize_version
+    changed_when: false
+    tags:
+    - kubernetes
+    - kustomize
+
+  - name: "kubernetes | kustomize :: download"
+    get_url:
+      url: https://github.com/{{ packages.kustomize.repo }}/releases/download/kustomize%2Fv{{ packages.kustomize.version }}/kustomize_v{{ packages.kustomize.version }}_{{ packages.kustomize.platform }}.tar.gz
+      dest: "{{ dlcache }}/kustomize-{{ packages.kustomize.version }}.tar.gz"
+      sha256sum: "{{ packages.kustomize.checksum }}"
+    when: kustomize_version is failed or packages.kustomize.version not in kustomize_version.stdout_lines[0]
+    tags:
+    - kubernetes
+    - kustomize
+
+  - name: "kubernetes | kustomize :: unarchive"
+    unarchive:
+      src: "{{ dlcache }}/kustomize-{{ packages.kustomize.version }}.tar.gz"
+      dest: /usr/local/bin
+      copy: no
+      mode: 0755
+    when: kustomize_version is failed or packages.kustomize.version not in kustomize_version.stdout_lines[0]
+    tags:
+    - kubernetes
+    - kustomize
+
   - name: "kubernetes | SOPS :: installation"
     get_url:
       url: https://github.com/{{ packages.sops.repo }}/releases/download/v{{ packages.sops.version }}/sops-v{{ packages.sops.version }}.linux
