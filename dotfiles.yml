@@ -725,7 +725,7 @@
       - "oderwat.indent-rainbow"
       - "editorconfig.editorconfig"
       - "searking.preview-vscode"
-      - "vscode-icons-team.vscode-icons"
+      - "pkief.material-icon-theme"
       - "ckolkman.vscode-postgres"
     when: wsl == "0"
     tags:
