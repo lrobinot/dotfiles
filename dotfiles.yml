@@ -656,6 +656,78 @@
     - lang
     - protoc
 
+  - name: "lang | Protop :: check"
+    stat:
+      path: "{{ homedir }}/.protop/lib/protop-{{ packages.protop.version }}.jar"
+    register: stat_protop
+    tags:
+    - lang
+    - protop
+
+  - name: "lang | Protop :: download"
+    git:
+      repo: https://github.com/{{ packages.protop.repo }}
+      dest: "{{ dlcache }}/protop-{{ packages.protop.version }}"
+      version: v{{ packages.protop.version }}
+      force: yes
+    tags:
+    - lang
+    - protop
+
+  - name: "lang | Protop :: duplicate install.sh"
+    copy:
+      src: "{{ dlcache }}/protop-{{ packages.protop.version }}/install.sh"
+      dest: "{{ dlcache }}/protop-{{ packages.protop.version }}/dinstall.sh"
+      mode: 0755
+      remote_src: yes
+    when: not stat_protop.stat.exists
+    tags:
+    - lang
+    - protop
+
+  - name: "lang | Protop :: update dinstall.sh"
+    lineinfile:
+      path: "{{ dlcache }}/protop-{{ packages.protop.version }}/dinstall.sh"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    with_items:
+    - { regexp: "^gradle=", line: 'gradle="docker run --rm -v {{ dlcache }}/protop-{{ packages.protop.version }}:/protop -w /protop gradle:6.5.1-jdk11 gradle"' }
+    - { regexp: "^dir=", line: 'dir="{{ homedir }}/.protop"' }
+    when: not stat_protop.stat.exists
+    tags:
+    - lang
+    - protop
+
+  - name: "lang | Protop :: build & install"
+    command: ./dinstall.sh
+    args:
+      chdir: "{{ dlcache }}/protop-{{ packages.protop.version }}"
+      creates: "{{ homedir }}/.protop/lib/protop-{{ packages.protop.version }}.jar"
+    when: not stat_protop.stat.exists
+    tags:
+    - lang
+    - protop
+
+  - name: "lang | Protop :: remove temporary dinstall.sh"
+    file:
+      path: "{{ dlcache }}/protop-{{ packages.protop.version }}/dinstall.sh"
+      state: absent
+    when: not stat_protop.stat.exists
+    tags:
+    - lang
+    - protop
+
+  - name: "lang | Protop :: set owner"
+    file:
+      path: "{{ homedir }}/.protop"
+      state: directory
+      recurse: yes
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
+    tags:
+    - lang
+    - protop
+
   - name: "editor | Code :: repository key"
     apt_key:
       url: https://packages.microsoft.com/keys/microsoft.asc

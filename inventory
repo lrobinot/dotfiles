@@ -81,6 +81,10 @@ all:
         version: 3.12.1
         platform: linux-x86_64
 
+      protop:
+        repo: protop-io/protop
+        version: 0.7.1
+
       keycloak:
         version: 10.0.1
         checksum: 312761d90eacdf2e4e00a902ae120ad067b3a857
