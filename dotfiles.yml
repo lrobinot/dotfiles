@@ -808,6 +808,8 @@
       - "nobuhito.printcode"
       # Material Icon Theme
       - "pkief.material-icon-theme"
+      # TODO highlither
+      - "wayou.vscode-todo-highlight"
     when: wsl == "0"
     tags:
     - editor
