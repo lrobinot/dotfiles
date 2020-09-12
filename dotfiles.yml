@@ -1441,7 +1441,6 @@
       url: https://github.com/getsentry/sentry-cli/releases/download/{{ packages.sentry.version }}/sentry-cli-Linux-x86_64
       dest: /usr/local/bin/sentry-cli
       mode: 0755
-#    when: k9s_version is failed or packages.k9s.version not in k9s_version.stdout_lines[0]
     tags:
     - kubernetes
     - sentry
@@ -1491,9 +1490,9 @@
 
   - name: "special | login background changer apply"
     shell: echo "n" | /usr/local/bin/ubuntu-20.04-change-gdm-background /usr/local/share/backgrounds/{{ gdmbackground }}
+    changed_when: false
     when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"
     tags:
     - never
     - special
     - login-background
-
