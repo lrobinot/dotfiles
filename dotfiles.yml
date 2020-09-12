@@ -1463,9 +1463,6 @@
       state: latest
     when: ansible_distribution == "Ubuntu" and ansible_distribution_version == "20.04"
     tags:
-    - fonts
-    - ubuntu-mono
-    tags:
     - never
     - special
     - login-background
