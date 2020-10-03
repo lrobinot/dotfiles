@@ -1496,3 +1496,33 @@
     - never
     - special
     - login-background
+
+  - name: "kubernetes | terraform :: check"
+    command: terraform version
+    ignore_errors: yes
+    register: terraform_version
+    changed_when: false
+    tags:
+    - kubernetes
+    - terraform
+
+  - name: "kubernetes | terraform :: download"
+    get_url:
+      url: https://releases.hashicorp.com/terraform/{{ packages.terraform.version }}/terraform_{{ packages.terraform.version }}_linux_amd64.zip
+      dest: "{{ dlcache }}/terraform-{{ packages.terraform.version }}.tar.gz"
+      sha256sum: "{{ packages.terraform.checksum }}"
+    when: terraform_version is failed or packages.terraform.version not in terraform_version.stdout_lines[0]
+    tags:
+    - kubernetes
+    - terraform
+
+  - name: "kubernetes | terraform :: unarchive"
+    unarchive:
+      src: "{{ dlcache }}/terraform-{{ packages.terraform.version }}.tar.gz"
+      dest: /usr/local/bin
+      copy: no
+      mode: 0755
+    when: terraform_version is failed or packages.terraform.version not in terraform_version.stdout_lines[0]
+    tags:
+    - kubernetes
+    - terraform

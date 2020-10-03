@@ -68,6 +68,10 @@ all:
         checksum: 9d5b68f881ba89146678a0399469db24670cba4813e0299b47cb39a240006f37
         platform: linux_amd64
 
+      terraform:
+        version: 0.13.4
+        checksum: a92df4a151d390144040de5d18351301e597d3fae3679a814ea57554f6aa9b24
+
       node:
         pkg_repo: "node_12.x"
 
