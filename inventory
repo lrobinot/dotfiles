@@ -65,6 +65,8 @@ all:
       - "nobuhito.printcode"
       # REST Client
       - "humao.rest-client"
+      # Text Tables
+      - "romanpeshkov.vscode-text-tables"
 
     packages:
       sops:
