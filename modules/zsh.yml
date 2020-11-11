@@ -1,0 +1,21 @@
+---
+  - name: "shell | Zsh :: installation"
+    apt:
+      name: zsh
+      state: latest
+
+  - name: "shell | Zsh :: configuration"
+    template:
+      src: home/.zshrc.j2
+      dest: "{{ homedir }}/.zshrc"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
+      mode: 0600
+
+  - name: "shell | Zsh :: theme"
+    template:
+      src: home/.p10k.zsh.j2
+      dest: "{{ homedir }}/.p10k.zsh"
+      owner: "{{ userid }}"
+      group: "{{ groupid }}"
+      mode: 0600

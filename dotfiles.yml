@@ -242,6 +242,13 @@
     - terminal
     - tilda
 
+  - name: "terminal | Tilix"
+    include: modules/tilix.yml
+    when: wsl == "0"
+    tags:
+    - terminal
+    - tilix
+
   - name: "scm | Git :: repository"
     apt_repository:
       repo: ppa:git-core/ppa
@@ -838,32 +845,8 @@
     - editor
     - vim
 
-  - name: "shell | Zsh :: installation"
-    apt:
-      name: zsh
-      state: latest
-    tags:
-    - shell
-    - zsh
-
-  - name: "shell | Zsh :: configuration"
-    template:
-      src: home/.zshrc.j2
-      dest: "{{ homedir }}/.zshrc"
-      owner: "{{ userid }}"
-      group: "{{ groupid }}"
-      mode: 0600
-    tags:
-    - shell
-    - zsh
-
-  - name: "shell | Zsh :: theme"
-    copy:
-      src: home/.p10k.zsh
-      dest: "{{ homedir }}/.p10k.zsh"
-      owner: "{{ userid }}"
-      group: "{{ groupid }}"
-      mode: 0600
+  - name: "shell | Zsh"
+    include: modules/zsh.yml
     tags:
     - shell
     - zsh
