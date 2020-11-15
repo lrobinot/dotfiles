@@ -1,0 +1,28 @@
+---
+- name: "scm | Git :: repository"
+  apt_repository:
+    repo: ppa:git-core/ppa
+    filename: git
+    mode: 0644
+  tags:
+  - scm
+  - git
+
+- name: "scm | Git :: installation"
+  apt:
+    name: ['git', 'git-flow']
+    state: latest
+  tags:
+  - scm
+  - git
+
+- name: "scm | Git :: configuration"
+  template:
+    src: home/.gitconfig.j2
+    dest: "{{ homedir }}/.gitconfig"
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    mode: 0600
+  tags:
+  - scm
+  - git

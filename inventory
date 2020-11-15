@@ -7,8 +7,6 @@ all:
   vars:
     dlcache: /usr/local/.dotfiles
 
-    gdmbackground: purple-swirls.jpg
-
     terminal:
       background:
         color: "#2a092a"
@@ -42,84 +40,3 @@ all:
         color: "#00ff2a"
       font: "MesloLGS NF Regular 10"
       scrollback: 5000
-
-    vscode:
-      extensions:
-      # Better Comments
-      - "aaron-bond.better-comments"
-      # Bookmarks
-      - "alefragnani.bookmarks"
-      # Bracket Pair Colorizer 2
-      - "coenraads.bracket-pair-colorizer-2"
-      # Editor Config
-      - "editorconfig.editorconfig"
-      # Gremlins tracker
-      - "nhoizey.gremlins"
-      # Indent Rainbow
-      - "oderwat.indent-rainbow"
-      # Markdown Paste
-      - "telesoho.vscode-markdown-paste-image"
-      # Material Icon Theme
-      - "pkief.material-icon-theme"
-      # Print Code
-      - "nobuhito.printcode"
-      # REST Client
-      - "humao.rest-client"
-      # Text Tables
-      - "romanpeshkov.vscode-text-tables"
-
-    packages:
-      sops:
-        repo: mozilla/sops
-        version: 3.5.0
-        checksum: 610fca9687d1326ef2e1a66699a740f5dbd5ac8130190275959da737ec52f096
-        platform: amd64
-
-      k3d:
-        repo: rancher/k3d
-        version: 1.7.0
-        checksum: da9ff31bcf4377fadfb065f4998d347f19de1168a5a553ce2c23b763ee1f6098
-        platform: linux-amd64
-
-      k9s:
-        repo: derailed/k9s
-        version: 0.21.1
-        checksum: d691ec3970b601dacb932e2c6fcf33b9f04fa2a79cbca9ba4787ee159e6cae01
-        platform: Linux_x86_64
-
-      kustomize:
-        repo: kubernetes-sigs/kustomize
-        version: 3.8.1
-        checksum: 9d5b68f881ba89146678a0399469db24670cba4813e0299b47cb39a240006f37
-        platform: linux_amd64
-
-      terraform:
-        version: 0.13.4
-        checksum: a92df4a151d390144040de5d18351301e597d3fae3679a814ea57554f6aa9b24
-
-      node:
-        pkg_repo: "node_12.x"
-
-      go:
-        version: 1.14.5
-        # Checksum for go<version>.linux-amd64.tar.gz on https://golang.org/dl/
-        checksum: 82a1b84f16858db03231eb201f90cce2a991078dda543879b87e738e2586854b
-
-      protoc:
-        repo: protocolbuffers/protobuf
-        version: 3.12.1
-        platform: linux-x86_64
-
-      protop:
-        repo: protop-io/protop
-        version: 0.7.1
-
-      keycloak:
-        version: 10.0.1
-        checksum: 312761d90eacdf2e4e00a902ae120ad067b3a857
-
-      httpie:
-        version: 2.1.0
-
-      sentry:
-        version: 1.54.0

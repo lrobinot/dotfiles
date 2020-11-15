@@ -1,0 +1,62 @@
+---
+- name: "special | Transmission :: folders"
+  file:
+    path: "{{ homedir }}/{{ item }}"
+    state: directory
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    mode: 0700
+  with_items:
+  - "Downloads"
+  - "Downloads/000 A Traiter 000"
+  - "Downloads/.transmission.work"
+  - ".config/transmission"
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - transmission
+
+- name: "special | Transmission :: installation"
+  apt:
+    name: transmission-gtk
+    state: latest
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - transmission
+
+- name: "special | Transmission :: settings"
+  template:
+    src: home/.config/transmission/settings.json.j2
+    dest: "{{ homedir }}/.config/transmission/settings.json"
+    mode: 0644
+  tags:
+  - never
+  - special
+  - transmission
+
+- name: "special | Transmission :: favorite"
+  block:
+
+  - name: "special | Transmission :: favorite [1/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      state: read
+    become: "{{ username }}"
+    register: favorites
+    changed_when: false
+
+  - name: "special | Transmission :: favorite [2/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      value: "{{ favorites.value | list_append('transmission-gtk.desktop') }}"
+    become: "{{ username }}"
+    changed_when: false
+
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - transmission

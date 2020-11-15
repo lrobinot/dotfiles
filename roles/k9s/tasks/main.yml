@@ -1,0 +1,36 @@
+---
+- name: "kubernetes | k9s :: check"
+  command: k9s version --short
+  ignore_errors: yes
+  register: k9s_version
+  changed_when: false
+  tags:
+  - kubernetes
+  - k9s
+
+- name: "kubernetes | k9s :: download"
+  get_url:
+    url: https://github.com/{{ repo }}/releases/download/v{{ version }}/k9s_{{ platform }}.tar.gz
+    dest: "{{ dlcache }}/k9s-{{ version }}.tar.gz"
+    owner: root
+    group: root
+    mode: "0644"
+    sha256sum: "{{ checksum }}"
+  when: k9s_version is failed or version not in k9s_version.stdout_lines[0]
+  tags:
+  - kubernetes
+  - k9s
+
+- name: "kubernetes | k9s :: unarchive"
+  unarchive:
+    src: "{{ dlcache }}/k9s-{{ version }}.tar.gz"
+    dest: /usr/local/bin
+    copy: no
+    mode: 0755
+    exclude:
+    - LICENSE
+    - README.md
+  when: k9s_version is failed or version not in k9s_version.stdout_lines[0]
+  tags:
+  - kubernetes
+  - k9s

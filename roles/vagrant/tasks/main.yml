@@ -1,0 +1,27 @@
+---
+- name: "container | Vagrant :: check"
+  command: vagrant version --version
+  ignore_errors: yes
+  register: vagrant_version
+  changed_when: false
+  tags:
+  - container
+  - vagrant
+
+- name: "container | Vagrant :: download"
+  get_url:
+    url: https://releases.hashicorp.com/vagrant/{{ version }}/vagrant_{{ version }}_linux_amd64.zip
+    dest: "{{ dlcache }}/vagrant-{{ version }}-linux-amd64.zip"
+  when: vagrant_version is failed or version not in vagrant_version.stdout
+  tags:
+  - container
+  - vagrant
+
+- name: "container | vagrant :: extraction"
+  unarchive:
+    src: "{{ dlcache }}/vagrant-{{ version }}-linux-amd64.zip"
+    dest: /usr/local/bin
+  when: vagrant_version is failed or version not in vagrant_version.stdout
+  tags:
+  - container
+  - vagrant

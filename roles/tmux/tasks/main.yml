@@ -1,0 +1,19 @@
+---
+- name: "utils | Tmux :: installation"
+  apt:
+    name: tmux
+    state: latest
+  tags:
+  - utils
+  - tmux
+
+- name: "utils | Tmux :: configuration"
+  template:
+    src: home/.tmux.conf.j2
+    dest: "{{ homedir }}/.tmux.conf"
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    mode: 0600
+  tags:
+  - utils
+  - tmux

@@ -1,0 +1,26 @@
+---
+- name: "kubernetes | kubectl :: repository key"
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  tags:
+  - kubernetes
+  - kubectl
+
+- name: "kubernetes | kubectl :: repository"
+  apt_repository:
+    repo: "deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main"
+    state: present
+    filename: kubernetes
+    mode: 0644
+  tags:
+  - kubernetes
+  - kubectl
+
+- name: "kubernetes | kubectl :: installation"
+  apt:
+    name: kubectl
+    state: latest
+  tags:
+  - kubernetes
+  - kubectl

@@ -1,0 +1,5 @@
+---
+repo: rancher/k3d
+version: 1.7.0
+checksum: da9ff31bcf4377fadfb065f4998d347f19de1168a5a553ce2c23b763ee1f6098
+platform: linux-amd64

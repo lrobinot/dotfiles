@@ -1,0 +1,57 @@
+---
+# If Play/Pause keyboard buttons do not work with Spotify if Chrome is started
+# chrome://flags/#hardware-media-key-handling to disable media key handler
+- name: "special | Spotify :: repository key"
+  apt_key:
+    url: https://download.spotify.com/debian/pubkey.gpg
+    state: present
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - spotify
+
+- name: "special | Spotify :: repository"
+  apt_repository:
+    repo: deb [arch=amd64] http://repository.spotify.com stable non-free
+    state: present
+    filename: "spotify"
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - spotify
+
+- name: "special | Spotify :: installation"
+  apt:
+    name: spotify-client
+    state: latest
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - spotify
+
+- name: "special | Spotify :: favorite"
+  block:
+
+  - name: "special | Spotify :: favorite [1/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      state: read
+    become: "{{ username }}"
+    register: favorites
+    changed_when: false
+
+  - name: "special | Spotify :: favorite [2/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      value: "{{ favorites.value | list_append('spotify.desktop') }}"
+    become: "{{ username }}"
+    changed_when: false
+
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - spotify

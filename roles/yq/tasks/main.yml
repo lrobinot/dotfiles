@@ -1,0 +1,27 @@
+---
+- name: "utils | Yq :: remove python version"
+  pip:
+    name: yq
+    state: absent
+    umask: "0022"
+  tags:
+  - utils
+  - yq
+
+- name: "utils | Yq :: repository"
+  apt_repository:
+    repo: ppa:rmescandon/yq
+    state: present
+    filename: yq
+    mode: 0644
+  tags:
+  - utils
+  - yq
+
+- name: "utils | Yq :: installation"
+  apt:
+    name: yq
+    state: latest
+  tags:
+  - utils
+  - yq

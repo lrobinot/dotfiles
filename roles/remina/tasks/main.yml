@@ -1,0 +1,35 @@
+---
+- name: "special | Remmina :: installation"
+  apt:
+    name:
+      - remmina
+    state: latest
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - remmina
+
+- name: "special | Remmina :: favorite"
+  block:
+
+  - name: "special | Remmina :: favorite [1/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      state: read
+    become: "{{ username }}"
+    register: favorites
+    changed_when: false
+
+  - name: "special | OBS :: favorite [2/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      value: "{{ favorites.value | list_append('org.remmina.Remmina.desktop') }}"
+    become: "{{ username }}"
+    changed_when: false
+
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - remmina

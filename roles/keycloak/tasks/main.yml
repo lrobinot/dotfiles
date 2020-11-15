@@ -1,0 +1,38 @@
+---
+- name: "kubernetes | keycloak :: download"
+  get_url:
+    url: https://downloads.jboss.org/keycloak/{{ version }}/keycloak-{{ version }}.tar.gz
+    dest: "{{ dlcache }}/keycloak-{{ version }}.tar.gz"
+    checksum: sha1:{{ checksum }}
+  tags:
+  - kubernetes
+  - keycloak
+
+- name: "kubernetes | keycloak :: folder"
+  file:
+    path: "/usr/local/keycloak"
+    mode: "0755"
+    state: directory
+  tags:
+  - kubernetes
+  - keycloak
+
+- name: "kubernetes | keycloak :: unarchive"
+  unarchive:
+    src: "{{ dlcache }}/keycloak-{{ version }}.tar.gz"
+    dest: /usr/local/keycloak
+    copy: no
+    extra_opts:
+    - --strip-components=1
+  tags:
+  - kubernetes
+  - keycloak
+
+- name: "kubernetes | keycloak :: symlink"
+  file:
+    src: /usr/local/keycloak/bin/kcadm.sh
+    dest: /usr/local/bin/kcadm
+    state: link
+  tags:
+  - kubernetes
+  - keycloak

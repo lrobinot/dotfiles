@@ -1,0 +1,29 @@
+---
+- name: "utils | httpie :: remove os version"
+  apt:
+    name: httpie
+    state: absent
+  tags:
+  - utils
+  - httpie
+
+- name: "utils | httpie :: check"
+  command: http --version
+  ignore_errors: yes
+  register: httpie_version
+  changed_when: false
+  tags:
+  - utils
+  - httpie
+
+- name: "utils | httpie :: installation"
+  pip:
+    name: https://github.com/httpie/httpie/archive/{{ version }}.tar.gz
+    executable: pip3
+    extra_args: --upgrade
+    umask: "0022"
+    state: latest
+  when: httpie_version is failed or httpie_version.stdout != version
+  tags:
+  - utils
+  - httpie

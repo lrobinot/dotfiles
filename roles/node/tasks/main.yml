@@ -1,0 +1,37 @@
+---
+- name: "lang | Node :: repository key"
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+  tags:
+  - lang
+  - nodejs
+
+- name: "lang | Node :: repository"
+  apt_repository:
+    repo: "deb [arch=amd64] https://deb.nodesource.com/{{ branch }} {{ ansible_distribution_release }} main"
+    state: present
+    filename: nodesource
+    mode: 0644
+  tags:
+  - lang
+  - nodejs
+
+- name: "lang | Node :: installation"
+  apt:
+    name: nodejs
+    state: latest
+  tags:
+  - lang
+  - nodejs
+
+- name: "lang | Node :: configuration"
+  template:
+    src: home/.npmrc.j2
+    dest: "{{ homedir }}/.npmrc"
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    mode: 0600
+  tags:
+  - lang
+  - nodejs

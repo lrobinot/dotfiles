@@ -1,0 +1,20 @@
+---
+- name: "settings | locale.gen"
+  locale_gen:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - en_US.UTF-8
+  - fr_FR.UTF-8
+  tags:
+  - always
+  - locale
+
+- name: "settings | locale"
+  template:
+    src: etc/default/locale.j2
+    dest: /etc/default/locale
+    mode: 0644
+  tags:
+  - always
+  - locale

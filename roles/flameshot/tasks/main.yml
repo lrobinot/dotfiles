@@ -1,0 +1,34 @@
+---
+- name: "special | Flameshot :: installation"
+  apt:
+    name: flameshot
+    state: latest
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - flameshot
+
+- name: "special | Flameshot :: favorite"
+  block:
+
+  - name: "special | Flameshot :: favorite [1/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      state: read
+    become: "{{ username }}"
+    register: favorites
+    changed_when: false
+
+  - name: "special | Flameshot :: favorite [2/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      value: "{{ favorites.value | list_append('flameshot.desktop') }}"
+    become: "{{ username }}"
+    changed_when: false
+
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - flameshot

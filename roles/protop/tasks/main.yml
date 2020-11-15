@@ -1,0 +1,87 @@
+---
+- name: "lang | Protop :: installation folders"
+  file:
+    path: "{{ homedir }}/.protop/{{ item }}"
+    state: directory
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    mode: 0775
+  with_items:
+  - bin
+  - lib
+  - tmp
+  tags:
+  - lang
+  - protop
+
+- name: "lang | Protop :: check"
+  stat:
+    path: "{{ homedir }}/.protop/lib/protop-{{ version }}.jar"
+  register: stat_protop
+  tags:
+  - lang
+  - protop
+
+- name: "lang | Protop :: download"
+  git:
+    repo: https://github.com/{{ repo }}
+    dest: "{{ dlcache }}/protop-{{ version }}"
+    version: v{{ version }}
+    force: yes
+  tags:
+  - lang
+  - protop
+
+- name: "lang | Protop :: duplicate install.sh"
+  copy:
+    src: "{{ dlcache }}/protop-{{ version }}/install.sh"
+    dest: "{{ dlcache }}/protop-{{ version }}/dinstall.sh"
+    mode: 0755
+    remote_src: yes
+  when: not stat_protop.stat.exists
+  tags:
+  - lang
+  - protop
+
+- name: "lang | Protop :: update dinstall.sh"
+  lineinfile:
+    path: "{{ dlcache }}/protop-{{ version }}/dinstall.sh"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+  - { regexp: "^gradle=", line: 'gradle="docker run --rm -v {{ dlcache }}/protop-{{ version }}:/protop -w /protop gradle:6.5.1-jdk11 gradle"' }
+  - { regexp: "^dir=", line: 'dir="{{ homedir }}/.protop"' }
+  when: not stat_protop.stat.exists
+  tags:
+  - lang
+  - protop
+
+- name: "lang | Protop :: build & install"
+  command: ./dinstall.sh
+  args:
+    chdir: "{{ dlcache }}/protop-{{ version }}"
+    creates: "{{ homedir }}/.protop/lib/protop-{{ version }}.jar"
+  when: not stat_protop.stat.exists
+  tags:
+  - lang
+  - protop
+
+# - name: "lang | Protop :: remove temporary dinstall.sh"
+#   file:
+#     path: "{{ dlcache }}/protop-{{ version }}/dinstall.sh"
+#     state: absent
+#   when: not stat_protop.stat.exists
+#   tags:
+#   - lang
+#   - protop
+
+- name: "lang | Protop :: set owner"
+  file:
+    path: "{{ homedir }}/.protop"
+    state: directory
+    recurse: yes
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+  tags:
+  - lang
+  - protop

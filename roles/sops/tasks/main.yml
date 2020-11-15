@@ -1,0 +1,12 @@
+---
+- name: "kubernetes | SOPS :: download"
+  get_url:
+    url: https://github.com/{{ repo }}/releases/download/v{{ version }}/sops-v{{ version }}.linux
+    dest: /usr/local/bin/sops
+    owner: root
+    group: root
+    mode: "0755"
+    checksum: sha256:{{ checksum }}
+  tags:
+  - kubernetes
+  - sops

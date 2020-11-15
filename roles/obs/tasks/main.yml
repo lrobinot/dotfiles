@@ -1,0 +1,47 @@
+---
+- name: "special | OBS :: repository"
+  apt_repository:
+    repo: ppa:obsproject/obs-studio
+    filename: obs-studio
+    mode: 0644
+  tags:
+  - never
+  - special
+  - obs
+
+- name: "special | OBS :: installation"
+  apt:
+    name:
+      - obs-studio
+      - v4l2loopback-dkms
+      - v4l2loopback-utils
+    state: latest
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - obs
+
+- name: "special | OBS :: favorite"
+  block:
+
+  - name: "special | OBS :: favorite [1/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      state: read
+    become: "{{ username }}"
+    register: favorites
+    changed_when: false
+
+  - name: "special | OBS :: favorite [2/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      value: "{{ favorites.value | list_append('com.obsproject.Studio.desktop') }}"
+    become: "{{ username }}"
+    changed_when: false
+
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - obs

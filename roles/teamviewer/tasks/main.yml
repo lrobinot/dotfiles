@@ -1,0 +1,55 @@
+---
+- name: "special | Teamviewer :: repository key"
+  apt_key:
+    url: https://download.teamviewer.com/download/linux/signature/TeamViewer2017.asc
+    state: present
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - teamviewer
+
+- name: "special | Teamviewer :: repository"
+  apt_repository:
+    repo: deb http://linux.teamviewer.com/deb stable main
+    state: present
+    filename: "teamviewer"
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - teamviewer
+
+- name: "special | Teamviewer :: installation"
+  apt:
+    name: teamviewer
+    state: latest
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - teamviewer
+
+- name: "special | Teamviewer :: favorite"
+  block:
+
+  - name: "special | Teamviewer :: favorite [1/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      state: read
+    become: "{{ username }}"
+    register: favorites
+    changed_when: false
+
+  - name: "special | Teamviewer :: favorite [2/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      value: "{{ favorites.value | list_append('com.teamviewer.TeamViewer.desktop') }}"
+    become: "{{ username }}"
+    changed_when: false
+
+  when: wsl == "0"
+  tags:
+  - never
+  - special
+  - teamviewer

@@ -17,12 +17,12 @@ class FilterModule(object):
 
 def list_insert_after(inStr, value, after):
     l = inStr.strip('][').split(', ')
-    length = len(l) 
+    length = len(l)
     for i in range(length):
         if l[i] == "'" + value + "'":
             del l[i]
             break
-    length = len(l) 
+    length = len(l)
     for i in range(length):
         if l[i] == "'" + after + "'":
             l.insert(i + 1, "'" + value + "'")
@@ -32,12 +32,12 @@ def list_insert_after(inStr, value, after):
 
 def list_insert_before(inStr, value, before):
     l = inStr.strip('][').split(', ')
-    length = len(l) 
+    length = len(l)
     for i in range(length):
         if l[i] == "'" + value + "'":
             del l[i]
             break
-    length = len(l) 
+    length = len(l)
     for i in range(length):
         if l[i] == "'" + before + "'":
             l.insert(i, "'" + value + "'")
@@ -47,7 +47,7 @@ def list_insert_before(inStr, value, before):
 
 def list_append(inStr, value):
     l = inStr.strip('][').split(', ')
-    length = len(l) 
+    length = len(l)
     for i in range(length):
         if l[i] == "'" + value + "'":
             del l[i]

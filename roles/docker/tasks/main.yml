@@ -1,0 +1,42 @@
+---
+- name: "container | Docker :: repository key"
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  tags:
+  - container
+  - docker
+
+- name: "container | Docker :: repository"
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    filename: docker
+    mode: 0644
+  tags:
+  - container
+  - docker
+
+- name: "container | Docker :: cleanup"
+  apt:
+    name: ['docker', 'docker-engine', 'docker.io']
+    state: absent
+  tags:
+  - container
+  - docker
+
+- name: "container | Docker :: installation"
+  apt:
+    name: ['docker-ce', 'docker-compose']
+    state: latest
+  tags:
+  - container
+  - docker
+
+- name: "container | Docker :: user rights"
+  user:
+    name: "{{ username }}"
+    groups: "docker"
+    append: "yes"
+  tags:
+  - container
+  - docker

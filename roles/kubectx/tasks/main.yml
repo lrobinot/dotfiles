@@ -1,0 +1,21 @@
+---
+- name: "kubernetes | kubectx :: download"
+  get_url:
+    url: https://github.com/{{ repo }}/releases/download/v{{ version }}/kubectx_v{{ version }}_{{ platform }}.tar.gz
+    dest: "{{ dlcache }}/kubectx-{{ version }}.tar.gz"
+    sha256sum: "{{ checksum }}"
+  tags:
+  - kubernetes
+  - kubectx
+
+- name: "kubernetes | kubectx :: unarchive"
+  unarchive:
+    src: "{{ dlcache }}/kubectx-{{ version }}.tar.gz"
+    dest: /usr/local/bin
+    copy: no
+    mode: 0755
+    exclude:
+    - LICENSE
+  tags:
+  - kubernetes
+  - kubectx

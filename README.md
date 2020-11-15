@@ -25,4 +25,3 @@ cd dotfiles
 
 1. Install Bitwarden extension
 2. Sync Chrome
-

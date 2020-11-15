@@ -1,0 +1,54 @@
+---
+- name: "misc | Chrome :: repository key"
+  apt_key:
+    url: https://dl.google.com/linux/linux_signing_key.pub
+    state: present
+  when: wsl == "0"
+  tags:
+  - misc
+  - chrome
+
+- name: "misc | Chrome :: repository"
+  apt_repository:
+    repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+    state: present
+    filename: "google-chrome"
+    update_cache: "yes"
+  when: wsl == "0"
+  tags:
+  - misc
+  - chrome
+
+- name: "misc | Chrome :: installation"
+  apt:
+    name:
+    - google-chrome-stable
+    - chrome-gnome-shell
+    state: latest
+  when: wsl == "0"
+  tags:
+  - misc
+  - chrome
+
+- name: "misc | Chrome :: favorite"
+  block:
+
+  - name: "misc | Chrome :: favorite [1/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      state: read
+    become: "{{ username }}"
+    register: favorites
+    changed_when: false
+
+  - name: "misc | Chrome :: favorite [2/2]"
+    dconf:
+      key: /org/gnome/shell/favorite-apps
+      value: "{{ favorites.value | list_insert_after('google-chrome.desktop', 'org.gnome.Nautilus.desktop') }}"
+    become: "{{ username }}"
+    changed_when: false
+
+  when: wsl == "0"
+  tags:
+  - misc
+  - chrome
