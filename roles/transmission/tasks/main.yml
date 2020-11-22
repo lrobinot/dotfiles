@@ -20,7 +20,7 @@
 - name: "special | Transmission :: installation"
   apt:
     name: transmission-gtk
-    state: latest
+    state: present
   when: wsl == "0"
   tags:
   - never

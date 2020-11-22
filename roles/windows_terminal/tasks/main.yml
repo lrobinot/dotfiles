@@ -2,7 +2,7 @@
 - name: "terminal | Windows Terminal :: installation"
   win_chocolatey:
     name: microsoft-windows-terminal
-    state: latest
+    state: present
   when: wsl == "1"
   tags:
   - terminal

@@ -24,7 +24,7 @@
     name:
     - google-chrome-stable
     - chrome-gnome-shell
-    state: latest
+    state: present
   when: wsl == "0"
   tags:
   - misc

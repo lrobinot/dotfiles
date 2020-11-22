@@ -27,7 +27,7 @@
 - name: "container | Docker :: installation"
   apt:
     name: ['docker-ce', 'docker-compose']
-    state: latest
+    state: present
   tags:
   - container
   - docker

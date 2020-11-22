@@ -2,7 +2,7 @@
 - name: "editor | Vim :: installation"
   apt:
     name: vim
-    state: latest
+    state: present
   tags:
   - editor
   - vim

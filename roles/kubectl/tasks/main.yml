@@ -20,7 +20,7 @@
 - name: "kubernetes | kubectl :: installation"
   apt:
     name: kubectl
-    state: latest
+    state: present
   tags:
   - kubernetes
   - kubectl

@@ -11,7 +11,7 @@
 - name: "scm | Git :: installation"
   apt:
     name: ['git', 'git-flow']
-    state: latest
+    state: present
   tags:
   - scm
   - git

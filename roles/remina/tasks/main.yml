@@ -3,7 +3,7 @@
   apt:
     name:
       - remmina
-    state: latest
+    state: present
   when: wsl == "0"
   tags:
   - never

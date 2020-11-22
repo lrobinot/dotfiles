@@ -15,7 +15,7 @@
       - obs-studio
       - v4l2loopback-dkms
       - v4l2loopback-utils
-    state: latest
+    state: present
   when: wsl == "0"
   tags:
   - never

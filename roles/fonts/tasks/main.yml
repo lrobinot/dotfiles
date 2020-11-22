@@ -2,7 +2,7 @@
 - name: "fonts | Cascadia Code :: installation"
   win_chocolatey:
     name: cascadiacode
-    state: latest
+    state: present
   when: wsl == "1"
   tags:
   - cascadiacode
@@ -10,7 +10,7 @@
 - name: "fonts | Ubuntu Mono :: installation"
   apt:
     name: ubuntu-mono
-    state: latest
+    state: present
   when: wsl == "0"
   tags:
   - ubuntu-mono

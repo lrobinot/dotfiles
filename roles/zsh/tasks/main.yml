@@ -2,7 +2,7 @@
 - name: "shell | Zsh :: installation"
   apt:
     name: zsh
-    state: latest
+    state: present
 
 - name: "shell | Zsh :: configuration"
   template:

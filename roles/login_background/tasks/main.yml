@@ -13,7 +13,7 @@
 - name: "special | login background changer dependencies"
   apt:
     name: libglib2.0-dev-bin
-    state: latest
+    state: present
   when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version("20.04", ">=")
   tags:
   - never
@@ -43,7 +43,7 @@
   - login-background
 
 - name: "special | login background changer apply"
-  shell: echo "n" | /usr/local/bin/change-gdm-background /usr/local/share/backgrounds/{{ background }}
+  shell: set -o pipefail && echo "n" | /usr/local/bin/change-gdm-background /usr/local/share/backgrounds/{{ background }}
   changed_when: false
   when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version("20.04", ">=")
   tags:

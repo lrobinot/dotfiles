@@ -2,7 +2,13 @@
 - name: "terminal | Tilix :: installation"
   apt:
     name: tilix
-    state: latest
+    state: present
+
+- name: "terminal | Tilix :: alternatives"
+  alternatives:
+    name: x-terminal-emulator
+    path: /usr/bin/tilix.wrapper
+    priority: 100
 
 - name: "terminal | Tilix :: fix vte issue"
   file:

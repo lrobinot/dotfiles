@@ -25,7 +25,7 @@
   - name: "utils | Misc :: installation"
     apt:
       name: [ 'figlet', 'lolcat', 'boxes', 'xclip', 'xsel', 'tree', 'jq', 'libnss3-tools' ]
-      state: latest
+      state: present
     tags:
     - always
 
@@ -33,7 +33,7 @@
   - { name: locale, tags: ["locale"] }
   - { name: fonts, tags: ["fonts"] }
 
-  - { name: windows-terminal, tags: ["terminal", "windows-terminal"] }
+  - { name: windows_terminal, tags: ["terminal", "windows-terminal"] }
   - { name: tilix, tags: ["terminal", "tilix"] }
 
   - { name: zsh, tags: ["shell", "zsh"] }
@@ -77,4 +77,4 @@
   - { name: vlc, tags: ["special", "vlc"] }
   - { name: obs, tags: ["special", "obs"] }
   - { name: remina, tags: ["special", "remina"] }
-  - { name: login-background, tags: ["never", "special", "login-background"] }
+  - { name: login_background, tags: ["never", "special", "login-background"] }

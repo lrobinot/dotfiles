@@ -53,7 +53,8 @@ TEMPPASSWORD=$(mktemp --tmpdir="${top}" --quiet)
 trap 'rm -f "${TEMPPASSWORD}"' EXIT
 echo "$PASSWORD" >"${TEMPPASSWORD}"
 
-sudo --stdin --validate >&/dev/null <"${TEMPPASSWORD}"
+# shellcheck disable=SC2024
+sudo --stdin --validate <"${TEMPPASSWORD}"
 
 message "Checking requirements"
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr libffi-dev libssl-dev python3-pip python3-dev python3-psutil </dev/null >/dev/null && echo "OK"

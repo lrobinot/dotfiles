@@ -20,7 +20,7 @@
 - name: "utils | Insomnia :: installation"
   apt:
     name: insomnia
-    state: latest
+    state: present
   tags:
   - utils
   - insomnia

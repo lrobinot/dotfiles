@@ -2,7 +2,7 @@
 - name: "utils | Tmux :: installation"
   apt:
     name: tmux
-    state: latest
+    state: present
   tags:
   - utils
   - tmux

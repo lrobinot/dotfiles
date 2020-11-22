@@ -20,7 +20,7 @@
 - name: "lang | Node :: installation"
   apt:
     name: nodejs
-    state: latest
+    state: present
   tags:
   - lang
   - nodejs

@@ -25,7 +25,7 @@
 - name: "special | Spotify :: installation"
   apt:
     name: spotify-client
-    state: latest
+    state: present
   when: wsl == "0"
   tags:
   - never

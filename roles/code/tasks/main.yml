@@ -21,7 +21,7 @@
 - name: "editor | Code :: installation"
   apt:
     name: code
-    state: latest
+    state: present
   when: wsl == "0"
   tags:
   - editor

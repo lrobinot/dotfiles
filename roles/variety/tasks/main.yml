@@ -2,7 +2,7 @@
 - name: "special | Variety :: installation"
   apt:
     name: variety
-    state: latest
+    state: present
   when: wsl == "0"
   tags:
   - never

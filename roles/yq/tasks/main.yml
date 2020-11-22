@@ -21,7 +21,7 @@
 - name: "utils | Yq :: installation"
   apt:
     name: yq
-    state: latest
+    state: present
   tags:
   - utils
   - yq
