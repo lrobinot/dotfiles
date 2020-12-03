@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
+  any_errors_fatal: true
   module_defaults:
     apt:
       force_apt_get: yes
