@@ -12,6 +12,7 @@
   get_url:
     url: https://releases.hashicorp.com/vagrant/{{ version }}/vagrant_{{ version }}_linux_amd64.zip
     dest: "{{ dlcache }}/vagrant-{{ version }}-linux-amd64.zip"
+    mode: '0644'
   when: vagrant_version is failed or version not in vagrant_version.stdout
   tags:
   - container
