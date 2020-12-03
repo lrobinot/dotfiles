@@ -5,8 +5,10 @@
     state: directory
     owner: "{{ userid }}"
     group: "{{ groupid }}"
-    mode: 0775
+    mode: '0750'
   with_items:
+  - .auth
+  - _links
   - bin
   - lib
   - tmp
@@ -36,9 +38,10 @@
   copy:
     src: "{{ dlcache }}/protop-{{ version }}/install.sh"
     dest: "{{ dlcache }}/protop-{{ version }}/dinstall.sh"
-    mode: 0755
+    mode: '0755'
     remote_src: yes
   when: not stat_protop.stat.exists
+  changed_when: false
   tags:
   - lang
   - protop
@@ -52,6 +55,7 @@
   - { regexp: "^gradle=", line: 'gradle="docker run --rm -v {{ dlcache }}/protop-{{ version }}:/protop -w /protop gradle:6.5.1-jdk11 gradle"' }
   - { regexp: "^dir=", line: 'dir="{{ homedir }}/.protop"' }
   when: not stat_protop.stat.exists
+  changed_when: false
   tags:
   - lang
   - protop
