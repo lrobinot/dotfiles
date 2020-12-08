@@ -42,6 +42,6 @@ tilix_prefs_apparence:
   - { key: "cursor-colors-set", value: "true" }
   - { key: "cursor-foreground-color", value: "'#000000'" }
   - { key: "foreground-color", value: "'{{ terminal.foreground.color }}'" }
-  - { key: "palette", value: "{{ terminal.palette }}" }
+  - { key: "palette", value: "{{ terminal.palette | to_json }}" }
   - { key: "use-theme-colors", value: "false" }
   - { key: "dim-transparency-percent", value: "30" }
