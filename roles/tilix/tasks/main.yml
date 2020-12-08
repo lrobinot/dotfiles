@@ -77,13 +77,6 @@
   become: "{{ username }}"
   with_items: "{{ tilix_prefs_keybindings }}"
 
-- name: "terminal | Tilix :: F12 key binding"
-  dconf:
-    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/{{ item.key }}"
-    value: "{{ item.value | string }}"
-  become: "{{ username }}"
-  with_items: "{{ tilix_prefs_hotkey }}"
-
 - name: "terminal | Tilix :: apparence"
   dconf:
     key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/{{ item.key }}"
@@ -91,5 +84,9 @@
   become: "{{ username }}"
   with_items: "{{ tilix_prefs_apparence }}"
 
-# Tilix configuration + Theme +  extension
-# Color themes ~/.config/tilix/schemes/dotfiles.json
+- name: "terminal | Tilix :: F12 key binding"
+  dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/{{ item.key }}"
+    value: "{{ item.value | string }}"
+  become: "{{ username }}"
+  with_items: "{{ tilix_prefs_hotkey }}"

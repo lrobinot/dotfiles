@@ -33,7 +33,15 @@ tilix_prefs_apparence:
   - { key: "use-custom-command", value: "true" }
   - { key: "login-shell", value: "true" }
   # Color
-  - { key: "use-theme-colors", value: "false" }
-  - { key: "bold-is-bright", value: "true" }
+  - { key: "background-color", value: "'{{ terminal.background.color }}'" }
   - { key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}" }
+  - { key: "bold-color", value: "'#FFFFFF'" }
+  - { key: "bold-is-bright", value: "true" }
+  - { key: "cursor-background-color", value: "'{{ terminal.cursor.color }}'" }
+  - { key: "cursor-blink-mode", value: "'on'" }
+  - { key: "cursor-colors-set", value: "true" }
+  - { key: "cursor-foreground-color", value: "'#000000'" }
+  - { key: "foreground-color", value: "'{{ terminal.foreground.color }}'" }
+  - { key: "palette", value: "{{ terminal.palette }}" }
+  - { key: "use-theme-colors", value: "false" }
   - { key: "dim-transparency-percent", value: "30" }
