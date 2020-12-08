@@ -42,7 +42,7 @@
     dest: "{{ homedir }}/.config/autostart/tilix.desktop"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
-    mode: 0600
+    mode: "0600"
 
 - name: "terminal | Tilix :: config folder"
   file:
@@ -61,11 +61,35 @@
     dest: "{{ homedir }}/.config/tilix/schemes/dotfiles.json"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
-    mode: 0600
+    mode: "0600"
+
+- name: "terminal | Tilix :: global preferences"
+  dconf:
+    key: "/com/gexperts/Tilix/{{ item.key }}"
+    value: "{{ item.value }}"
+  become: "{{ username }}"
+  with_items: "{{ tilix_prefs_global }}"
+
+- name: "terminal | Tilix :: key bindings"
+  dconf:
+    key: "/com/gexperts/Tilix/keybindings/{{ item.key }}"
+    value: "{{ item.value | string }}"
+  become: "{{ username }}"
+  with_items: "{{ tilix_prefs_keybindings }}"
+
+- name: "terminal | Tilix :: F12 key binding"
+  dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/{{ item.key }}"
+    value: "{{ item.value | string }}"
+  become: "{{ username }}"
+  with_items: "{{ tilix_prefs_hotkey }}"
+
+- name: "terminal | Tilix :: apparence"
+  dconf:
+    key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/{{ item.key }}"
+    value: "{{ item.value | string }}"
+  become: "{{ username }}"
+  with_items: "{{ tilix_prefs_apparence }}"
 
 # Tilix configuration + Theme +  extension
-# See https://github.com/ghyde/ansible-role-tilix/tree/master/tasks
-# * dconf dump /com/gexperts/Terminix/ > terminix.dconf
-# * User Preferences -> Keyboard Shortcuts -> Custom Shortcuts: [F12] Start Tilix in Quake mode => tilix --quake
-#   See https://askubuntu.com/questions/26056/where-are-gnome-keyboard-shortcuts-stored
-# Color themes ~/.config/tilix/schemes/dotfiles.json                                                                                                                              35,1           All
+# Color themes ~/.config/tilix/schemes/dotfiles.json
