@@ -1,5 +1,5 @@
 ---
-- name: "settings | locale.gen"
+- name: "generate needed languages"
   locale_gen:
     name: "{{ item }}"
     state: present
@@ -10,7 +10,7 @@
   - always
   - locale
 
-- name: "settings | locale"
+- name: "set locale"
   template:
     src: etc/default/locale.j2
     dest: /etc/default/locale

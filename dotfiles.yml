@@ -7,7 +7,7 @@
   become: yes
 
   pre_tasks:
-  - name: "settings | download cache folder"
+  - name: "settings : create download cache folder"
     file:
       path: "{{ dlcache }}"
       state: directory
@@ -15,15 +15,17 @@
     tags:
     - always
 
-  - name: "settings | auto-start folder"
+  - name: "settings | create auto-start folder"
     file:
       path: "{{ homedir }}/.config/autostart"
       state: directory
       owner: "{{ userid }}"
       group: "{{ groupid }}"
       mode: 0700
+    tags:
+    - always
 
-  - name: "utils | Misc :: installation"
+  - name: "settings | install miscellaneous utilities"
     apt:
       name: [ 'figlet', 'lolcat', 'boxes', 'xclip', 'xsel', 'tree', 'jq', 'libnss3-tools' ]
       state: present
