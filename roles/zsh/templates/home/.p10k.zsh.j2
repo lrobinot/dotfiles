@@ -1,4 +1,4 @@
-{% if '-desktop' in ansible_hostname %}
+{% if ansible_default_ipv4.network == network.home %}
 {% set host_context = '@home' %}
 {% else %}
 {% set host_context = '@work' %}

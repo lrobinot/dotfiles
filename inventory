@@ -6,6 +6,8 @@ all:
 
   vars:
     dlcache: /usr/local/.dotfiles
+    network:
+      home: 192.168.5.0
 
     terminal:
       background:
