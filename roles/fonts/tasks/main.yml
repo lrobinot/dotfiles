@@ -1,7 +1,7 @@
 ---
-- name: "fonts | Cascadia Code :: installation"
+- name: "fonts | Cascadia Code :: Power Line installation"
   win_chocolatey:
-    name: cascadiacode
+    name: cascadiacodepl
     state: present
   when: wsl == "1"
   tags:
@@ -14,6 +14,40 @@
   when: wsl == "0"
   tags:
   - ubuntu-mono
+
+- name: "fonts | Cascadia Code :: remove distribution package"
+  apt:
+    name: fonts-cascadia-code
+    state: absent
+  when: wsl == "0"
+  tags:
+  - cascadiacode
+
+- name: "fonts | Cascadia Code :: folder"
+  file:
+    path: /usr/share/fonts/truetype/cascadia-code
+    state: directory
+    mode: '0755'
+  when: wsl == "0"
+  tags:
+  - cascadiacode
+
+- name: "fonts | Cascadia Code :: download"
+  get_url:
+    url: https://github.com/microsoft/cascadia-code/releases/download/v{{ fonts.cascadia.version }}/CascadiaCode-{{ fonts.cascadia.version }}.zip
+    dest: "{{ dlcache }}/CascadiaCode-{{ fonts.cascadia.version }}.zip"
+  when: wsl == "0"
+  tags:
+  - cascadiacode
+
+- name: "fonts | Cascadia Code :: extraction"
+  unarchive:
+    src: "{{ dlcache }}/CascadiaCode-{{ fonts.cascadia.version }}.zip"
+    dest: /usr/share/fonts/truetype/cascadia-code
+    copy: no
+  when: wsl == "0"
+  tags:
+  - cascadiacode
 
 - name: "fonts | MesloLGS NF :: folder"
   file:

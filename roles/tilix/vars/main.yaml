@@ -25,7 +25,7 @@ tilix_prefs_apparence:
   # General
   - { key: "visible-name", value: "'Default'" }
   - { key: "use-system-font", value: "false" }
-  - { key: "font", value: "'MesloLGS NF 10'" }
+  - { key: "font", value: "'{{ terminal.font.family }} {{ terminal.font.weight }} {{ terminal.font.size }}'" }
   - { key: "cursor-blink-mode", value: "'on'" }
   - { key: "terminal-bell", value: "'icon'" }
   # Command

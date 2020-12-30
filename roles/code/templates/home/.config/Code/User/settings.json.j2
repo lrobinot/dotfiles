@@ -16,7 +16,7 @@
         "DIFFS": "diff"
     },
     "files.trimTrailingWhitespace": true,
-    "git.suggestSmartCommit": false
+    "git.suggestSmartCommit": false,
     "go.formatTool": "goimports",
     "python.linting.pylintEnabled": true,
     "shellcheck.disableVersionCheck": true,
@@ -24,8 +24,8 @@
     "swaggerViewer.defaultPort": 62123,
     "telemetry.enableCrashReporter": false,
     "telemetry.enableTelemetry": false,
-    "terminal.integrated.fontFamily": "MesloLGS NF",
-    "terminal.integrated.fontSize": 13,
+    "terminal.integrated.fontFamily": "{{ terminal.font.family }}",
+    "terminal.integrated.fontSize": {{ terminal.font.size + 3 }},
     "terminal.integrated.shell.linux": "/usr/bin/zsh",
     "window.titleBarStyle": "custom",
     "window.zoomLevel": 0,

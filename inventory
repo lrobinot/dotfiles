@@ -40,5 +40,9 @@ all:
         - '#eeeeec'
       cursor:
         color: "#00ff2a"
-      font: "MesloLGS NF Regular 10"
+
+      font:
+        family: "MesloLGS NF"
+        weight: "Regular"
+        size: 10
       scrollback: 5000
