@@ -1,6 +1,6 @@
 #!/bin/bash
 
-top="$(dirname "$(readlink -f "$0")")"
+top=$(git rev-parse --show-toplevel)
 
 #set -x
 set -e
@@ -38,14 +38,18 @@ error() {
 
 cd "$top"
 
+VERSION=2.0+$(git rev-list --all --count)-g$(git rev-parse --short HEAD)
+if ! git diff-index --quiet HEAD --
+then
+  VERSION="${VERSION}-dirty"
+fi
+
 clear
-echo ''
-echo '     _       _    __ _ _                       '
-echo '  __| | ___ | |_ / _(_) | ___  ___   _     _   '
-echo ' / _` |/ _ \| __| |_| | |/ _ \/ __|_| |_ _| |_ '
-echo '| (_| | (_) | |_|  _| | |  __/\__ \_   _|_   _|'
-echo ' \__,_|\___/ \__|_| |_|_|\___||___/ |_|   |_|  '
-echo '                                               '
+{
+  figlet "dotfile++"
+  echo "    v${VERSION}"
+  echo ''
+} | lolcat
 
 read -r -s -p "[sudo] password for $USER: " PASSWORD
 echo ""
