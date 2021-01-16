@@ -44,7 +44,7 @@
   - name: "special | Signal :: favorite [2/2]"
     dconf:
       key: /org/gnome/shell/favorite-apps
-      value: "{{ favorites.value | list_append('signal.desktop') }}"
+      value: "{{ favorites.value | list_append('signal-desktop.desktop') }}"
     become: "{{ username }}"
     changed_when: false
 
