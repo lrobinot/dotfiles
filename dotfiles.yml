@@ -73,6 +73,7 @@
   - { name: sentry, tags: ["kubernetes", "sentry"] }
 
   - { name: variety, tags: ["special", "variety"] }
+  - { name: signal, tags: ["special", "signal"] }
   - { name: spotify, tags: ["special", "spotify"] }
   - { name: transmission, tags: ["special", "transmission"] }
   - { name: flameshot, tags: ["special", "flameshot"] }
