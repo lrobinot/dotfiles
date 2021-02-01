@@ -2,7 +2,11 @@
 Name=Tilix
 Comment=A tiling terminal for Gnome
 Keywords=shell;prompt;command;commandline;cmd;
+{% if ansible_distribution_version is version("20.04", ">=") %}
 Exec=/usr/bin/tilix --quake --minimize --session Default.json
+{% else %}
+Exec=/usr/bin/tilix --quake --session Default.json
+{% endif %}
 Terminal=false
 Type=Application
 StartupNotify=true
