@@ -56,7 +56,6 @@
   - { name: go, tags: ["lang", "go"] }
   - { name: node, tags: ["lang", "node"] }
   - { name: protoc, tags: ["lang", "protoc"] }
-  - { name: protop, tags: ["lang", "protop"] }
 
   - { name: docker, tags: ["container", "docker"] }
   - { name: vagrant, tags: ["container", "vagrant"] }
