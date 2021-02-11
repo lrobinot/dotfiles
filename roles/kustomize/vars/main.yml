@@ -1,5 +1,5 @@
 ---
 repo: kubernetes-sigs/kustomize
-version: 3.8.7
-checksum: 4a3372d7bfdffe2eaf729e77f88bc94ce37dc84de55616bfe90aac089bf6fd02
+version: 3.10.0
+checksum: bab4ab8881718c29ba174bdf677fd89986ad25c40eb363fec9e78c1aff2ff0ea
 platform: linux_amd64
