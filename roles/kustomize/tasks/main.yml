@@ -23,8 +23,17 @@
     src: "{{ dlcache }}/kustomize-{{ version }}.tar.gz"
     dest: /usr/local/bin
     copy: no
-    mode: 0755
   when: kustomize_version is failed or version not in kustomize_version.stdout_lines[0]
+  tags:
+  - kubernetes
+  - kustomize
+
+- name: "kubernetes | kustomize :: permission"
+  file:
+    path: /usr/local/bin/kustomize
+    owner: root
+    group: root
+    mode: '0755'
   tags:
   - kubernetes
   - kustomize

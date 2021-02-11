@@ -13,9 +13,18 @@
     src: "{{ dlcache }}/kubectx-{{ version }}.tar.gz"
     dest: /usr/local/bin
     copy: no
-    mode: 0755
     exclude:
     - LICENSE
+  tags:
+  - kubernetes
+  - kubectx
+
+- name: "kubernetes | kubectx :: permission"
+  file:
+    path: /usr/local/bin/kubectx
+    owner: root
+    group: root
+    mode: '0755'
   tags:
   - kubernetes
   - kubectx

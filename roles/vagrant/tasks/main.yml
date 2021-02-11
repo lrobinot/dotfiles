@@ -1,5 +1,5 @@
 ---
-- name: "container | Vagrant :: check"
+- name: "container | vagrant :: check"
   command: vagrant version --version
   ignore_errors: yes
   register: vagrant_version
@@ -8,7 +8,7 @@
   - container
   - vagrant
 
-- name: "container | Vagrant :: download"
+- name: "container | vagrant :: download"
   get_url:
     url: https://releases.hashicorp.com/vagrant/{{ version }}/vagrant_{{ version }}_linux_amd64.zip
     dest: "{{ dlcache }}/vagrant-{{ version }}-linux-amd64.zip"
@@ -23,6 +23,16 @@
     src: "{{ dlcache }}/vagrant-{{ version }}-linux-amd64.zip"
     dest: /usr/local/bin
   when: vagrant_version is failed or version not in vagrant_version.stdout
+  tags:
+  - container
+  - vagrant
+
+- name: "container | vagrant :: permission"
+  file:
+    path: /usr/local/bin/vagrant
+    owner: root
+    group: root
+    mode: '0755'
   tags:
   - container
   - vagrant

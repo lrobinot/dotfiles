@@ -28,3 +28,13 @@
   tags:
   - kubernetes
   - terraform
+
+- name: "kubernetes | terraform :: permission"
+  file:
+    path: /usr/local/bin/terraform
+    owner: root
+    group: root
+    mode: '0755'
+  tags:
+  - kubernetes
+  - terraform
