@@ -13,7 +13,7 @@
     url: https://dl.google.com/go/go{{ version }}.linux-amd64.tar.gz
     dest: "{{ dlcache }}/go{{ version }}.linux-amd64.tar.gz"
     checksum: sha256:{{ checksum }}
-  when: go_version is failed or version not in go_version.stdout
+  when: go_version is failed or version|string not in go_version.stdout
   tags:
   - lang
   - go
@@ -22,7 +22,7 @@
   file:
     path: /usr/local/go
     state: absent
-  when: go_version is failed or version not in go_version.stdout
+  when: go_version is failed or version|string not in go_version.stdout
   tags:
   - lang
   - go
@@ -32,7 +32,7 @@
     src: "{{ dlcache }}/go{{ version }}.linux-amd64.tar.gz"
     dest: /usr/local
     copy: no
-  when: go_version is failed or version not in go_version.stdout
+  when: go_version is failed or version|string not in go_version.stdout
   tags:
   - lang
   - go
