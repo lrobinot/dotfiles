@@ -70,7 +70,6 @@
   - { name: terraform, tags: ["kubernetes", "terraform"] }
   - { name: helm, tags: ["kubernetes", "helm"] }
   - { name: keycloak, tags: ["kubernetes", "keycloak"] }
-  - { name: sentry, tags: ["kubernetes", "sentry"] }
 
   - { name: variety, tags: ["special", "variety"] }
   - { name: signal, tags: ["special", "signal"] }
