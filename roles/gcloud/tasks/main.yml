@@ -1,0 +1,26 @@
+---
+- name: "kubernetes | gcloud :: repository key"
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  tags:
+  - kubernetes
+  - gcloud
+
+- name: "kubernetes | gcloud :: repository"
+  apt_repository:
+    repo: "deb [arch=amd64] https://packages.cloud.google.com/apt cloud-sdk main"
+    state: present
+    filename: google-cloud-sdk
+    mode: 0644
+  tags:
+  - kubernetes
+  - gcloud
+
+- name: "kubernetes | gcloud :: installation"
+  apt:
+    name: google-cloud-sdk
+    state: present
+  tags:
+  - kubernetes
+  - gcloud
