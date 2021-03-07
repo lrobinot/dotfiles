@@ -15,6 +15,12 @@ tilix_prefs_global:
 tilix_prefs_keybindings:
   - { key: "nautilus-open", value: "'<Ctrl><Alt>t'" }
   - { key: "win-view-sidebar", value: "'F8'" }
+  - { key: "session-add-down", value: "'<Alt><Super>Down'" }
+  - { key: "session-add-right", value: "'<Alt><Super>Right'" }
+  - { key: "session-resize-right", value: "'<Alt><Super>6'" }
+  - { key: "session-resize-up", value: "'<Alt><Super>8'" }
+  - { key: "session-resize-left", value: "'<Alt><Super>4'" }
+  - { key: "session-resize-down", value: "'<Alt><Super>2'" }
 
 tilix_prefs_hotkey:
   - { key: "binding", value: "'F12'" }
