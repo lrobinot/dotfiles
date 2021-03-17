@@ -1,5 +1,5 @@
 ---
 repo: ahmetb/kubectx
-version: 0.9.1
-checksum: ce689516f3ae916492bb8f9ee3344da03f6b5a098c1ce2c4a5107b8e9e1cf445
+version: 0.9.3
+checksum: f5b15b27b3f2186672d7ae4be2363d84952eeceff3dc8765fa12c3b8e26de60a
 platform: linux_x86_64
