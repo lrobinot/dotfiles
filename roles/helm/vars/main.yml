@@ -1,3 +1,4 @@
 ---
-version: 3.5.2
-checksum: 01b317c506f8b6ad60b11b1dc3f093276bb703281cb1ae01132752253ec706a2
+repo: helm/helm
+version: 3.5.3
+checksum: 2170a1a644a9e0b863f00c17b761ce33d4323da64fc74562a3a6df2abbf6cd70
