@@ -12,6 +12,7 @@ COL_RED=$ESC_SEQ"31m"
 COL_GREEN=$ESC_SEQ"32m"
 COL_YELLOW=$ESC_SEQ"33m"
 
+
 message() {
   /bin/echo -e "\n${COL_GREEN}*** ${1}${COL_RESET}"
 }
@@ -63,9 +64,9 @@ do
       latest="${latest:1}"
       if [ "${version}" != "${latest}" ]
       then
-        running "[$(basename "${role}")] ${repo} ${version} ${COL_RED}new version ${latest} available${COL_RESET} 👉 https://github.com/${repo}/releases/tag/v${latest}"
+        running "[$(basename "${role}")] ${repo} ${COL_YELLOW}${version}${COL_RESET} ${COL_RED}new version ${latest} available${COL_RESET} 👉 https://github.com/${repo}/releases/tag/v${latest}"
       else
-        running "[$(basename "${role}")] ${repo} ${version} ${COL_GREEN}latest version${COL_RESET}"
+        running "[$(basename "${role}")] ${repo} ${COL_YELLOW}${version}${COL_RESET} ${COL_GREEN}latest version${COL_RESET}"
       fi
     fi
   fi
