@@ -63,9 +63,9 @@ do
       latest="${latest:1}"
       if [ "${version}" != "${latest}" ]
       then
-        running "[$(basename "${role}")] ${repo} ${version} => ${COL_RED}${latest}${COL_RESET}"
+        running "[$(basename "${role}")] ${repo} ${version} ${COL_RED}new version ${latest} available${COL_RESET} 👉 https://github.com/${repo}/releases/tag/v${latest}"
       else
-        running "[$(basename "${role}")] ${repo} ${version} => ${COL_GREEN}ok${COL_RESET}"
+        running "[$(basename "${role}")] ${repo} ${version} ${COL_GREEN}latest version${COL_RESET}"
       fi
     fi
   fi
