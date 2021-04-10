@@ -65,7 +65,6 @@
   - { name: k9s, tags: ["kubernetes", "k9s"] }
   - { name: kubectx, tags: ["kubernetes", "kubectx"] }
   - { name: kubeseal, tags: ["kubernetes", "kubeseal"] }
-  - { name: kustomize, tags: ["kubernetes", "kustomize"] }
   - { name: sops, tags: ["kubernetes", "sops"] }
   - { name: terraform, tags: ["kubernetes", "terraform"] }
   - { name: helm, tags: ["kubernetes", "helm"] }
