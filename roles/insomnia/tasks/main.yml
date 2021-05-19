@@ -1,15 +1,17 @@
 ---
-- name: "utils | Insomnia :: repository key"
-  apt_key:
-    url: https://insomnia.rest/keys/debian-public.key.asc
-    state: present
+- name: "utils | Insomnia :: remove old repository"
+  apt_repository:
+    repo: "deb [arch=amd64] https://dl.bintray.com/getinsomnia/Insomnia /"
+    state: absent
+    filename: insomnia
+    mode: 0644
   tags:
   - utils
   - insomnia
 
 - name: "utils | Insomnia :: repository"
   apt_repository:
-    repo: "deb [arch=amd64] https://dl.bintray.com/getinsomnia/Insomnia /"
+    repo: "deb [trusted=yes arch=amd64] https://download.konghq.com/insomnia-ubuntu/ default all"
     state: present
     filename: insomnia
     mode: 0644
