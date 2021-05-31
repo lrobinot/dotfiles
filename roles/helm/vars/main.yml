@@ -1,4 +1,4 @@
 ---
 repo: helm/helm
-version: 3.5.3
-checksum: 2170a1a644a9e0b863f00c17b761ce33d4323da64fc74562a3a6df2abbf6cd70
+version: 3.6.0
+checksum: 0a9c80b0f211791d6a9d36022abd0d6fd125139abe6d1dcf4c5bf3bc9dcec9c8
