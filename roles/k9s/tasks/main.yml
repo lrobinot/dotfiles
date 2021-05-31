@@ -10,7 +10,7 @@
 
 - name: "kubernetes | k9s :: download"
   get_url:
-    url: https://github.com/{{ repo }}/releases/download/v{{ version }}/k9s_{{ platform }}.tar.gz
+    url: https://github.com/{{ repo }}/releases/download/v{{ version }}/k9s_v{{ version }}_{{ platform }}.tar.gz
     dest: "{{ dlcache }}/k9s-{{ version }}.tar.gz"
     owner: root
     group: root
