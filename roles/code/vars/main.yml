@@ -4,8 +4,6 @@ extensions:
 - "aaron-bond.better-comments"
 # Bookmarks
 - "alefragnani.bookmarks"
-# Bracket Pair Colorizer 2
-- "coenraads.bracket-pair-colorizer-2"
 # Editor Config
 - "editorconfig.editorconfig"
 # Gremlins tracker
