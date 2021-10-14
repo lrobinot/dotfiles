@@ -19,3 +19,38 @@
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0600
+
+- name: "shell | Zsh :: custom folder"
+  file:
+    path: "{{ homedir }}/.zsh.custom"
+    state: directory
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    mode: 0750
+
+- name: "shell | Zsh :: custom plugins"
+  file:
+    path: "{{ homedir }}/.zsh.custom/plugins"
+    state: directory
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    mode: 0750
+
+- name: "shell | Zsh :: autosuggestions plugin"
+  file:
+    src: "{{ homedir }}/{{ dotdir }}/zsh-autosuggestions"
+    dest: "{{ homedir }}/.zsh.custom/plugins/zsh-autosuggestions"
+    state: link
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    mode: 0750
+
+- name: "shell | Zsh :: syntax-highlighting plugin"
+  file:
+    src: "{{ homedir }}/{{ dotdir }}/zsh-syntax-highlighting"
+    dest: "{{ homedir }}/.zsh.custom/plugins/zsh-syntax-highlighting"
+    state: link
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    mode: 0750
+
