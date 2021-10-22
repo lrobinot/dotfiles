@@ -69,6 +69,7 @@
   - { name: helm, tags: ["kubernetes", "helm"] }
   - { name: keycloak, tags: ["kubernetes", "keycloak"] }
   - { name: gcloud, tags: ["kubernetes", "gcloud"] }
+  - { name: skaffold, tags: ["kubernetes", "skaffold"] }
 
   - { name: variety, tags: ["special", "variety"] }
   - { name: spotify, tags: ["special", "spotify"] }
