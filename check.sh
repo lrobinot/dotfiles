@@ -56,9 +56,9 @@ for role in roles/*
 do
   if [ -f "${role}/vars/main.yml" ]
   then
-    repo=$(yq r "${role}/vars/main.yml" 'repo')
-    version=$(yq r "${role}/vars/main.yml" 'version')
-    if [ -n "${repo}" ]
+    repo=$(yq eval '.repo' "${role}/vars/main.yml")
+    version=$(yq eval '.version' "${role}/vars/main.yml")
+    if [ "${repo}" != "null" ]
     then
       latest=$(http "https://api.github.com/repos/${repo}/releases/latest" | jq -r '.tag_name' | sed 's@^.*/@@')
       latest="${latest:1}"
