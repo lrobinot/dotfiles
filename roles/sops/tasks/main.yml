@@ -1,7 +1,7 @@
 ---
 - name: "kubernetes | SOPS :: download"
   get_url:
-    url: https://github.com/{{ repo }}/releases/download/v{{ version }}/sops-v{{ version }}.linux
+    url: https://github.com/{{ repo }}/releases/download/v{{ version }}/sops-v{{ version }}.linux.amd64
     dest: /usr/local/bin/sops
     owner: root
     group: root
