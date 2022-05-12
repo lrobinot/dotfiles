@@ -8,20 +8,29 @@
   - utils
   - yq
 
-- name: "utils | Yq :: repository"
-  apt_repository:
-    repo: ppa:rmescandon/yq
-    state: present
-    filename: yq
-    mode: 0644
+- name: "utils | Yq :: remove apt version"
+  apt:
+    name: yq
+    state: absent
   tags:
   - utils
   - yq
 
-- name: "utils | Yq :: installation"
-  apt:
-    name: yq
-    state: present
+- name: "utils | Yq :: download"
+  get_url:
+    url: https://github.com/{{ repo }}/releases/download/v{{ version }}/yq_linux_amd64
+    dest: /usr/local/bin/yq
+    sha256sum: "{{ checksum }}"
+  tags:
+  - utils
+  - yq
+
+- name: "utils | Yq :: permission"
+  file:
+    path: /usr/local/bin/yq
+    owner: root
+    group: root
+    mode: '0755'
   tags:
   - utils
   - yq
