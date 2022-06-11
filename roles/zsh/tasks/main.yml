@@ -38,14 +38,14 @@
 
 - name: "shell | Zsh :: custom scripts"
   copy:
-    src: "{{ item }}"
-    dest: "{{ homedir }}/.zsh.custom/{{ item }}"
+    src: "{{ item }}.sh"
+    dest: "{{ homedir }}/.zsh.custom/{{ item }}.zsh"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0700
   with_items:
-    - 000.aliases.sh
-    - 010.kubeconfig.sh
+    - 000.aliases
+    - 010.kubeconfig
 
 - name: "shell | Zsh :: autosuggestions plugin"
   file:
