@@ -2,6 +2,7 @@
 - name: "container | Docker :: repository key"
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
+    keyring: /usr/share/keyrings/docker.gpg
     state: present
   tags:
   - container
@@ -9,7 +10,7 @@
 
 - name: "container | Docker :: repository"
   apt_repository:
-    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    repo: "deb [signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
     filename: docker
     mode: 0644
   tags:
@@ -32,11 +33,12 @@
   - container
   - docker
 
-- name: "container | Docker :: user rights"
-  user:
-    name: "{{ username }}"
-    groups: "docker"
-    append: "yes"
-  tags:
-  - container
-  - docker
+# - name: "container | Docker :: user rights"
+#   user:
+#     name: "{{ username }}"
+#     groups: docker
+#     createhome: no
+#     append: yes
+#   tags:
+#   - container
+#   - docker
