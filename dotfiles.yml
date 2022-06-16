@@ -27,7 +27,7 @@
 
   - name: "settings | install miscellaneous utilities"
     apt:
-      name: [ 'figlet', 'lolcat', 'boxes', 'xclip', 'xsel', 'tree', 'jq', 'libnss3-tools' ]
+      name: [ 'boxes', 'xclip', 'xsel', 'tree', 'jq', 'libnss3-tools' ]
       state: present
     tags:
     - always
@@ -51,7 +51,7 @@
   - { name: yq, tags: ["utils", "yq"] }
   - { name: tmux, tags: ["utils", "tmux"] }
   - { name: httpie, tags: ["utils", "httpie"] }
-  - { name: insomnia, tags: ["utils", "insomnia"] }
+  #  - { name: insomnia, tags: ["utils", "insomnia"] }
 
   - { name: go, tags: ["lang", "go"] }
   - { name: node, tags: ["lang", "node"] }
