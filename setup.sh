@@ -38,6 +38,26 @@ error() {
 
 cd "$top"
 
+read -r -s -p "[sudo] password for $USER: " PASSWORD
+echo ""
+TEMPPASSWORD=$(mktemp --tmpdir="${top}" --quiet)
+trap 'rm -f "${TEMPPASSWORD}"' EXIT
+echo "$PASSWORD" >"${TEMPPASSWORD}"
+
+# shellcheck disable=SC2024
+sudo --stdin --validate <"${TEMPPASSWORD}"
+
+message "Checking requirements"
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr libffi-dev libssl-dev python3-pip python3-dev python3-psutil </dev/null >/dev/null && echo "apt OK"
+command -v figlet >/dev/null 2>&1 || {
+  message "installing figlet via apt"
+  running "apt-get install -qq -yes figlet"
+}
+command -v lolcat >/dev/null 2>&1 || {
+  message "installing lolcat via apt"
+  running "apt-get install -qq -yes lolcat"
+}
+
 VERSION=2.0+$(git rev-list --all --count)-g$(git rev-parse --short HEAD)
 if ! git diff-index --quiet HEAD --
 then
@@ -51,25 +71,11 @@ clear
   echo ''
 } | lolcat
 
-read -r -s -p "[sudo] password for $USER: " PASSWORD
-echo ""
-TEMPPASSWORD=$(mktemp --tmpdir="${top}" --quiet)
-trap 'rm -f "${TEMPPASSWORD}"' EXIT
-echo "$PASSWORD" >"${TEMPPASSWORD}"
-
-# shellcheck disable=SC2024
-sudo --stdin --validate <"${TEMPPASSWORD}"
-
-message "Checking requirements"
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr libffi-dev libssl-dev python3-pip python3-dev python3-psutil </dev/null >/dev/null && echo "OK"
-
-message "Checking ansible requirement"
+message "Checking ansible requirements"
 command -v ansible >/dev/null 2>&1 || {
-  action "ansible not found, installing via apt"
-  running "add-apt-repository ppa:ansible/ansible"
-  sudo add-apt-repository --yes --update ppa:ansible/ansible &>/dev/null && echo "OK"
-  running "apt-get install ansible"
-  sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes ansible </dev/null >/dev/null && echo "OK"
+  action "ansible not found, installing via pip3"
+  running "pip3 install ansible-core"
+  running "ansible-galaxy install -r requirements.yml"
 }
 running "ansible --version"
 ansible --version
@@ -123,7 +129,10 @@ rm -f "${TEMPPASSWORD}"
 message "Starting Ansible Playbook"
 export ANSIBLE_CONFIG="${top}/ansible.cfg"
 #  --become --ask-become-pass \
+DEBUG=-vvv
+DEBUG=
 ansible-playbook \
+  ${DEBUG} \
   --inventory "${top}/inventory" \
   --limit localhost \
   --extra-vars="ansible_become_pass=$PASSWORD" \
