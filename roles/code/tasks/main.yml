@@ -61,7 +61,8 @@
   shell: code --install-extension {{ item }}
   args:
     creates: "{{ homedir }}/.vscode/extensions/{{ item }}-*/package.json"
-  become: "{{ username }}"
+  become: true
+  become_user: "{{ username }}"
   with_items: "{{ extensions }}"
   when: wsl == "0"
   tags:
@@ -75,7 +76,8 @@
     dconf:
       key: /org/gnome/shell/favorite-apps
       state: read
-    become: "{{ username }}"
+    become: true
+    become_user: "{{ username }}"
     register: favorites
     changed_when: false
 
@@ -83,7 +85,8 @@
     dconf:
       key: /org/gnome/shell/favorite-apps
       value: "{{ favorites.value | list_insert_after('code.desktop', 'com.gexperts.Tilix.desktop') }}"
-    become: "{{ username }}"
+    become: true
+    become_user: "{{ username }}"
     changed_when: false
 
   when: wsl == "0"
