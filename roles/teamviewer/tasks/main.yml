@@ -37,7 +37,8 @@
     dconf:
       key: /org/gnome/shell/favorite-apps
       state: read
-    become: "{{ username }}"
+    become: true
+    become_user: "{{ username }}"
     register: favorites
     changed_when: false
 
@@ -45,7 +46,8 @@
     dconf:
       key: /org/gnome/shell/favorite-apps
       value: "{{ favorites.value | list_append('com.teamviewer.TeamViewer.desktop') }}"
-    become: "{{ username }}"
+    become: true
+    become_user: "{{ username }}"
     changed_when: false
 
   when: wsl == "0"
