@@ -22,6 +22,7 @@ ok() {
 
 running() {
   /bin/echo -e "${COL_YELLOW} ⇒ ${COL_RESET}${1}: "
+  ${1}
 }
 
 action() {
@@ -51,11 +52,11 @@ message "Checking requirements"
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes dirmngr libffi-dev libssl-dev python3-pip python3-dev python3-psutil </dev/null >/dev/null && echo "apt OK"
 command -v figlet >/dev/null 2>&1 || {
   message "installing figlet via apt"
-  running "apt-get install -qq -yes figlet"
+  running "sudo apt-get install -qq --yes figlet"
 }
 command -v lolcat >/dev/null 2>&1 || {
   message "installing lolcat via apt"
-  running "apt-get install -qq -yes lolcat"
+  running "sudo apt-get install -qq --yes lolcat"
 }
 
 VERSION=2.0+$(git rev-list --all --count)-g$(git rev-parse --short HEAD)
@@ -75,10 +76,16 @@ message "Checking ansible requirements"
 command -v ansible >/dev/null 2>&1 || {
   action "ansible not found, installing via pip3"
   running "pip3 install ansible-core"
-  running "ansible-galaxy install -r requirements.yml"
 }
+for dir in $(cat requirements.yml  | grep -- '  -' | sed -e 's/^.* //' -e 's/\./\//g')
+do
+  if [ ! -d "$HOME/.ansible/collections/ansible_collections/$dir" ]
+  then
+    running "ansible-galaxy install -r requirements.yml"
+  fi
+done
+
 running "ansible --version"
-ansible --version
 ok
 
 command -v git >/dev/null 2>&1 && {
