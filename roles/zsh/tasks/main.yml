@@ -45,6 +45,7 @@
     mode: 0700
   with_items:
     - 000.aliases
+    - 005.path
     - 010.kubeconfig
 
 - name: "shell | Zsh :: autosuggestions plugin"
