@@ -2,6 +2,7 @@
 - name: "kubernetes | helm :: check"
   command: helm version --short
   ignore_errors: yes
+  no_log: true
   register: helm_version
   changed_when: false
   tags:

@@ -2,6 +2,7 @@
 - name: "lang | Go :: check version"
   command: /usr/local/go/bin/go version
   ignore_errors: yes
+  no_log: true
   register: go_version
   changed_when: false
   tags:

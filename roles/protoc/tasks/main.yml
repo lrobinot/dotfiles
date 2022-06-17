@@ -2,6 +2,7 @@
 - name: "lang | Protoc :: check"
   command: protoc --version
   ignore_errors: yes
+  no_log: true
   register: protoc_version
   changed_when: false
   tags:

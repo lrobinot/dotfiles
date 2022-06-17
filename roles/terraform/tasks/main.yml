@@ -2,6 +2,7 @@
 - name: "kubernetes | terraform :: get installed version"
   command: terraform version
   ignore_errors: yes
+  no_log: true
   register: terraform_version
   changed_when: false
   tags:

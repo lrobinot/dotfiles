@@ -2,6 +2,7 @@
 - name: "kubernetes | k9s :: check"
   command: k9s version --short
   ignore_errors: yes
+  no_log: true
   register: k9s_version
   changed_when: false
   tags:

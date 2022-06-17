@@ -2,6 +2,7 @@
 - name: "container | vagrant :: check"
   command: vagrant version --version
   ignore_errors: yes
+  no_log: true
   register: vagrant_version
   changed_when: false
   tags:

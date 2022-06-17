@@ -10,6 +10,7 @@
 - name: "utils | httpie :: check"
   command: http --version
   ignore_errors: yes
+  no_log: True
   register: httpie_version
   changed_when: false
   tags:
