@@ -1,51 +1,53 @@
 ---
-- name: "lang | Go :: check version"
-  command: /usr/local/go/bin/go version
-  ignore_errors: yes
+- name: "Lang | Go :: check version"
+  ansible.builtin.command:
+    cmd: /usr/local/go/bin/go version
+  ignore_errors: true
   no_log: true
   register: go_version
   changed_when: false
   tags:
-  - lang
-  - go
+    - lang
+    - go
 
-- name: "lang | Go :: download"
-  get_url:
+- name: "Lang | Go :: download"
+  ansible.builtin.get_url:
     url: https://dl.google.com/go/go{{ version }}.linux-amd64.tar.gz
     dest: "{{ dlcache }}/go{{ version }}.linux-amd64.tar.gz"
     checksum: sha256:{{ checksum }}
+    mode: 0644
   when: go_version is failed or version|string not in go_version.stdout
   tags:
-  - lang
-  - go
+    - lang
+    - go
 
-- name: "lang | Go :: cleanup"
-  file:
+- name: "Lang | Go :: cleanup"
+  ansible.builtin.file:
     path: /usr/local/go
     state: absent
   when: go_version is failed or version|string not in go_version.stdout
   tags:
-  - lang
-  - go
+    - lang
+    - go
 
-- name: "lang | Go :: installation"
-  unarchive:
+- name: "Lang | Go :: installation"
+  ansible.builtin.unarchive:
     src: "{{ dlcache }}/go{{ version }}.linux-amd64.tar.gz"
     dest: /usr/local
-    copy: no
+    copy: false
   when: go_version is failed or version|string not in go_version.stdout
   tags:
-  - lang
-  - go
+    - lang
+    - go
 
-- name: "lang | Go :: configuration"
-  template:
+- name: "Lang | Go :: configuration"
+  ansible.builtin.template:
     src: etc/profile.d/{{ item }}.j2
     dest: /etc/profile.d/{{ item }}
     mode: 0644
   with_items:
-  - go-bin.sh
-  - go-path.sh
+    - go-bin.sh
+    - go-path.sh
   tags:
-  - lang
-  - go
+    - lang
+    - go
