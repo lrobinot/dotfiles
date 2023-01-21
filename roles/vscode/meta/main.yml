@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  role_name: vscode
+  author: Ludovic ROBINOT (lrobinot@gmail.com)
+  description: Install Microsoft Visual Studio Code
+  license: BSD
+  min_ansible_version: 1.2
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+
+dependencies:
+  # Depend on Tilix for favorite apps ordering
+  - role: tilix

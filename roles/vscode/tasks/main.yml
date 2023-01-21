@@ -1,0 +1,107 @@
+---
+- name: "Editor | Code :: repository key"
+  ansible.builtin.get_url:
+    url: "{{ apt.key }}"
+    dest: "{{ keyrings_dir }}/{{ apt.name }}.asc"
+    owner: root
+    group: root
+    mode: 0644
+  register: key_asc
+  tags:
+    - editor
+    - vscode
+
+- name: "Misc | Code :: repository key dearmor"
+  ansible.builtin.command:
+    cmd: gpg --dearmor --output {{ apt.name }}.gpg {{ apt.name }}.asc
+    chdir: "{{ keyrings_dir }}"
+    creates: "{{ apt.name }}.gpg"
+  when: key_asc.changed
+  tags:
+    - editor
+    - vscode
+
+- name: "Editor | Code :: repository"
+  ansible.builtin.template:
+    src: apt.sources.list.j2
+    dest: /etc/apt/sources.list.d/{{ apt.name }}.list
+    owner: root
+    group: root
+    mode: 0644
+  register: apt_repo
+  tags:
+    - editor
+    - vscode
+
+- name: "Editor | Code :: installation"
+  ansible.builtin.apt:
+    name:
+      - code
+    state: latest
+    update_cache: "{{ apt_repo.changed }}"
+  tags:
+    - editor
+    - vscode
+
+- name: "Editor | Code :: configuration folder"
+  ansible.builtin.file:
+    path: "{{ homedir }}/.config/{{ item }}"
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    state: directory
+    mode: '0700'
+  with_items:
+    - "Code"
+    - "Code/User"
+  tags:
+    - editor
+    - vscode
+
+- name: "Editor | Code :: configuration"
+  ansible.builtin.template:
+    src: home/.config/Code/User/{{ item }}.j2
+    dest: "{{ homedir }}/.config/Code/User/{{ item }}"
+    owner: "{{ userid }}"
+    group: "{{ groupid }}"
+    mode: 0600
+  with_items:
+    - settings.json
+    - keybindings.json
+  tags:
+    - editor
+    - vscode
+
+- name: "Editor | Code :: extensions"
+  ansible.builtin.command:
+    cmd: /usr/bin/code --install-extension "{{ item }}"
+  args:
+    creates: "{{ homedir }}/.vscode/extensions/{{ item }}-*/package.json"
+  become: true
+  become_user: "{{ username }}"
+  with_items: "{{ extensions }}"
+  tags:
+    - editor
+    - vscode
+
+- name: "Editor | Code :: favorite"
+  tags:
+    - editor
+    - vscode
+  block:
+
+    - name: "Editor | Code :: favorite [1/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: true
+      become_user: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "Editor | Code :: favorite [2/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_insert_after('code.desktop', 'com.gexperts.Tilix.desktop') }}"
+      become: true
+      become_user: "{{ username }}"
+      changed_when: false

@@ -1,0 +1,29 @@
+---
+apt:
+  key: https://packages.microsoft.com/keys/microsoft.asc
+  name: vscode
+  url: https://packages.microsoft.com/repos/vscode
+  suite: stable
+  component: main
+
+extensions:
+  # Better Comments
+  - "aaron-bond.better-comments"
+  # Bookmarks
+  - "alefragnani.bookmarks"
+  # Editor Config
+  - "editorconfig.editorconfig"
+  # Gremlins tracker
+  - "nhoizey.gremlins"
+  # Indent Rainbow
+  - "oderwat.indent-rainbow"
+  # Markdown Paste
+  - "telesoho.vscode-markdown-paste-image"
+  # Material Icon Theme
+  - "pkief.material-icon-theme"
+  # Print Code
+  - "nobuhito.printcode"
+  # REST Client
+  - "humao.rest-client"
+  # Text Tables
+  - "romanpeshkov.vscode-text-tables"
