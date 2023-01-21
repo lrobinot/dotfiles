@@ -1,0 +1,53 @@
+---
+- name: "Special | download gdm background changer download"
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/PRATAP-KUMAR/ubuntu-gdm-set-background/main/ubuntu-gdm-set-background
+    dest: /usr/local/bin/change-gdm-background
+    mode: 0755
+  tags:
+    - never
+    - special
+    - gdm-background
+
+- name: "Special | gdm background changer dependencies"
+  ansible.builtin.apt:
+    name:
+      - libglib2.0-dev-bin
+    state: present
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version("20.04", ">=")
+  tags:
+    - never
+    - special
+    - gdm-background
+
+- name: "Special | gdm background folder"
+  ansible.builtin.file:
+    path: /usr/local/share/backgrounds
+    state: directory
+    mode: 0755
+  tags:
+    - never
+    - special
+    - gdm-background
+
+- name: "Special | gdm background copy"
+  ansible.builtin.copy:
+    src: usr/local/share/backgrounds/{{ background }}
+    dest: /usr/local/share/backgrounds/{{ background }}
+    mode: 0644
+  tags:
+    - never
+    - special
+    - gdm-background
+
+- name: "Special | gdm background changer apply"
+  ansible.builtin.shell:
+    cmd: /usr/local/bin/change-gdm-background --image /usr/local/share/backgrounds/{{ background }} >/dev/null
+    executable: /bin/bash
+  register: gdm_command
+  failed_when: gdm_command.rc not in [ 0, 1 ]
+  changed_when: false
+  tags:
+    - never
+    - special
+    - gdm-background
