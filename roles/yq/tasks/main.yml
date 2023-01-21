@@ -1,36 +1,29 @@
 ---
-- name: "utils | Yq :: remove python version"
-  pip:
+- name: "Utils | Yq :: remove python version"
+  ansible.builtin.pip:
     name: yq
     state: absent
     umask: "0022"
   tags:
-  - utils
-  - yq
+    - utils
+    - yq
 
-- name: "utils | Yq :: remove apt version"
-  apt:
+- name: "Utils | Yq :: remove apt version"
+  ansible.builtin.apt:
     name: yq
     state: absent
   tags:
-  - utils
-  - yq
+    - utils
+    - yq
 
-- name: "utils | Yq :: download"
-  get_url:
+- name: "Utils | Yq :: download"
+  ansible.builtin.get_url:
     url: https://github.com/{{ repo }}/releases/download/v{{ version }}/yq_linux_amd64
     dest: /usr/local/bin/yq
-    sha256sum: "{{ checksum }}"
-  tags:
-  - utils
-  - yq
-
-- name: "utils | Yq :: permission"
-  file:
-    path: /usr/local/bin/yq
     owner: root
     group: root
-    mode: '0755'
+    mode: 0755
+    checksum: sha256:{{ checksum }}
   tags:
-  - utils
-  - yq
+    - utils
+    - yq

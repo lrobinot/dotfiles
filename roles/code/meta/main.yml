@@ -1,4 +1,0 @@
----
-dependencies:
-# Depend on Tilix for favorite apps ordering
-- role: tilix
