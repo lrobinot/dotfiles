@@ -1,43 +1,43 @@
 ---
-- name: "shell | Zsh :: installation"
-  apt:
+- name: "Shell | Zsh :: installation"
+  ansible.builtin.apt:
     name: zsh
-    state: present
+    state: latest
 
-- name: "shell | Zsh :: configuration"
-  template:
+- name: "Shell | Zsh :: configuration"
+  ansible.builtin.template:
     src: home/.zshrc.j2
     dest: "{{ homedir }}/.zshrc"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0600
 
-- name: "shell | Zsh :: theme"
-  template:
+- name: "Shell | Zsh :: theme"
+  ansible.builtin.template:
     src: home/.p10k.zsh.j2
     dest: "{{ homedir }}/.p10k.zsh"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0600
 
-- name: "shell | Zsh :: custom folder"
-  file:
+- name: "Shell | Zsh :: custom folder"
+  ansible.builtin.file:
     path: "{{ homedir }}/.zsh.custom"
     state: directory
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0750
 
-- name: "shell | Zsh :: custom plugins"
-  file:
+- name: "Shell | Zsh :: custom plugins"
+  ansible.builtin.file:
     path: "{{ homedir }}/.zsh.custom/plugins"
     state: directory
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0750
 
-- name: "shell | Zsh :: custom scripts"
-  copy:
+- name: "Shell | Zsh :: custom scripts"
+  ansible.builtin.copy:
     src: "{{ item }}.sh"
     dest: "{{ homedir }}/.zsh.custom/{{ item }}.zsh"
     owner: "{{ userid }}"
@@ -48,8 +48,8 @@
     - 005.path
     - 010.kubeconfig
 
-- name: "shell | Zsh :: autosuggestions plugin"
-  file:
+- name: "Shell | Zsh :: autosuggestions plugin"
+  ansible.builtin.file:
     src: "{{ homedir }}/{{ dotdir }}/zsh-autosuggestions"
     dest: "{{ homedir }}/.zsh.custom/plugins/zsh-autosuggestions"
     state: link
@@ -57,8 +57,8 @@
     group: "{{ groupid }}"
     mode: 0750
 
-- name: "shell | Zsh :: syntax-highlighting plugin"
-  file:
+- name: "Shell | Zsh :: syntax-highlighting plugin"
+  ansible.builtin.file:
     src: "{{ homedir }}/{{ dotdir }}/zsh-syntax-highlighting"
     dest: "{{ homedir }}/.zsh.custom/plugins/zsh-syntax-highlighting"
     state: link
