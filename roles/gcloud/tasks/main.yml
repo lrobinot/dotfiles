@@ -1,26 +1,32 @@
 ---
-- name: "kubernetes | gcloud :: repository key"
-  apt_key:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    state: present
-  tags:
-  - kubernetes
-  - gcloud
-
-- name: "kubernetes | gcloud :: repository"
-  apt_repository:
-    repo: "deb [arch=amd64] https://packages.cloud.google.com/apt cloud-sdk main"
-    state: present
-    filename: google-cloud-sdk
+- name: "Kubernetes | gcloud :: repository key"
+  ansible.builtin.get_url:
+    url: "{{ apt.key }}"
+    dest: "{{ keyrings_dir }}/{{ apt.name }}.gpg"
+    owner: root
+    group: root
     mode: 0644
   tags:
-  - kubernetes
-  - gcloud
+    - kubernetes
+    - gcloud
 
-- name: "kubernetes | gcloud :: installation"
-  apt:
-    name: google-cloud-sdk
+- name: "Kubernetes | gcloud :: repository"
+  ansible.builtin.template:
+    src: apt.sources.list.j2
+    dest: /etc/apt/sources.list.d/{{ apt.name }}.list
+    owner: root
+    group: root
+    mode: 0644
+  register: apt_repo
+  tags:
+    - kubernetes
+    - gcloud
+
+- name: "Kubernetes | gcloud :: installation"
+  ansible.builtin.apt:
+    name:
+      - google-cloud-sdk
     state: present
   tags:
-  - kubernetes
-  - gcloud
+    - kubernetes
+    - gcloud
