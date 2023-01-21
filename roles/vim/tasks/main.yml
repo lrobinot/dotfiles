@@ -1,19 +1,19 @@
 ---
-- name: "editor | Vim :: installation"
-  apt:
+- name: "Editor | Vim :: installation"
+  ansible.builtin.apt:
     name: vim
-    state: present
+    state: latest
   tags:
-  - editor
-  - vim
+    - editor
+    - vim
 
-- name: "editor | Vim :: configuration"
-  template:
+- name: "Editor | Vim :: configuration"
+  ansible.builtin.template:
     src: home/.vimrc.j2
     dest: "{{ homedir }}/.vimrc"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0600
   tags:
-  - editor
-  - vim
+    - editor
+    - vim
