@@ -1,0 +1,48 @@
+---
+- name: "Utils | age :: get checksum"
+  ansible.builtin.stat:
+    path: /usr/local/bin/age
+    checksum_algorithm: sha256
+  register: age_stat
+  ignore_errors: true
+  changed_when: false
+  tags:
+    - utils
+    - age
+
+- name: "Utils | age :: download"
+  ansible.builtin.get_url:
+    url: https://github.com/{{ repo }}/releases/download/v{{ version }}/age-v{{ version }}-linux-amd64.tar.gz
+    dest: "{{ dlcache }}/age-v{{ version }}.linux-amd64.tar.gz"
+    mode: 0644
+    checksum: sha256:{{ checksum }}
+  when: age_stat is failed or age_stat.stat.checksum != bin_checksum
+  tags:
+    - utils
+    - age
+
+- name: "Utils | age :: installation"
+  ansible.builtin.unarchive:
+    src: "{{ dlcache }}/age-v{{ version }}.linux-amd64.tar.gz"
+    dest: /usr/local/bin
+    exclude: LICENSE
+    extra_opts:
+      - --strip-components=1
+    copy: false
+  when: age_stat is failed or age_stat.stat.checksum != bin_checksum
+  tags:
+    - utils
+    - age
+
+- name: "Utils | age :: set permission"
+  ansible.builtin.file:
+    path: /usr/local/bin/{{ item }}
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - age
+    - age-keygen
+  tags:
+    - utils
+    - age
