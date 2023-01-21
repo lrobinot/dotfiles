@@ -38,7 +38,7 @@
     name:
       - google-chrome-stable
       - chrome-gnome-shell
-    state: present
+    state: latest
     update_cache: "{{ apt_repo.changed }}"
   tags:
     - misc
