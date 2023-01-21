@@ -49,7 +49,7 @@
     name:
       - docker-ce
       - docker-compose
-    state: present
+    state: latest
     update_cache: "{{ apt_repo.changed }}"
   tags:
     - container
