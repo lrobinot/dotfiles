@@ -1,0 +1,6 @@
+apt:
+  key: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  name: kubernetes
+  url: https://apt.kubernetes.io/
+  suite: kubernetes-xenial
+  component: main

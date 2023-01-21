@@ -1,26 +1,32 @@
 ---
-- name: "kubernetes | kubectl :: repository key"
-  apt_key:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    state: present
-  tags:
-  - kubernetes
-  - kubectl
-
-- name: "kubernetes | kubectl :: repository"
-  apt_repository:
-    repo: "deb [arch=amd64] https://apt.kubernetes.io/ kubernetes-xenial main"
-    state: present
-    filename: kubernetes
+- name: "Kubernetes | kubectl :: repository key"
+  ansible.builtin.get_url:
+    url: "{{ apt.key }}"
+    dest: "{{ keyrings_dir }}/{{ apt.name }}.gpg"
+    owner: root
+    group: root
     mode: 0644
   tags:
-  - kubernetes
-  - kubectl
+    - kubernetes
+    - kubectl
 
-- name: "kubernetes | kubectl :: installation"
-  apt:
-    name: kubectl
+- name: "Kubernetes | kubectl :: repository"
+  ansible.builtin.template:
+    src: apt.sources.list.j2
+    dest: /etc/apt/sources.list.d/{{ apt.name }}.list
+    owner: root
+    group: root
+    mode: 0644
+  register: apt_repo
+  tags:
+    - kubernetes
+    - kubectl
+
+- name: "Kubernetes | kubectl :: installation"
+  ansible.builtin.apt:
+    name:
+      - kubectl
     state: present
   tags:
-  - kubernetes
-  - kubectl
+    - kubernetes
+    - kubectl
