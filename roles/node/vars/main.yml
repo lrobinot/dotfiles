@@ -1,2 +1,9 @@
 ---
-branch: "node_12.x"
+branch: "node_19.x"
+
+apt:
+  key: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+  name: nodesource
+  url: https://deb.nodesource.com/{{ branch }}
+  suite: "{{ ansible_distribution_release }}"
+  component: main

@@ -1,37 +1,55 @@
 ---
-- name: "lang | Node :: repository key"
-  apt_key:
-    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    state: present
-  tags:
-  - lang
-  - nodejs
-
-- name: "lang | Node :: repository"
-  apt_repository:
-    repo: "deb [arch=amd64] https://deb.nodesource.com/{{ branch }} {{ ansible_distribution_release }} main"
-    state: present
-    filename: nodesource
+- name: "Lang | Node :: repository key"
+  ansible.builtin.get_url:
+    url: "{{ apt.key }}"
+    dest: "{{ keyrings_dir }}/{{ apt.name }}.asc"
+    owner: root
+    group: root
     mode: 0644
+  register: key_asc
   tags:
-  - lang
-  - nodejs
+    - lang
+    - nodejs
 
-- name: "lang | Node :: installation"
-  apt:
-    name: nodejs
-    state: present
+- name: "Misc | Chrome :: repository key dearmor"
+  ansible.builtin.command:
+    cmd: gpg --dearmor --output {{ apt.name }}.gpg {{ apt.name }}.asc
+    chdir: "{{ keyrings_dir }}"
+    creates: "{{ apt.name }}.gpg"
+  when: key_asc.changed
   tags:
-  - lang
-  - nodejs
+    - misc
+    - chrome
 
-- name: "lang | Node :: configuration"
-  template:
+- name: "Lang | Node :: repository"
+  ansible.builtin.template:
+    src: apt.sources.list.j2
+    dest: /etc/apt/sources.list.d/{{ apt.name }}.list
+    owner: root
+    group: root
+    mode: 0644
+  register: apt_repo
+  tags:
+    - lang
+    - nodejs
+
+- name: "Lang | Node :: installation"
+  ansible.builtin.apt:
+    name:
+      - nodejs
+    state: latest
+    update_cache: "{{ apt_repo.changed }}"
+  tags:
+    - lang
+    - nodejs
+
+- name: "Lang | Node :: configuration"
+  ansible.builtin.template:
     src: home/.npmrc.j2
     dest: "{{ homedir }}/.npmrc"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0600
   tags:
-  - lang
-  - nodejs
+    - lang
+    - nodejs
