@@ -1,98 +1,98 @@
 ---
-- name: "terminal | Tilix :: installation"
-  apt:
+- name: "Terminal | Tilix :: installation"
+  ansible.builtin.apt:
     name: tilix
-    state: present
+    state: latest
 
-- name: "terminal | Tilix :: alternatives"
-  alternatives:
+- name: "Terminal | Tilix :: alternatives"
+  ansible.builtin.alternatives:
     name: x-terminal-emulator
     path: /usr/bin/tilix
     link: /usr/bin/tilix.wrapper
     priority: 100
     state: selected
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version("22.04", "<")
 
-- name: "terminal | Tilix :: fix vte issue"
-  file:
+- name: "Terminal | Tilix :: fix vte issue"
+  ansible.builtin.file:
     src: /etc/profile.d/vte-2.91.sh
     dest: /etc/profile.d/vte.sh
     owner: root
     group: root
     state: link
 
-- name: "terminal | Tilix :: favorite"
+- name: "Terminal | Tilix :: favorite"
   block:
+    - name: "Terminal | Tilix :: favorite [1/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: true
+      become_user: "{{ username }}"
+      register: favorites
+      changed_when: false
 
-  - name: "terminal | Tilix :: favorite [1/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      state: read
-    become: true
-    become_user: "{{ username }}"
-    register: favorites
-    changed_when: false
+    - name: "Terminal | Tilix :: favorite [2/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_insert_after('com.gexperts.Tilix.desktop', 'google-chrome.desktop') }}"
+      become: true
+      become_user: "{{ username }}"
+      changed_when: false
 
-  - name: "terminal | Tilix :: favorite [2/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      value: "{{ favorites.value | list_insert_after('com.gexperts.Tilix.desktop', 'google-chrome.desktop') }}"
-    become: true
-    become_user: "{{ username }}"
-    changed_when: false
-
-- name: "terminal | Tilix :: auto-start"
-  template:
+- name: "Terminal | Tilix :: auto-start"
+  ansible.builtin.template:
     src: home/.config/autostart/tilix.desktop.j2
     dest: "{{ homedir }}/.config/autostart/tilix.desktop"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: "0600"
 
-- name: "terminal | Tilix :: config folder"
-  file:
+- name: "Terminal | Tilix :: config folder"
+  ansible.builtin.file:
     path: "{{ homedir }}/.config/{{ item }}"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     state: directory
     mode: '0700'
   with_items:
-  - "tilix"
-  - "tilix/schemes"
+    - "tilix"
+    - "tilix/schemes"
 
-- name: "terminal | Tilix :: custom theme"
-  template:
+- name: "Terminal | Tilix :: custom theme"
+  ansible.builtin.template:
     src: home/.config/tilix/schemes/dotfiles.json.j2
     dest: "{{ homedir }}/.config/tilix/schemes/dotfiles.json"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: "0600"
 
-- name: "terminal | Tilix :: global preferences"
-  dconf:
+- name: "Terminal | Tilix :: global preferences"
+  community.general.dconf:
     key: "/com/gexperts/Tilix/{{ item.key }}"
     value: "{{ item.value }}"
   become: true
   become_user: "{{ username }}"
   with_items: "{{ tilix_prefs_global }}"
 
-- name: "terminal | Tilix :: key bindings"
-  dconf:
+- name: "Terminal | Tilix :: key bindings"
+  community.general.dconf:
     key: "/com/gexperts/Tilix/keybindings/{{ item.key }}"
     value: "{{ item.value | string }}"
   become: true
   become_user: "{{ username }}"
   with_items: "{{ tilix_prefs_keybindings }}"
 
-- name: "terminal | Tilix :: apparence"
-  dconf:
+- name: "Terminal | Tilix :: apparence"
+  community.general.dconf:
     key: "/com/gexperts/Tilix/profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/{{ item.key }}"
     value: "{{ item.value | string }}"
   become: true
   become_user: "{{ username }}"
   with_items: "{{ tilix_prefs_apparence }}"
 
-- name: "terminal | Tilix :: F12 key binding"
-  dconf:
+- name: "Terminal | Tilix :: F12 key binding"
+  community.general.dconf:
     key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/{{ item.key }}"
     value: "{{ item.value | string }}"
   become: true

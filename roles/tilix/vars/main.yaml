@@ -1,53 +1,53 @@
 tilix_prefs_global:
-  - { key: "accelerators-enabled", value: "true" }
-  - { key: "control-scroll-zoom", value: "true" }
-  - { key: "enable-wide-handle", value: "true" }
-  - { key: "prompt-on-close", value: "true" }
-  - { key: "quake-height-percent", value: "70" }
-  - { key: "quake-hide-headerbar", value: "true" }
-  - { key: "quake-specific-monitor", value: "0" }
-  - { key: "quake-width-percent", value: "75" }
-  - { key: "sidebar-on-right", value: "false" }
-  - { key: "terminal-title-style", value: "'small'"}
-  - { key: "copy-on-select", value: "true" }
-  - { key: "window-style", value: "'normal'"}
+  - {key: "accelerators-enabled", value: "true"}
+  - {key: "control-scroll-zoom", value: "true"}
+  - {key: "enable-wide-handle", value: "true"}
+  - {key: "prompt-on-close", value: "true"}
+  - {key: "quake-height-percent", value: "70"}
+  - {key: "quake-hide-headerbar", value: "true"}
+  - {key: "quake-specific-monitor", value: "0"}
+  - {key: "quake-width-percent", value: "75"}
+  - {key: "sidebar-on-right", value: "false"}
+  - {key: "terminal-title-style", value: "'small'"}
+  - {key: "copy-on-select", value: "true"}
+  - {key: "window-style", value: "'normal'"}
 
 tilix_prefs_keybindings:
-  - { key: "nautilus-open", value: "'<Ctrl><Alt>t'" }
-  - { key: "win-view-sidebar", value: "'F8'" }
-  - { key: "session-add-down", value: "'<Alt><Super>Down'" }
-  - { key: "session-add-right", value: "'<Alt><Super>Right'" }
-  - { key: "session-resize-right", value: "'<Alt><Super>6'" }
-  - { key: "session-resize-up", value: "'<Alt><Super>8'" }
-  - { key: "session-resize-left", value: "'<Alt><Super>4'" }
-  - { key: "session-resize-down", value: "'<Alt><Super>2'" }
+  - {key: "nautilus-open", value: "'<Ctrl><Alt>t'"}
+  - {key: "win-view-sidebar", value: "'F8'"}
+  - {key: "session-add-down", value: "'<Shift>Down'"}
+  - {key: "session-add-right", value: "'<Shift>Right'"}
+  - {key: "session-resize-right", value: "'<Alt><Super>6'"}
+  - {key: "session-resize-up", value: "'<Alt><Super>8'"}
+  - {key: "session-resize-left", value: "'<Alt><Super>4'"}
+  - {key: "session-resize-down", value: "'<Alt><Super>2'"}
 
 tilix_prefs_hotkey:
-  - { key: "binding", value: "'F12'" }
-  - { key: "command", value: "'tilix --quake'" }
-  - { key: "name", value: "'Tilix'" }
+  - {key: "binding", value: "'F12'"}
+  - {key: "command", value: "'tilix --quake'"}
+  - {key: "name", value: "'Tilix'"}
 
 tilix_prefs_apparence:
   # General
-  - { key: "visible-name", value: "'Default'" }
-  - { key: "use-system-font", value: "false" }
-  - { key: "font", value: "'{{ terminal.font.family }} {{ terminal.font.weight }} {{ terminal.font.size }}'" }
-  - { key: "cursor-blink-mode", value: "'on'" }
-  - { key: "terminal-bell", value: "'icon'" }
+  - {key: "visible-name", value: "'Default'"}
+  - {key: "use-system-font", value: "false"}
+  - {key: "font", value: "'{{ terminal.font.family} {{ terminal.font.weight} {{ terminal.font.size}'"}
+  - {key: "cursor-blink-mode", value: "'on'"}
+  - {key: "terminal-bell", value: "'icon'"}
   # Command
-  - { key: "custom-command", value: "'/usr/bin/zsh'" }
-  - { key: "use-custom-command", value: "true" }
-  - { key: "login-shell", value: "true" }
+  - {key: "custom-command", value: "'/usr/bin/zsh'"}
+  - {key: "use-custom-command", value: "true"}
+  - {key: "login-shell", value: "true"}
   # Color
-  - { key: "background-color", value: "'{{ terminal.background.color }}'" }
-  - { key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}" }
-  - { key: "bold-color", value: "'#FFFFFF'" }
-  - { key: "bold-is-bright", value: "true" }
-  - { key: "cursor-background-color", value: "'{{ terminal.cursor.color }}'" }
-  - { key: "cursor-blink-mode", value: "'on'" }
-  - { key: "cursor-colors-set", value: "true" }
-  - { key: "cursor-foreground-color", value: "'#000000'" }
-  - { key: "foreground-color", value: "'{{ terminal.foreground.color }}'" }
-  - { key: "palette", value: "{{ terminal.palette | to_json }}" }
-  - { key: "use-theme-colors", value: "false" }
-  - { key: "dim-transparency-percent", value: "30" }
+  - {key: "background-color", value: "'{{ terminal.background.color}'"}
+  - {key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency}"}
+  - {key: "bold-color", value: "'#FFFFFF'"}
+  - {key: "bold-is-bright", value: "true"}
+  - {key: "cursor-background-color", value: "'{{ terminal.cursor.color}'"}
+  - {key: "cursor-blink-mode", value: "'on'"}
+  - {key: "cursor-colors-set", value: "true"}
+  - {key: "cursor-foreground-color", value: "'#000000'"}
+  - {key: "foreground-color", value: "'{{ terminal.foreground.color}'"}
+  - {key: "palette", value: "{{ terminal.palette | to_json}"}
+  - {key: "use-theme-colors", value: "false"}
+  - {key: "dim-transparency-percent", value: "30"}
