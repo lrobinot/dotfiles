@@ -1,46 +1,47 @@
 ---
-- name: "kubernetes | k9s :: check"
-  command: k9s version --short
-  ignore_errors: yes
+- name: "Kubernetes | k9s :: check"
+  ansible.builtin.command:
+    cmd: k9s version --short
+  ignore_errors: true
   no_log: true
   register: k9s_version
   changed_when: false
   tags:
-  - kubernetes
-  - k9s
+    - kubernetes
+    - k9s
 
-- name: "kubernetes | k9s :: download"
-  get_url:
+- name: "Kubernetes | k9s :: download"
+  ansible.builtin.get_url:
     url: https://github.com/{{ repo }}/releases/download/v{{ version }}/k9s_{{ platform }}.tar.gz
     dest: "{{ dlcache }}/k9s-{{ version }}.tar.gz"
     owner: root
     group: root
-    mode: "0644"
-    sha256sum: "{{ checksum }}"
+    mode: 0644
+    checksum: sha256:{{ checksum }}
   when: k9s_version is failed or version not in k9s_version.stdout_lines[0]
   tags:
-  - kubernetes
-  - k9s
+    - kubernetes
+    - k9s
 
-- name: "kubernetes | k9s :: unarchive"
-  unarchive:
+- name: "Kubernetes | k9s :: unarchive"
+  ansible.builtin.unarchive:
     src: "{{ dlcache }}/k9s-{{ version }}.tar.gz"
     dest: /usr/local/bin
-    copy: no
+    copy: false
     exclude:
-    - LICENSE
-    - README.md
+      - LICENSE
+      - README.md
   when: k9s_version is failed or version not in k9s_version.stdout_lines[0]
   tags:
-  - kubernetes
-  - k9s
+    - kubernetes
+    - k9s
 
-- name: "kubernetes | k9s :: permission"
-  file:
+- name: "Kubernetes | k9s :: permission"
+  ansible.builtin.file:
     path: /usr/local/bin/k9s
     owner: root
     group: root
-    mode: '0755'
+    mode: 0755
   tags:
-  - kubernetes
-  - k9s
+    - kubernetes
+    - k9s

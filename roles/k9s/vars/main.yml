@@ -1,5 +1,5 @@
 ---
 repo: derailed/k9s
-version: 0.25.18
-checksum: d288aacc368ab6b243fc9e7ecd17b53fa34a813509c2dc3023171085db83cf9d
+version: 0.26.7
+checksum: f774bb75045e361e17a4f267491c5ec66f41db7bffd996859ffb1465420af249
 platform: Linux_x86_64
