@@ -1,20 +1,22 @@
 ---
-- name: "generate needed languages"
-  locale_gen:
+- name: Generate needed languages
+  community.general.locale_gen:
     name: "{{ item }}"
     state: present
   with_items:
-  - en_US.UTF-8
-  - fr_FR.UTF-8
+    - en_US.UTF-8
+    - fr_FR.UTF-8
   tags:
-  - always
-  - locale
+    - always
+    - locale
 
-- name: "set locale"
-  template:
+- name: Set locale
+  ansible.builtin.template:
     src: etc/default/locale.j2
     dest: /etc/default/locale
+    owner: root
+    group: root
     mode: 0644
   tags:
-  - always
-  - locale
+    - always
+    - locale
