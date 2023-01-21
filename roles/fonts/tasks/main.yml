@@ -1,73 +1,66 @@
 ---
-- name: "fonts | Cascadia Code :: Power Line installation"
-  win_chocolatey:
-    name: cascadiacodepl
-    state: present
-  when: wsl == "1"
-  tags:
-  - cascadiacode
-
-- name: "fonts | Ubuntu Mono :: installation"
-  apt:
+- name: "Fonts | Ubuntu Mono :: installation"
+  ansible.builtin.apt:
     name: ubuntu-mono
     state: present
-  when: wsl == "0"
   tags:
-  - ubuntu-mono
+    - fonts
+    - ubuntu-mono
 
-- name: "fonts | Cascadia Code :: remove distribution package"
-  apt:
+- name: "Fonts | Cascadia Code :: remove distribution package"
+  ansible.builtin.apt:
     name: fonts-cascadia-code
     state: absent
-  when: wsl == "0"
   tags:
-  - cascadiacode
+    - fonts
+    - cascadiacode
 
-- name: "fonts | Cascadia Code :: folder"
-  file:
+- name: "Fonts | Cascadia Code :: folder"
+  ansible.builtin.file:
     path: /usr/share/fonts/truetype/cascadia-code
     state: directory
-    mode: '0755'
-  when: wsl == "0"
+    mode: 0755
   tags:
-  - cascadiacode
+    - fonts
+    - cascadiacode
 
-- name: "fonts | Cascadia Code :: download"
-  get_url:
+- name: "Fonts | Cascadia Code :: download"
+  ansible.builtin.get_url:
     url: https://github.com/microsoft/cascadia-code/releases/download/v{{ fonts.cascadia.version }}/CascadiaCode-{{ fonts.cascadia.version }}.zip
     dest: "{{ dlcache }}/CascadiaCode-{{ fonts.cascadia.version }}.zip"
-  when: wsl == "0"
+    mode: 0644
   tags:
-  - cascadiacode
+    - fonts
+    - cascadiacode
 
-- name: "fonts | Cascadia Code :: extraction"
-  unarchive:
+- name: "Fonts | Cascadia Code :: extraction"
+  ansible.builtin.unarchive:
     src: "{{ dlcache }}/CascadiaCode-{{ fonts.cascadia.version }}.zip"
     dest: /usr/share/fonts/truetype/cascadia-code
-    copy: no
-  when: wsl == "0"
+    copy: false
   tags:
-  - cascadiacode
+    - fonts
+    - cascadiacode
 
-- name: "fonts | MesloLGS NF :: folder"
-  file:
+- name: "Fonts | MesloLGS NF :: folder"
+  ansible.builtin.file:
     path: /usr/share/fonts/truetype/meslo-lgs-nf
     state: directory
     mode: '0755'
-  when: wsl == "0"
   tags:
-  - meslo
+    - fonts
+    - meslo
 
-- name: "fonts | MesloLGS NF :: installation"
-  get_url:
+- name: "Fonts | MesloLGS NF :: installation"
+  ansible.builtin.get_url:
     url: https://github.com/romkatv/powerlevel10k-media/raw/master/{{ item.src }}.ttf
     dest: /usr/share/fonts/truetype/meslo-lgs-nf/{{ item.dst }}.ttf
     mode: '0644'
   with_items:
-  - { src: "MesloLGS%20NF%20Regular", dst: "meslo-lgs-nf-regular" }
-  - { src: "MesloLGS%20NF%20Bold", dst: "meslo-lgs-nf-bold" }
-  - { src: "MesloLGS%20NF%20Italic", dst: "meslo-lgs-nf-italic" }
-  - { src: "MesloLGS%20NF%20Bold%20Italic", dst: "meslo-lgs-nf-bold-italic" }
-  when: wsl == "0"
+    - {src: "MesloLGS%20NF%20Regular", dst: "meslo-lgs-nf-regular"}
+    - {src: "MesloLGS%20NF%20Bold", dst: "meslo-lgs-nf-bold"}
+    - {src: "MesloLGS%20NF%20Italic", dst: "meslo-lgs-nf-italic"}
+    - {src: "MesloLGS%20NF%20Bold%20Italic", dst: "meslo-lgs-nf-bold-italic"}
   tags:
-  - meslo
+    - fonts
+    - meslo
