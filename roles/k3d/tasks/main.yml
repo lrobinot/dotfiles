@@ -1,12 +1,12 @@
 ---
-- name: "kubernetes | k3d :: installation"
-  get_url:
+- name: "Kubernetes | k3d :: installation"
+  ansible.builtin.get_url:
     url: https://github.com/{{ repo }}/releases/download/v{{ version }}/k3d-{{ platform }}
     dest: /usr/local/bin/k3d
     owner: root
     group: root
-    mode: "0755"
+    mode: 0755
     checksum: sha256:{{ checksum }}
   tags:
-  - kubernetes
-  - k3d
+    - kubernetes
+    - k3d
