@@ -1,44 +1,66 @@
 ---
-- name: "container | Docker :: repository key"
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    keyring: /usr/share/keyrings/docker.gpg
-    state: present
-  tags:
-  - container
-  - docker
-
-- name: "container | Docker :: repository"
-  apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
-    filename: docker
+- name: "Container | Docker :: repository key"
+  ansible.builtin.get_url:
+    url: "{{ apt.key }}"
+    dest: "{{ keyrings_dir }}/{{ apt.name }}.asc"
+    owner: root
+    group: root
     mode: 0644
+  register: key_asc
   tags:
-  - container
-  - docker
+    - container
+    - docker
 
-- name: "container | Docker :: cleanup"
-  apt:
-    name: ['docker', 'docker-engine', 'docker.io']
+- name: "Misc | Chrome :: repository key dearmor"
+  ansible.builtin.command:
+    cmd: gpg --dearmor --output {{ apt.name }}.gpg {{ apt.name }}.asc
+    chdir: "{{ keyrings_dir }}"
+    creates: "{{ apt.name }}.gpg"
+  when: key_asc.changed
+  tags:
+    - misc
+    - chrome
+
+- name: "Container | Docker :: repository"
+  ansible.builtin.template:
+    src: apt.sources.list.j2
+    dest: /etc/apt/sources.list.d/{{ apt.name }}.list
+    owner: root
+    group: root
+    mode: 0644
+  register: apt_repo
+  tags:
+    - container
+    - docker
+
+- name: "Container | Docker :: cleanup"
+  ansible.builtin.apt:
+    name:
+      - docker
+      - docker-engine
+      - docker.io
     state: absent
   tags:
-  - container
-  - docker
+    - container
+    - docker
 
-- name: "container | Docker :: installation"
-  apt:
-    name: ['docker-ce', 'docker-compose']
+- name: "Container | Docker :: installation"
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-compose
     state: present
+    update_cache: "{{ apt_repo.changed }}"
   tags:
-  - container
-  - docker
+    - container
+    - docker
 
-# - name: "container | Docker :: user rights"
-#   user:
-#     name: "{{ username }}"
-#     groups: docker
-#     createhome: no
-#     append: yes
-#   tags:
-#   - container
-#   - docker
+- name: "Container | Docker :: user rights"
+  user:
+    name: "{{ username }}"
+    groups: docker
+    createhome: false
+    append: true
+  tags:
+    - container
+    - docker

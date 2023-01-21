@@ -1,0 +1,7 @@
+---
+apt:
+  key: https://download.docker.com/linux/ubuntu/gpg
+  name: docker
+  url: https://download.docker.com/linux/ubuntu
+  suite: "{{ ansible_distribution_release }}"
+  component: stable
