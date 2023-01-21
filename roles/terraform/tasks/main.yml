@@ -1,41 +1,43 @@
 ---
-- name: "kubernetes | terraform :: get installed version"
-  command: terraform version
-  ignore_errors: yes
+- name: "Kubernetes | terraform :: get installed version"
+  ansible.builtin.command:
+    cmd: terraform version
+  ignore_errors: true
   no_log: true
   register: terraform_version
   changed_when: false
   tags:
-  - kubernetes
-  - terraform
+    - kubernetes
+    - terraform
 
-- name: "kubernetes | terraform :: download needed version"
-  get_url:
+- name: "Kubernetes | terraform :: download needed version"
+  ansible.builtin.get_url:
     url: https://releases.hashicorp.com/terraform/{{ version }}/terraform_{{ version }}_linux_amd64.zip
     dest: "{{ dlcache }}/terraform-{{ version }}.tar.gz"
     sha256sum: "{{ checksum }}"
+    mode: 0600
   when: terraform_version is failed or version not in terraform_version.stdout_lines[0]
   tags:
-  - kubernetes
-  - terraform
+    - kubernetes
+    - terraform
 
-- name: "kubernetes | terraform :: unarchive"
-  unarchive:
+- name: "Kubernetes | terraform :: unarchive"
+  ansible.builtin.unarchive:
     src: "{{ dlcache }}/terraform-{{ version }}.tar.gz"
     dest: /usr/local/bin
-    copy: no
+    copy: true
     mode: 0755
   when: terraform_version is failed or version not in terraform_version.stdout_lines[0]
   tags:
-  - kubernetes
-  - terraform
+    - kubernetes
+    - terraform
 
-- name: "kubernetes | terraform :: permission"
-  file:
+- name: "Kubernetes | terraform :: permission"
+  ansible.builtin.file:
     path: /usr/local/bin/terraform
     owner: root
     group: root
-    mode: '0755'
+    mode: 0755
   tags:
-  - kubernetes
-  - terraform
+    - kubernetes
+    - terraform
