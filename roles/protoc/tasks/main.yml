@@ -1,70 +1,72 @@
 ---
-- name: "lang | Protoc :: check"
-  command: protoc --version
-  ignore_errors: yes
+- name: "Lang | Protoc :: check"
+  ansible.builtin.command:
+    cmd: protoc --version
+  ignore_errors: true
   no_log: true
   register: protoc_version
   changed_when: false
   tags:
-  - lang
-  - protoc
+    - lang
+    - protoc
 
-- name: "lang | Protoc :: download"
-  get_url:
+- name: "Lang | Protoc :: download"
+  ansible.builtin.get_url:
     url: https://github.com/{{ repo }}/releases/download/v{{ version }}/protoc-{{ version }}-linux-x86_64.zip
     dest: "{{ dlcache }}/protoc-{{ version }}-linux-x86_64.zip"
-  when: protoc_version is failed or version not in protoc_version.stdout
+    mode: 0644
+  when: protoc_version is failed or version|string not in protoc_version.stdout
   tags:
-  - lang
-  - protoc
+    - lang
+    - protoc
 
-- name: "lang | Protoc :: temporary extraction folder"
-  tempfile:
+- name: "Lang | Protoc :: temporary extraction folder"
+  ansible.builtin.tempfile:
     state: directory
   register: __protoc_tmp
-  when: protoc_version is failed or version not in protoc_version.stdout
+  when: protoc_version is failed or version|string not in protoc_version.stdout
   tags:
-  - lang
-  - protoc
+    - lang
+    - protoc
 
-- name: "lang | Protoc :: extraction"
-  unarchive:
+- name: "Lang | Protoc :: extraction"
+  ansible.builtin.unarchive:
     src: "{{ dlcache }}/protoc-{{ version }}-linux-x86_64.zip"
     dest: "{{ __protoc_tmp.path }}"
-    copy: no
-  when: protoc_version is failed or version not in protoc_version.stdout
+    copy: false
+  when: protoc_version is failed or version|string not in protoc_version.stdout
   tags:
-  - lang
-  - protoc
+    - lang
+    - protoc
 
-- name: "lang | Protoc :: installation (binaries)"
-  copy:
+- name: "Lang | Protoc :: installation (binaries)"
+  ansible.builtin.copy:
     src: "{{ __protoc_tmp.path }}/bin/protoc"
     dest: "/usr/local/bin/protoc"
-    mode: "0755"
-    remote_src: yes
-  when: protoc_version is failed or version not in protoc_version.stdout
+    mode: 0755
+    remote_src: true
+  when: protoc_version is failed or version|string not in protoc_version.stdout
   tags:
-  - lang
-  - protoc
+    - lang
+    - protoc
 
-- name: "lang | Protoc :: installation (include folder)"
-  file:
-    path: "/usr/local/include"
-    mode: "0755"
+- name: "Lang | Protoc :: installation (include folder)"
+  ansible.builtin.file:
+    path: /usr/local/include
+    mode: 0755
     state: directory
-  when: protoc_version is failed or version not in protoc_version.stdout
+  when: protoc_version is failed or version|string not in protoc_version.stdout
   tags:
-  - lang
-  - protoc
+    - lang
+    - protoc
 
-- name: "lang | Protoc :: installation (includes)"
-  copy:
+- name: "Lang | Protoc :: installation (includes)"
+  ansible.builtin.copy:
     src: "{{ __protoc_tmp.path }}/include/google/"
-    dest: "/usr/local/include/google"
-    mode: "0755"
-    remote_src: True
-  when: protoc_version is failed or version not in protoc_version.stdout
+    dest: /usr/local/include/google
+    mode: 0755
+    remote_src: true
+  when: protoc_version is failed or version|string not in protoc_version.stdout
   tags:
-  - lang
-  - protoc
+    - lang
+    - protoc
