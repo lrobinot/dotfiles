@@ -1,30 +1,32 @@
 ---
-- name: "utils | httpie :: remove os version"
-  apt:
-    name: httpie
+- name: "Utils | httpie :: remove os version"
+  ansible.builtin.apt:
+    name:
+      - httpie
     state: absent
   tags:
-  - utils
-  - httpie
+    - utils
+    - httpie
 
-- name: "utils | httpie :: check"
-  command: http --version
-  ignore_errors: yes
-  no_log: True
+- name: "Utils | httpie :: check"
+  ansible.builtin.command:
+    cmd: http --version
+  ignore_errors: true
+  no_log: true
   register: httpie_version
   changed_when: false
   tags:
-  - utils
-  - httpie
+    - utils
+    - httpie
 
-- name: "utils | httpie :: installation"
-  pip:
+- name: "Utils | httpie :: installation"
+  ansible.builtin.pip:
     name: https://github.com/httpie/httpie/archive/{{ version }}.tar.gz
     executable: pip3
     extra_args: --upgrade
-    umask: "0022"
+    umask: 0022
     state: present
   when: httpie_version is failed or httpie_version.stdout != version
   tags:
-  - utils
-  - httpie
+    - utils
+    - httpie
