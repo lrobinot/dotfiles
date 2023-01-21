@@ -1,12 +1,12 @@
 ---
-- name: "kubernetes | SOPS :: download"
-  get_url:
+- name: "Utils | SOPS :: download"
+  ansible.builtin.get_url:
     url: https://github.com/{{ repo }}/releases/download/v{{ version }}/sops-v{{ version }}.linux.amd64
     dest: /usr/local/bin/sops
     owner: root
     group: root
-    mode: "0755"
+    mode: 0755
     checksum: sha256:{{ checksum }}
   tags:
-  - kubernetes
-  - sops
+    - utils
+    - sops
