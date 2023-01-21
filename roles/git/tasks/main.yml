@@ -13,7 +13,7 @@
     name:
       - git
       - git-flow
-    state: present
+    state: latest
   tags:
     - scm
     - git
