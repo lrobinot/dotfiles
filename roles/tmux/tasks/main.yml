@@ -1,19 +1,19 @@
 ---
-- name: "utils | Tmux :: installation"
-  apt:
+- name: "Utils | Tmux :: installation"
+  ansible.builtin.apt:
     name: tmux
-    state: present
+    state: latest
   tags:
-  - utils
-  - tmux
+    - utils
+    - tmux
 
-- name: "utils | Tmux :: configuration"
-  template:
+- name: "Utils | Tmux :: configuration"
+  ansible.builtin.template:
     src: home/.tmux.conf.j2
     dest: "{{ homedir }}/.tmux.conf"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0600
   tags:
-  - utils
-  - tmux
+    - utils
+    - tmux
