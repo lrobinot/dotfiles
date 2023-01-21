@@ -24,7 +24,7 @@
     name: https://github.com/httpie/httpie/archive/{{ version }}.tar.gz
     executable: pip3
     extra_args: --upgrade
-    umask: 0022
+    umask: "0022"
     state: present
   when: httpie_version is failed or httpie_version.stdout != version
   tags:
