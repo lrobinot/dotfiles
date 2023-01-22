@@ -1,64 +1,62 @@
 ---
-- name: "special | Variety :: installation"
-  apt:
+- name: "Special | Variety :: installation"
+  ansible.builtin.apt:
     name: variety
-    state: present
-  when: wsl == "0"
+    state: latest
   tags:
-  - never
-  - special
-  - variety
+    - never
+    - special
+    - variety
 
-- name: "special | Variety :: Settings folder"
-  file:
+- name: "Special | Variety :: Settings folder"
+  ansible.builtin.file:
     path: "{{ homedir }}/.config/variety"
     state: directory
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0700
-  when: wsl == "0"
   tags:
-  - never
-  - special
-  - variety
+    - never
+    - special
+    - variety
 
-- name: "special | Variety :: Settings"
-  template:
+- name: "Special | Variety :: Settings"
+  ansible.builtin.template:
     src: home/.config/variety/{{ item }}.j2
     dest: "{{ homedir }}/.config/variety/{{ item }}"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0600
   with_items:
-  - "variety.conf"
+    - variety.conf
   tags:
-  - never
-  - special
-  - variety
+    - never
+    - special
+    - variety
 
-- name: "special | Variety :: Settings"
-  template:
+- name: "Special | Variety :: Settings"
+  ansible.builtin.template:
     src: home/.config/variety/{{ item }}.j2
     dest: "{{ homedir }}/.config/variety/{{ item }}"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0600
   with_items:
-  - ".firstrun"
+    - .firstrun
   changed_when: false
   tags:
-  - never
-  - special
-  - variety
+    - never
+    - special
+    - variety
 
-- name: "special | Variety :: auto-start"
-  template:
+- name: "Special | Variety :: auto-start"
+  ansible.builtin.template:
     src: home/.config/autostart/variety.desktop.j2
     dest: "{{ homedir }}/.config/autostart/variety.desktop"
     owner: "{{ userid }}"
     group: "{{ groupid }}"
     mode: 0600
   tags:
-  - never
-  - special
-  - variety
+    - never
+    - special
+    - variety
