@@ -13,7 +13,7 @@
   ansible.builtin.apt:
     name:
       - libglib2.0-dev-bin
-    state: present
+    state: latest
   when: ansible_distribution == "Ubuntu" and ansible_distribution_version is version("20.04", ">=")
   tags:
     - never
