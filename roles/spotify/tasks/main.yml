@@ -3,7 +3,7 @@
 # chrome://flags/#hardware-media-key-handling to disable media key handler
 
 - name: "Special | Spotify :: repository key"
-  ansible.builtin.apt_key:
+  ansible.builtin.get_url:
     url: "{{ apt.key }}"
     dest: "{{ keyrings_dir }}/{{ apt.name }}.asc"
     owner: root
