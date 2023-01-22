@@ -1,57 +1,71 @@
 ---
-- name: "special | Teamviewer :: repository key"
-  apt_key:
-    url: https://download.teamviewer.com/download/linux/signature/TeamViewer2017.asc
-    state: present
-  when: wsl == "0"
+- name: "Special | Teamviewer :: repository key"
+  ansible.builtin.get_url:
+    url: "{{ apt.key }}"
+    dest: "{{ keyrings_dir }}/{{ apt.name }}.asc"
+    owner: root
+    group: root
+    mode: 0644
+  register: key_asc
   tags:
-  - never
-  - special
-  - teamviewer
+    - never
+    - special
+    - teamviewer
 
-- name: "special | Teamviewer :: repository"
-  apt_repository:
-    repo: deb http://linux.teamviewer.com/deb stable main
-    state: present
-    filename: "teamviewer"
-  when: wsl == "0"
+- name: "Special | Teamviewer :: repository key dearmor"
+  ansible.builtin.command:
+    cmd: gpg --dearmor --output {{ apt.name }}.gpg {{ apt.name }}.asc
+    chdir: "{{ keyrings_dir }}"
+    creates: "{{ apt.name }}.gpg"
+  when: key_asc.changed
   tags:
-  - never
-  - special
-  - teamviewer
+    - never
+    - special
+    - teamviewer
 
-- name: "special | Teamviewer :: installation"
-  apt:
-    name: teamviewer
-    state: present
-  when: wsl == "0"
+- name: "Special | Teamviewer :: repository"
+  ansible.builtin.template:
+    src: apt.sources.list.j2
+    dest: /etc/apt/sources.list.d/{{ apt.name }}.list
+    owner: root
+    group: root
+    mode: 0644
+  register: apt_repo
   tags:
-  - never
-  - special
-  - teamviewer
+    - never
+    - special
+    - teamviewer
 
-- name: "special | Teamviewer :: favorite"
+- name: "Special | Teamviewer :: installation"
+  ansible.builtin.apt:
+    name:
+      - teamviewer
+    state: latest
+    update_cache: "{{ apt_repo.changed }}"
+  tags:
+    - never
+    - special
+    - teamviewer
+
+- name: "Special | Teamviewer :: favorite"
+  tags:
+    - never
+    - special
+    - teamviewer
   block:
+    - name: "Special | Teamviewer :: favorite [1/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: true
+      become_user: "{{ username }}"
+      register: favorites
+      changed_when: false
 
-  - name: "special | Teamviewer :: favorite [1/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      state: read
-    become: true
-    become_user: "{{ username }}"
-    register: favorites
-    changed_when: false
-
-  - name: "special | Teamviewer :: favorite [2/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      value: "{{ favorites.value | list_append('com.teamviewer.TeamViewer.desktop') }}"
-    become: true
-    become_user: "{{ username }}"
-    changed_when: false
-
-  when: wsl == "0"
-  tags:
-  - never
-  - special
-  - teamviewer
+    - name: "Special | Teamviewer :: favorite [2/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('com.teamviewer.TeamViewer.desktop') }}"
+      become: true
+      become_user: "{{ username }}"
+      changed_when: false
