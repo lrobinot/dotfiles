@@ -1,36 +1,32 @@
 ---
-- name: "special | VLC :: installation"
-  apt:
+- name: "Special | VLC :: installation"
+  ansible.builtin.apt:
     name: vlc
-    state: present
-  when: wsl == "0"
+    state: latest
   tags:
-  - never
-  - special
-  - vlc
+    - never
+    - special
+    - vlc
 
-- name: "special | VLC :: favorite"
+- name: "Special | VLC :: favorite"
+  tags:
+    - never
+    - special
+    - vlc
   block:
+    - name: "Special | VLC :: favorite [1/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: true
+      become_user: "{{ username }}"
+      register: favorites
+      changed_when: false
 
-  - name: "special | VLC :: favorite [1/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      state: read
-    become: true
-    become_user: "{{ username }}"
-    register: favorites
-    changed_when: false
-
-  - name: "special | VLC :: favorite [2/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      value: "{{ favorites.value | list_append('vlc.desktop') }}"
-    become: true
-    become_user: "{{ username }}"
-    changed_when: false
-
-  when: wsl == "0"
-  tags:
-  - never
-  - special
-  - vlc
+    - name: "Special | VLC :: favorite [2/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('vlc.desktop') }}"
+      become: true
+      become_user: "{{ username }}"
+      changed_when: false
