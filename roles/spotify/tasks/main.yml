@@ -1,59 +1,74 @@
 ---
 # If Play/Pause keyboard buttons do not work with Spotify if Chrome is started
 # chrome://flags/#hardware-media-key-handling to disable media key handler
-- name: "special | Spotify :: repository key"
-  apt_key:
-    url: https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg
-    state: present
-  when: wsl == "0"
-  tags:
-  - never
-  - special
-  - spotify
 
-- name: "special | Spotify :: repository"
-  apt_repository:
-    repo: deb [arch=amd64] http://repository.spotify.com stable non-free
-    state: present
-    filename: "spotify"
-  when: wsl == "0"
+- name: "Special | Spotify :: repository key"
+  ansible.builtin.apt_key:
+    url: "{{ apt.key }}"
+    dest: "{{ keyrings_dir }}/{{ apt.name }}.asc"
+    owner: root
+    group: root
+    mode: 0644
+  register: key_asc
   tags:
-  - never
-  - special
-  - spotify
+    - never
+    - special
+    - spotify
 
-- name: "special | Spotify :: installation"
-  apt:
-    name: spotify-client
-    state: present
-  when: wsl == "0"
+- name: "Misc | Chrome :: repository key dearmor"
+  ansible.builtin.command:
+    cmd: gpg --dearmor --output {{ apt.name }}.gpg {{ apt.name }}.asc
+    chdir: "{{ keyrings_dir }}"
+    creates: "{{ apt.name }}.gpg"
+  when: key_asc.changed
   tags:
-  - never
-  - special
-  - spotify
+    - never
+    - special
+    - spotify
 
-- name: "special | Spotify :: favorite"
+- name: "Special | Spotify :: repository"
+  ansible.builtin.template:
+    src: apt.sources.list.j2
+    dest: /etc/apt/sources.list.d/{{ apt.name }}.list
+    owner: root
+    group: root
+    mode: 0644
+  register: apt_repo
+  tags:
+    - never
+    - special
+    - spotify
+
+- name: "Special | Spotify :: installation"
+  ansible.builtin.apt:
+    name:
+      - spotify-client
+    state: latest
+    update_cache: "{{ apt_repo.changed }}"
+  tags:
+    - never
+    - special
+    - spotify
+
+- name: "Special | Spotify :: favorite"
+  tags:
+    - never
+    - special
+    - spotify
   block:
+    - name: "Special | Spotify :: favorite [1/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: true
+      become_user: "{{ username }}"
+      register: favorites
+      changed_when: false
 
-  - name: "special | Spotify :: favorite [1/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      state: read
-    become: true
-    become_user: "{{ username }}"
-    register: favorites
-    changed_when: false
-
-  - name: "special | Spotify :: favorite [2/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      value: "{{ favorites.value | list_append('spotify.desktop') }}"
-    become: true
-    become_user: "{{ username }}"
-    changed_when: false
-
-  when: wsl == "0"
-  tags:
-  - never
-  - special
-  - spotify
+    - name: "Special | Spotify :: favorite [2/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('spotify.desktop') }}"
+      become: true
+      become_user: "{{ username }}"
+      changed_when: false
