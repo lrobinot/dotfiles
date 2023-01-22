@@ -6,8 +6,9 @@ all:
 
   vars:
     dlcache: /usr/local/.dotfiles
+    keyrings_dir: /usr/share/keyrings
     network:
-      home: 192.168.5.0
+      home: 10.0.0.0
 
     terminal:
       background:

@@ -77,7 +77,7 @@ command -v ansible >/dev/null 2>&1 || {
   action "ansible not found, installing via pip3"
   running "pip3 install ansible-core"
 }
-for dir in $(cat requirements.yml  | grep -- '  -' | sed -e 's/^.* //' -e 's/\./\//g')
+grep -- '  -' requirements.yml | sed -e 's/^.* //' -e 's/\./\//g' | while IFS= read -r dir
 do
   if [ ! -d "$HOME/.ansible/collections/ansible_collections/$dir" ]
   then
@@ -98,11 +98,11 @@ command -v git >/dev/null 2>&1 && {
   ok
 }
 
+tag_arg=()
 if [ -n "${1}" ]
 then
-  tags="--tags ${1}"
-else
-  tags=
+  tag_arg[0]="--tags"
+  tag_arg[1]="${1}"
 fi
 
 if [ -f "$HOME/.gitconfig" ]
@@ -126,7 +126,6 @@ then
   read -r -p "  ... your github username? " -i "$githubuser" -e githubuser
 fi
 
-wsl=$(grep -c -- -Microsoft /proc/version || :)
 gnome_terminal_default_profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 gnome_terminal_default_profile=${gnome_terminal_default_profile:1:-1}
 monitor=$(xrandr | grep '^DP-.*1920x1080+1920+0' | awk '{print $1}')
@@ -135,11 +134,7 @@ rm -f "${TEMPPASSWORD}"
 
 message "Starting Ansible Playbook"
 export ANSIBLE_CONFIG="${top}/ansible.cfg"
-#  --become --ask-become-pass \
-DEBUG=-vvv
-DEBUG=
 ansible-playbook \
-  ${DEBUG} \
   --inventory "${top}/inventory" \
   --limit localhost \
   --extra-vars="ansible_become_pass=$PASSWORD" \
@@ -152,9 +147,8 @@ ansible-playbook \
   --extra-vars="groupid=$(id --group "$USER")" \
   --extra-vars="homedir=$HOME" \
   --extra-vars="dotdir=$(realpath --relative-to="$HOME" "$top")" \
-  --extra-vars="wsl=$wsl" \
   --extra-vars="gnome_terminal_default_profile=$gnome_terminal_default_profile" \
   --extra-vars="monitor=$monitor" \
-  ${tags} \
+  "${tag_arg[@]}" \
   dotfiles.yml
 ok

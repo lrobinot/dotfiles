@@ -3,80 +3,84 @@
   any_errors_fatal: true
   module_defaults:
     apt:
-      force_apt_get: yes
-  become: yes
+      force_apt_get: true
+  become: true
 
   pre_tasks:
-  - name: "settings : create download cache folder"
-    file:
-      path: "{{ dlcache }}"
-      state: directory
-      mode: 0755
-    tags:
-    - always
+    - name: "settings : create download cache folder"
+      file:
+        path: "{{ dlcache }}"
+        state: directory
+        mode: 0755
+      tags:
+        - always
 
-  - name: "settings | create auto-start folder"
-    file:
-      path: "{{ homedir }}/.config/autostart"
-      state: directory
-      owner: "{{ userid }}"
-      group: "{{ groupid }}"
-      mode: 0700
-    tags:
-    - always
+    - name: "settings | create auto-start folder"
+      file:
+        path: "{{ homedir }}/.config/autostart"
+        state: directory
+        owner: "{{ userid }}"
+        group: "{{ groupid }}"
+        mode: 0700
+      tags:
+        - always
 
-  - name: "settings | install miscellaneous utilities"
-    apt:
-      name: [ 'boxes', 'xclip', 'xsel', 'tree', 'jq', 'libnss3-tools' ]
-      state: present
-    tags:
-    - always
+    - name: "settings | install miscellaneous utilities"
+      apt:
+        name:
+          - boxes
+          - xclip
+          - xsel
+          - tree
+          - jq
+          - libnss3-tools
+        state: present
+      tags:
+        - always
 
   roles:
-  - { name: locale, tags: ["locale"] }
-  - { name: fonts, tags: ["fonts"] }
+    - {name: locale, tags: ["locale"]}
+    - {name: fonts, tags: ["fonts"]}
 
-  - { name: windows_terminal, tags: ["terminal", "windows-terminal"] }
-  - { name: tilix, tags: ["terminal", "tilix"] }
+    - {name: tilix, tags: ["terminal", "tilix"]}
 
-  - { name: zsh, tags: ["shell", "zsh"] }
+    - {name: zsh, tags: ["shell", "zsh"]}
 
-  - { name: git, tags: ["scm", "git"] }
+    - {name: chrome, tags: ["misc", "chrome"]}
 
-  - { name: chrome, tags: ["misc", "chrome"] }
+    - {name: git, tags: ["scm", "git"]}
+    - {name: git_cliff, tags: ["scm", "git-cliff"]}
 
-  - { name: code, tags: ["editor", "code"] }
-  - { name: vim, tags: ["editor", "vim"] }
+    - {name: vscode, tags: ["editor", "code"]}
+    - {name: vim, tags: ["editor", "vim"]}
 
-  - { name: yq, tags: ["utils", "yq"] }
-  - { name: tmux, tags: ["utils", "tmux"] }
-  - { name: httpie, tags: ["utils", "httpie"] }
-  #  - { name: insomnia, tags: ["utils", "insomnia"] }
+    - {name: yq, tags: ["utils", "yq"]}
+    - {name: tmux, tags: ["utils", "tmux"]}
+    - {name: httpie, tags: ["utils", "httpie"]}
+    - {name: sops, tags: ["utils", "sops"]}
+    - {name: age, tags: ["utils", "age"]}
 
-  - { name: go, tags: ["lang", "go"] }
-  - { name: node, tags: ["lang", "node"] }
-  - { name: protoc, tags: ["lang", "protoc"] }
+    - {name: go, tags: ["lang", "go"]}
+    - {name: protoc, tags: ["lang", "protoc"]}
+    - {name: node, tags: ["lang", "node"]}
 
-  - { name: docker, tags: ["container", "docker"] }
-  - { name: vagrant, tags: ["container", "vagrant"] }
+    - {name: docker, tags: ["container", "docker"]}
 
-  - { name: kubectl, tags: ["kubernetes", "kubectl"] }
-  - { name: k3d, tags: ["kubernetes", "k3d"] }
-  - { name: k9s, tags: ["kubernetes", "k9s"] }
-  - { name: kubectx, tags: ["kubernetes", "kubectx"] }
-  - { name: sops, tags: ["kubernetes", "sops"] }
-  - { name: terraform, tags: ["kubernetes", "terraform"] }
-  - { name: helm, tags: ["kubernetes", "helm"] }
-  - { name: keycloak, tags: ["kubernetes", "keycloak"] }
-  - { name: gcloud, tags: ["kubernetes", "gcloud"] }
-  - { name: skaffold, tags: ["kubernetes", "skaffold"] }
+    - {name: kubectl, tags: ["kubernetes", "kubectl"]}
+    - {name: k3d, tags: ["kubernetes", "k3d"]}
+    - {name: k9s, tags: ["kubernetes", "k9s"]}
+    - {name: kubectx, tags: ["kubernetes", "kubectx"]}
+    - {name: terraform, tags: ["kubernetes", "terraform"]}
+    - {name: helm, tags: ["kubernetes", "helm"]}
+    - {name: gcloud, tags: ["kubernetes", "gcloud"]}
+    - {name: skaffold, tags: ["kubernetes", "skaffold"]}
 
-  - { name: variety, tags: ["special", "variety"] }
-  - { name: spotify, tags: ["special", "spotify"] }
-  - { name: transmission, tags: ["special", "transmission"] }
-  - { name: flameshot, tags: ["special", "flameshot"] }
-  - { name: teamviewer, tags: ["special", "teamviewer"] }
-  - { name: vlc, tags: ["special", "vlc"] }
-  - { name: obs, tags: ["special", "obs"] }
-  - { name: remina, tags: ["special", "remina"] }
-  - { name: login_background, tags: ["never", "special", "login-background"] }
+    - {name: variety, tags: ["special", "variety"]}
+    - {name: spotify, tags: ["special", "spotify"]}
+    - {name: transmission, tags: ["special", "transmission"]}
+    - {name: flameshot, tags: ["special", "flameshot"]}
+    - {name: teamviewer, tags: ["special", "teamviewer"]}
+    - {name: vlc, tags: ["special", "vlc"]}
+    - {name: obs, tags: ["special", "obs"]}
+    - {name: remina, tags: ["special", "remina"]}
+    - {name: gdm_background, tags: ["never", "special", "gdm-background"]}
