@@ -1,49 +1,45 @@
 ---
-- name: "special | OBS :: repository"
-  apt_repository:
+- name: "Special | OBS :: repository"
+  ansible.builtin.apt_repository:
     repo: ppa:obsproject/obs-studio
     filename: obs-studio
     mode: 0644
   tags:
-  - never
-  - special
-  - obs
+    - never
+    - special
+    - obs
 
-- name: "special | OBS :: installation"
-  apt:
+- name: "Special | OBS :: installation"
+  ansible.builtin.apt:
     name:
       - obs-studio
       - v4l2loopback-dkms
       - v4l2loopback-utils
-    state: present
-  when: wsl == "0"
+    state: latest
   tags:
-  - never
-  - special
-  - obs
+    - never
+    - special
+    - obs
 
-- name: "special | OBS :: favorite"
+- name: "Special | OBS :: favorite"
+  tags:
+    - never
+    - special
+    - obs
   block:
+    - name: "Special | OBS :: favorite [1/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: true
+      become_user: "{{ username }}"
+      register: favorites
+      changed_when: false
 
-  - name: "special | OBS :: favorite [1/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      state: read
-    become: true
-    become_user: "{{ username }}"
-    register: favorites
-    changed_when: false
-
-  - name: "special | OBS :: favorite [2/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      value: "{{ favorites.value | list_append('com.obsproject.Studio.desktop') }}"
-    become: true
-    become_user: "{{ username }}"
-    changed_when: false
-
-  when: wsl == "0"
-  tags:
-  - never
-  - special
-  - obs
+    - name: "Special | OBS :: favorite [2/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('com.obsproject.Studio.desktop') }}"
+      become: true
+      become_user: "{{ username }}"
+      changed_when: false
