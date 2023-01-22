@@ -1,37 +1,33 @@
 ---
-- name: "special | Remmina :: installation"
-  apt:
+- name: "Special | Remmina :: installation"
+  ansible.builtin.apt:
     name:
       - remmina
-    state: present
-  when: wsl == "0"
+    state: latest
   tags:
-  - never
-  - special
-  - remmina
+    - never
+    - special
+    - remmina
 
-- name: "special | Remmina :: favorite"
+- name: "Special | Remmina :: favorite"
+  tags:
+    - never
+    - special
+    - remmina
   block:
+    - name: "Special | Remmina :: favorite [1/2]"
+      ansible.builtin.dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: true
+      become_user: "{{ username }}"
+      register: favorites
+      changed_when: false
 
-  - name: "special | Remmina :: favorite [1/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      state: read
-    become: true
-    become_user: "{{ username }}"
-    register: favorites
-    changed_when: false
-
-  - name: "special | OBS :: favorite [2/2]"
-    dconf:
-      key: /org/gnome/shell/favorite-apps
-      value: "{{ favorites.value | list_append('org.remmina.Remmina.desktop') }}"
-    become: true
-    become_user: "{{ username }}"
-    changed_when: false
-
-  when: wsl == "0"
-  tags:
-  - never
-  - special
-  - remmina
+    - name: "Special | Remmina :: favorite [2/2]"
+      ansible.builtin.dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_append('org.remmina.Remmina.desktop') }}"
+      become: true
+      become_user: "{{ username }}"
+      changed_when: false
