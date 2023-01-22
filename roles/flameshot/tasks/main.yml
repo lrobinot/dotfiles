@@ -2,7 +2,7 @@
 - name: "Special | Flameshot :: installation"
   ansible.builtin.apt:
     name: flameshot
-    state: present
+    state: latest
   tags:
     - never
     - special
