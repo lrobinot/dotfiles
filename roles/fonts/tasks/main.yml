@@ -2,7 +2,7 @@
 - name: "Fonts | Ubuntu Mono :: installation"
   ansible.builtin.apt:
     name: ubuntu-mono
-    state: present
+    state: latest
   tags:
     - fonts
     - ubuntu-mono
