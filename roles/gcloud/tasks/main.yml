@@ -26,7 +26,8 @@
   ansible.builtin.apt:
     name:
       - google-cloud-sdk
-    state: present
+    state: latest
+    update_cache: "{{ apt_repo.changed }}"
   tags:
     - kubernetes
     - gcloud
