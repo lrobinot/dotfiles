@@ -1,5 +1,5 @@
 ---
 repo: GoogleContainerTools/skaffold
-version: 1.37.2
-checksum: 5028755d1e8e5bd87b4185785b9c490002862bf62d75f76f45c91ff6fea0a0ab
+version: 2.0.5
+checksum: 6d2ea38a7905cd1b8c86977fbc04cc18449b00f5c12d538b2e70dd9e5ce69663
 platform: linux-amd64
