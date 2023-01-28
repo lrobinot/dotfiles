@@ -3,7 +3,7 @@
   ansible.builtin.get_url:
     url: https://github.com/{{ repo }}/releases/download/v{{ version }}/kubectx_v{{ version }}_{{ platform }}.tar.gz
     dest: "{{ dlcache }}/kubectx-{{ version }}.tar.gz"
-    sha256sum: "{{ checksum }}"
+    checksum: sha256:"{{ checksum }}"
     mode: 0644
   tags:
     - kubernetes
