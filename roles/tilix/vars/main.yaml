@@ -31,7 +31,7 @@ tilix_prefs_apparence:
   # General
   - {key: "visible-name", value: "'Default'"}
   - {key: "use-system-font", value: "false"}
-  - {key: "font", value: "'{{ terminal.font.family} {{ terminal.font.weight} {{ terminal.font.size}'"}
+  - {key: "font", value: "'{{ terminal.font.family }} {{ terminal.font.weight }} {{ terminal.font.size }}'"}
   - {key: "cursor-blink-mode", value: "'on'"}
   - {key: "terminal-bell", value: "'icon'"}
   # Command
@@ -39,15 +39,15 @@ tilix_prefs_apparence:
   - {key: "use-custom-command", value: "true"}
   - {key: "login-shell", value: "true"}
   # Color
-  - {key: "background-color", value: "'{{ terminal.background.color}'"}
-  - {key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency}"}
+  - {key: "background-color", value: "'{{ terminal.background.color }}'"}
+  - {key: "background-transparency-percent", value: "{{ 100 - terminal.background.transparency }}"}
   - {key: "bold-color", value: "'#FFFFFF'"}
   - {key: "bold-is-bright", value: "true"}
-  - {key: "cursor-background-color", value: "'{{ terminal.cursor.color}'"}
+  - {key: "cursor-background-color", value: "'{{ terminal.cursor.color }}'"}
   - {key: "cursor-blink-mode", value: "'on'"}
   - {key: "cursor-colors-set", value: "true"}
   - {key: "cursor-foreground-color", value: "'#000000'"}
-  - {key: "foreground-color", value: "'{{ terminal.foreground.color}'"}
-  - {key: "palette", value: "{{ terminal.palette | to_json}"}
+  - {key: "foreground-color", value: "'{{ terminal.foreground.color }}'"}
+  - {key: "palette", value: "{{ terminal.palette | to_json }}"}
   - {key: "use-theme-colors", value: "false"}
   - {key: "dim-transparency-percent", value: "30"}
