@@ -59,6 +59,7 @@
     - {name: httpie, tags: ["utils", "httpie"]}
     - {name: sops, tags: ["utils", "sops"]}
     - {name: age, tags: ["utils", "age"]}
+    - {name: syncthing, tags: ["utils", "syncthing"]}
 
     - {name: go, tags: ["lang", "go"]}
     - {name: protoc, tags: ["lang", "protoc"]}

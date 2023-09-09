@@ -1,0 +1,8 @@
+---
+apt:
+  key: https://syncthing.net/release-key.gpg
+  name: syncthing
+  url: https://apt.syncthing.net/
+  suite: syncthing
+  component: stable
+
