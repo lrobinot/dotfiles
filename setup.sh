@@ -59,11 +59,7 @@ command -v lolcat >/dev/null 2>&1 || {
   running "sudo apt-get install -qq --yes lolcat"
 }
 
-VERSION=2.0+$(git rev-list --all --count)-g$(git rev-parse --short HEAD)
-if ! git diff-index --quiet HEAD --
-then
-  VERSION="${VERSION}-dirty"
-fi
+VERSION=$(./version.sh)
 
 clear
 {
