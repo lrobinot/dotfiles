@@ -11,7 +11,7 @@
     - container
     - docker
 
-- name: "Misc | Chrome :: repository key dearmor"
+- name: "Misc | Docker :: repository key dearmor"
   ansible.builtin.command:
     cmd: gpg --dearmor --output {{ apt.name }}.gpg {{ apt.name }}.asc
     chdir: "{{ keyrings_dir }}"
