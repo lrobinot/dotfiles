@@ -3,6 +3,7 @@ branch: "node_19.x"
 
 apt:
   key: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+  sha256: 773b328f7b1d6db58a8c6a7fc89e2ed58ac5e06c3ab148411cf8272be7b1c472
   name: nodesource
   url: https://deb.nodesource.com/{{ branch }}
   suite: "{{ ansible_distribution_release }}"

@@ -6,9 +6,10 @@
   ansible.builtin.get_url:
     url: "{{ apt.key }}"
     dest: "{{ keyrings_dir }}/{{ apt.name }}.asc"
+    checksum: sha256:{{ apt.sha256 }}
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   register: key_asc
   tags:
     - never
@@ -32,7 +33,7 @@
     dest: /etc/apt/sources.list.d/{{ apt.name }}.list
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   register: apt_repo
   tags:
     - never

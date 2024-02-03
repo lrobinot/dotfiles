@@ -1,5 +1,6 @@
 apt:
   key: https://download.teamviewer.com/download/linux/signature/TeamViewer2017.asc
+  sha256: f2c277c9ce8be6dd73b58d23596185b53d745494c0aff825af647cd918971eaf
   name: teamviewer
   url: http://linux.teamviewer.com/deb
   suite: stable

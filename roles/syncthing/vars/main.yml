@@ -1,8 +1,8 @@
 ---
 apt:
   key: https://syncthing.net/release-key.gpg
+  sha256: a3806c3511f2cce3d2f12962f64b58b9192a15c9d862886cc46f9de8a25d7dbf
   name: syncthing
   url: https://apt.syncthing.net/
   suite: syncthing
   component: stable
-

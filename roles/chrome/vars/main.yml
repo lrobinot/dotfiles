@@ -1,5 +1,6 @@
 apt:
   key: https://dl.google.com/linux/linux_signing_key.pub
+  sha256: 05ee0181a70b39bd5c71630bc9a828856c22cebd9449602759dd4fd89338e54d
   name: google-chrome
   url: https://dl.google.com/linux/chrome/deb/
   suite: stable

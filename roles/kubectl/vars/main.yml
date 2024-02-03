@@ -1,6 +1,7 @@
 apt:
-  key: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  key: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+  sha256: 5fe267a9ae47ffd566624057f2c8f64ab8a786a9c650e92cc22135381b04f12b
   name: kubernetes
-  url: https://apt.kubernetes.io/
-  suite: kubernetes-xenial
-  component: main
+  url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/
+  suite:
+  component: /

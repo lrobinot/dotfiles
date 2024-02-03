@@ -1,6 +1,7 @@
 ---
 apt:
   key: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  sha256: aa26cfdf2640ea1e02e8959b77957491cf5fb78964f06a5921e2c79607872797
   name: google-cloud-sdk
   url: https://packages.cloud.google.com/apt
   suite: cloud-sdk

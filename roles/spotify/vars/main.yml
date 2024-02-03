@@ -1,7 +1,8 @@
 # Latest key to use available on
 # https://www.spotify.com/uk/download/linux/
 apt:
-  key: https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg
+  key: https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg
+  sha256: 73cbc3789148946dc73455e9a34a4122f09fbe72b993a4cf25b3a092810a3a30
   name: spotify
   url: http://repository.spotify.com
   suite: stable

@@ -1,6 +1,7 @@
 ---
 apt:
   key: https://download.docker.com/linux/ubuntu/gpg
+  sha256: 1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570
   name: docker
   url: https://download.docker.com/linux/ubuntu
   suite: "{{ ansible_distribution_release }}"
