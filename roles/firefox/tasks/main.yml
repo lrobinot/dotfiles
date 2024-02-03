@@ -1,0 +1,87 @@
+---
+- name: Remove firefox snap
+  community.general.snap:
+    name: firefox
+    state: absent
+  tags:
+    - misc
+    - firefox
+
+- name: "Misc | Firefox :: disable snap version"
+  ansible.builtin.template:
+    src: etc/apt/preferences.d/mozilla.j2
+    dest: /etc/apt/preferences.d/mozilla
+    owner: root
+    group: root
+    mode: "0644"
+  tags:
+    - misc
+    - firefox
+
+- name: "Misc | Firefox :: repository key"
+  ansible.builtin.get_url:
+    url: "{{ apt.key }}"
+    dest: "{{ keyrings_dir }}/{{ apt.name }}.asc"
+    checksum: sha256:{{ apt.sha256 }}
+    owner: root
+    group: root
+    mode: "0644"
+  register: key_asc
+  tags:
+    - misc
+    - firefox
+
+- name: "Misc | Firefox :: repository key dearmor"
+  ansible.builtin.command:
+    cmd: gpg --dearmor --output {{ apt.name }}.gpg {{ apt.name }}.asc
+    chdir: "{{ keyrings_dir }}"
+    creates: "{{ apt.name }}.gpg"
+  when: key_asc.changed
+  tags:
+    - misc
+    - firefox
+
+- name: "Misc | Firefox :: repository"
+  ansible.builtin.template:
+    src: apt.sources.list.j2
+    dest: /etc/apt/sources.list.d/{{ apt.name }}.list
+    owner: root
+    group: root
+    mode: "0644"
+  register: apt_repo
+  tags:
+    - misc
+    - firefox
+
+- name: "Misc | Firefox :: installation"
+  ansible.builtin.apt:
+    name:
+      - firefox
+    allow_downgrade: true
+    state: latest
+    update_cache: "{{ apt_repo.changed }}"
+  tags:
+    - misc
+    - firefox
+
+- name: "Misc | Firefox :: favorite"
+  tags:
+    - misc
+    - firefox
+  block:
+    - name: "Misc | Firefox :: favorite [1/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        state: read
+      become: true
+      become_user: "{{ username }}"
+      register: favorites
+      changed_when: false
+
+    - name: "Misc | Firefox :: favorite [2/2]"
+      community.general.dconf:
+        key: /org/gnome/shell/favorite-apps
+        value: "{{ favorites.value | list_insert_after('firefox.desktop', 'google-chrome.desktop') }}"
+      become: true
+      become_user: "{{ username }}"
+      changed_when: false

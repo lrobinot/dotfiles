@@ -1,0 +1,7 @@
+apt:
+  key: https://packages.mozilla.org/apt/repo-signing-key.gpg
+  sha256: 3ce6a27fe0538464191eebb9ff1a0b8a269af16d872524822b25198328263e84
+  name: firefox
+  url: https://packages.mozilla.org/apt
+  suite: mozilla
+  component: main

@@ -47,6 +47,7 @@
     - {name: zsh, tags: ["shell", "zsh"]}
 
     - {name: chrome, tags: ["misc", "chrome"]}
+    - {name: firefox, tags: ["misc", "firefox"]}
 
     - {name: git, tags: ["scm", "git"]}
     - {name: git_cliff, tags: ["scm", "git-cliff"]}
