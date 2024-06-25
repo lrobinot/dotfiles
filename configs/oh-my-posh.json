@@ -42,7 +42,11 @@
           "template": " \uea83 {{ path .Path .Location }} ",
           "properties": {
             "style": "agnoster_short",
-            "max_depth": 3
+            "max_depth": 3,
+            "mapped_locations_enabled": true,
+            "mapped_locations": {
+              "C:/Users/*/OneDrive*/*": "OneDrive"
+            }
           }
         },
         {
