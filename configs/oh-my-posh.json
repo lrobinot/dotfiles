@@ -183,8 +183,7 @@
   "transient_prompt": {
     "foreground": "p:black",
     "background": "transparent",
-    "template": "<p:yellow,transparent>\ue0b6</><,p:yellow> {{ .Shell }} on {{ .HostName }}[{{ .OS }}] > </><p:yellow,transparent>\ue0b0</> "
-    //"template": "<p:yellow,transparent>\ue0b6</><,p:yellow> {{ .Folder }} </><p:yellow,transparent>\ue0b0</> "
+    "template": "<p:yellow,transparent>\ue0b6</><,p:yellow> {{ .Folder }} </><p:yellow,transparent>\ue0b0</> "
   },
   "secondary_prompt": {
     "foreground": "p:black",
